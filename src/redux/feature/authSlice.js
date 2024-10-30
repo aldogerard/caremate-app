@@ -1,7 +1,7 @@
 import axiosInstance from "@/api/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const loginPartner = createAsyncThunk(
+export const login = createAsyncThunk(
     "auth/login",
     async (data, { rejectWithValue }) => {
         try {
@@ -47,28 +47,35 @@ const authSLice = createSlice({
             state.role = role;
         },
         logout: (state, action) => {
-            state.token = "";
-            state.isLogin = "";
-            state.role = "";
-            localStorage.removeItem("token");
-        },
-        clearAuth: (state) => {
-            state.isLogin = false;
+            state.isLogin = null;
+            state.id = null;
             state.token = null;
             state.role = null;
-            state.id = null;
+            localStorage.removeItem("token");
+            localStorage.removeItem("id");
+            localStorage.removeItem("role");
+        },
+        clear: (state) => {
             state.status = null;
             state.error = null;
         },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(loginPartner.fulfilled, (state, action) => {
+            .addCase(login.fulfilled, (state, action) => {
+                console.log(action.payload);
                 state.isLogin = true;
+                state.id = action.payload.data.id;
                 state.token = action.payload.data.token;
                 state.role = action.payload.data.role;
-                state.status = "succeeded";
+                state.status = action.payload.message;
                 localStorage.setItem("token", action.payload.data.token);
+                localStorage.setItem("role", action.payload.data.role);
+                localStorage.setItem("id", action.payload.data.id);
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.error = action.payload.error;
+                state.status = action.payload.message;
             })
             .addCase(registerPartner.fulfilled, (state, action) => {
                 state.status = action.payload.message;
@@ -85,5 +92,5 @@ const authSLice = createSlice({
             );
     },
 });
-export const { setAuth, logout, clearAuth } = authSLice.actions;
+export const { setAuth, logout, clear } = authSLice.actions;
 export default authSLice.reducer;

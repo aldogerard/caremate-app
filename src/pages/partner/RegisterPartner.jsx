@@ -1,4 +1,4 @@
-import { clearAuth, registerPartner } from "@/redux/feature/authSlice";
+import { clear, registerPartner } from "@/redux/feature/authSlice";
 import { Failed, Success } from "@/utils/AlertUtil";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash, FaSeedling } from "react-icons/fa6";
@@ -91,8 +91,8 @@ const RegisterPartner = () => {
         if (status !== null) {
             if (status === "Partner created successfully") {
                 Success("Successful registration");
-                clearAuth();
-                navigate("/partner/signin");
+                dispatch(clear());
+                return navigate("/partner/signin");
             } else if (status === "Email already exists.") {
                 Failed("Email has been registered");
             } else if (status === "Phone_number already exists.") {
@@ -100,7 +100,7 @@ const RegisterPartner = () => {
             } else if (status === "failed") {
                 Failed("Failed registration");
             }
-            dispatch(clearAuth());
+            dispatch(clear());
         }
     }, [status]);
 

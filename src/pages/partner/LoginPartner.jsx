@@ -1,6 +1,9 @@
+import { clear, login } from "@/redux/feature/authSlice";
+import { Failed, Success } from "@/utils/AlertUtil";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash, FaSeedling } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const image = "https://account.enigmacamp.com/2.jpg";
 
@@ -15,6 +18,10 @@ const LoginPartner = () => {
     const [isMount, setIsMount] = useState(false);
     const [isFocus, setIsFocus] = useState(false);
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { status } = useSelector((state) => state.auth);
+
     useEffect(() => {
         if (!isMount) {
             setIsMount(true);
@@ -22,25 +29,51 @@ const LoginPartner = () => {
         }
         const { email, password } = auth;
 
-        const regex = /^[\w.-]+@[\w.-]+\.\w+$/;
-
         setIsEmailInvalid(
-            regex.test(email) || email.length <= 0 ? false : true
+            validateEmail(email) || email.length <= 0 ? false : true
         );
         setIsPasswordInvalid(
-            password.length >= 8 || password.length <= 0 ? false : true
+            validatePassword(password) || password.length <= 0 ? false : true
         );
     }, [auth]);
+
+    const validateEmail = (str) => {
+        const regex = /^[\w.-]+@[\w.-]+\.\w+$/;
+        return regex.test(str);
+    };
+
+    const validatePassword = (str) => {
+        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+        return regex.test(str);
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setAuth((state) => ({ ...state, [name]: value }));
     };
 
+    useEffect(() => {
+        if (status !== null) {
+            if (status === "Logged in successfully") {
+                Success("Successfully login");
+                dispatch(clear());
+                return navigate("/");
+            } else {
+                Failed(status);
+            }
+            dispatch(clear());
+        }
+    }, [status]);
+
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
+            dispatch(login(auth));
             e.target.reset();
+            setAuth({
+                email: "",
+                password: "",
+            });
         } catch (error) {
             // console.log(error)
         }
@@ -98,7 +131,7 @@ const LoginPartner = () => {
                                 id="email"
                                 autoComplete="off"
                                 name="email"
-                                onChange={handleChange}
+                                onInput={handleChange}
                                 placeholder="Enter your email"
                                 className="px-5 py-4 text-black/80 outline-none rounded-md border focus:shadow-sm  bg-white"
                             />
@@ -111,11 +144,20 @@ const LoginPartner = () => {
                                 >
                                     Password
                                 </label>
-                                {isPasswordInvalid && (
-                                    <p className="text-xs font-medium text-error">
-                                        *Minimum password is 8 letters
-                                    </p>
-                                )}
+                                {isPasswordInvalid &&
+                                    auth.password.length >= 8 && (
+                                        <p className="text-xs text-[10px] text-right font-medium text-error">
+                                            *Password must contain lowercase,
+                                            uppercase, numbers
+                                        </p>
+                                    )}
+
+                                {auth.password.length < 8 &&
+                                    auth.password.length > 0 && (
+                                        <p className="text-xs text-right font-medium text-error">
+                                            *Password must be 8 letters long
+                                        </p>
+                                    )}
                             </div>
                             <div
                                 className={`flex justify-between gap-2 items-center relative px-5 py-4 outline-none rounded-md border bg-white ${
@@ -129,7 +171,7 @@ const LoginPartner = () => {
                                     autoComplete="off"
                                     id="password"
                                     placeholder="Enter your password"
-                                    onChange={handleChange}
+                                    onInput={handleChange}
                                     className="bg-white text-black/80 outline-none w-[95%]"
                                     onFocus={handleFocus}
                                     onBlur={handleBlur}
