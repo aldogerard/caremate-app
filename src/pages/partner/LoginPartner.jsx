@@ -55,8 +55,8 @@ const LoginPartner = () => {
     useEffect(() => {
         if (status !== null) {
             if (status === "Logged in successfully") {
-                Success("Successfully login");
                 dispatch(clear());
+                // Success("Successfully login");
                 return navigate("/");
             } else {
                 Failed(status);

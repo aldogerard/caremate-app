@@ -25,3 +25,23 @@ export const Failed = (prompt) => {
         text: prompt,
     });
 };
+
+export const Logout = (cb) => {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You want logout!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, logout!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                icon: "success",
+                text: "You already logout",
+            });
+            cb();
+        }
+    });
+};

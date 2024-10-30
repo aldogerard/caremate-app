@@ -1,10 +1,15 @@
+import { logout } from "@/redux/feature/authSlice";
+import { Logout } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
 import { FaBars, FaSeedling, FaXmark } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
+    const dispatch = useDispatch();
     const location = useLocation().pathname;
+    const { isLogin, role } = useSelector((state) => state.auth);
 
     const [isOpen, setIsOpen] = useState(false);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -16,6 +21,12 @@ const Header = () => {
 
     const handleIsDetail = () => {
         setIsDetailOpen((state) => !state);
+    };
+
+    const handleLogout = () => {
+        Logout(() => {
+            dispatch(logout());
+        });
     };
 
     useEffect(() => {
@@ -68,12 +79,15 @@ const Header = () => {
         <section className="flex justify-center w-full bg-light fixed z-50 border-b">
             <main className="container relative lg:flex lg:items-center lg:justify-between">
                 <header className="py-4 flex justify-between items-center padding">
-                    <div className="flex justify-center items-center w-max gap-1">
+                    <Link
+                        to={"/"}
+                        className="flex justify-center items-center w-max gap-1 cursor-pointer"
+                    >
                         <FaSeedling className="text-primary text-3xl" />
                         <h1 className="text-xl font-semibold text-primary">
                             CareMate
                         </h1>
-                    </div>
+                    </Link>
                     <div
                         className="cursor-pointer lg:hidden"
                         onClick={handleIsOpen}
@@ -90,7 +104,11 @@ const Header = () => {
                         isOpen ? "pt-4 pb-6 h-max" : "h-0 overflow-hidden"
                     }`}
                 >
-                    <ul className="relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between lg:w-[420px]">
+                    <ul
+                        className={`relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between ${
+                            isLogin ? "lg:w-[560px]" : "lg:w-[400px]"
+                        } `}
+                    >
                         <EachUtils
                             of={link}
                             render={(item) => (
@@ -98,7 +116,7 @@ const Header = () => {
                                     <li
                                         className={` transition-template ${
                                             item.link === location &&
-                                            "lg:font-medium "
+                                            "lg:text-primary"
                                         }`}
                                     >
                                         {item.name}
@@ -106,11 +124,25 @@ const Header = () => {
                                 </Link>
                             )}
                         />
+                        {isLogin && (
+                            <Link
+                                to={
+                                    role === "PARTNER"
+                                        ? "/dashboard/partner"
+                                        : "/dashboard/admin"
+                                }
+                            >
+                                <li className={"transition-template"}>
+                                    Dashboard
+                                </li>
+                            </Link>
+                        )}
                         <div
-                            onClick={handleIsDetail}
+                            onClick={!isLogin ? handleIsDetail : handleLogout}
                             className="cursor-pointer"
                         >
-                            <h1>Login</h1>
+                            {isLogin && <h1>Logout</h1>}
+                            {!isLogin && <h1>Login</h1>}
                         </div>
                         <div
                             className={`${
