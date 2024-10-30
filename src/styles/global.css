@@ -9,7 +9,11 @@
 }
 
 body {
-    @apply bg-light;
+    @apply bg-light overflow-x-hidden;
+}
+
+* {
+    scrollbar-width: none;
 }
 
 .padding {
@@ -49,16 +53,4 @@ input:-webkit-autofill {
 input {
     background-color: white; /* Warna latar belakang normal */
     color: rgba(0, 0, 0, 0.8); /* Warna teks */
-}
-
-* {
-    overflow-x: hidden; /* Sembunyikan overflow horizontal */
-    overflow-y: scroll; /* Aktifkan scrolling vertikal */
-    scrollbar-width: none; /* Untuk Firefox */
-    -ms-overflow-style: none; /* Untuk Internet Explorer dan Edge */
-}
-
-/* Sembunyikan scrollbar untuk browser WebKit (Chrome, Safari) */
-*::-webkit-scrollbar {
-    display: none; /* Sembunyikan scrollbar */
 }

@@ -1,12 +1,6 @@
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
-import {
-    FaArrowRightToBracket,
-    FaBars,
-    FaCaretDown,
-    FaSeedling,
-    FaXmark,
-} from "react-icons/fa6";
+import { FaBars, FaSeedling, FaXmark } from "react-icons/fa6";
 import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
@@ -21,7 +15,6 @@ const Header = () => {
     };
 
     const handleIsDetail = () => {
-        console.log(isDetailOpen);
         setIsDetailOpen((state) => !state);
     };
 
@@ -62,10 +55,6 @@ const Header = () => {
 
     const loginList = [
         {
-            name: "Donor",
-            link: "/donor/signin",
-        },
-        {
             name: "Partner",
             link: "/partner/signin",
         },
@@ -76,7 +65,7 @@ const Header = () => {
     ];
 
     return (
-        <section className="flex justify-center w-full bg-light fixed z-50">
+        <section className="flex justify-center w-full bg-light fixed z-50 border-b">
             <main className="container relative lg:flex lg:items-center lg:justify-between">
                 <header className="py-4 flex justify-between items-center padding">
                     <div className="flex justify-center items-center w-max gap-1">
@@ -97,7 +86,7 @@ const Header = () => {
                     </div>
                 </header>
                 <nav
-                    className={`padding absolute w-full  transition-template border-b lg:border-0  bg-light lg:h-max lg:static lg:w-max lg:py-5 lg:overflow-visible ${
+                    className={`padding  w-full transition-template  bg-light lg:h-max lg:static lg:w-max lg:py-5 lg:overflow-visible ${
                         isOpen ? "pt-4 pb-6 h-max" : "h-0 overflow-hidden"
                     }`}
                 >
@@ -126,7 +115,7 @@ const Header = () => {
                         <div
                             className={`${
                                 isDetailOpen ? "flex absolute" : "hidden"
-                            } flex-col top-[152px] w-52 bg-red-50 border gap-1 p-2 rounded-md lg:top-8 lg:right-0`}
+                            } flex-col top-[152px] w-52 bg-light border gap-1 p-2 rounded-md lg:top-8 lg:right-0`}
                         >
                             <EachUtils
                                 of={loginList}

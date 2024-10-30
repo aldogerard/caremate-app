@@ -38,8 +38,12 @@ const LoginPartner = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        e.target.reset();
+        try {
+            e.preventDefault();
+            e.target.reset();
+        } catch (error) {
+            // console.log(error)
+        }
     };
 
     const handleClick = () => {
@@ -66,8 +70,8 @@ const LoginPartner = () => {
                         CareMate
                     </h1>
                 </div>
-                <h1 className="lg:w-11/12 lg:max-w-lg text-lg font-light text-center  text-secondary my-14 lg:text-2xl">
-                    Welcome back, Partner! Let’s make a difference together!
+                <h1 className="lg:w-11/12 lg:max-w-lg text-lg font-light text-center text-secondary my-8 lg:text-xl">
+                    Welcome back, Partner! Let's make a difference together!
                 </h1>
                 <form
                     onSubmit={handleSubmit}

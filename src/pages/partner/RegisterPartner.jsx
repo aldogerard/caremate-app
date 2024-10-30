@@ -17,7 +17,6 @@ const RegisterPartner = () => {
         phoneNumber: "",
     });
     const [isMount, setIsMount] = useState(false);
-    const [message, setMessage] = useState("");
 
     const [isEmailInvalid, setIsEmailInvalid] = useState(false);
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
@@ -134,20 +133,12 @@ const RegisterPartner = () => {
         });
     };
 
-    useEffect(() => {
-        if (message !== null) {
-            setTimeout(() => {
-                setMessage(null);
-            }, [10000]);
-        }
-    }, [message]);
-
     return (
         <section className="h-full flex">
             <aside className="hidden lg:flex lg:w-2/3">
                 <img src={image} alt="hero" />
             </aside>
-            <main className="flex flex-col h-full items-center py-4 lg:w-1/3">
+            <main className="flex flex-col h-full items-center py-4 lg:w-1/3 ">
                 <div className="flex justify-center items-center w-max">
                     <FaSeedling className="text-primary text-4xl lg:text-6xl" />
                     <h1 className="text-xl font-semibold text-primary lg:text-3xl">
@@ -374,9 +365,6 @@ const RegisterPartner = () => {
                                 </Link>
                             </h1>
                         </div>
-                        <h1 className="text-xs text-error text-center">
-                            {message}
-                        </h1>
                     </div>
                 </form>
             </main>

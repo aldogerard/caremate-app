@@ -36,10 +36,6 @@ const Routers = () => {
             element: <AuthLayout />,
             children: [
                 {
-                    path: "/donor/sigin",
-                    element: <>Login</>,
-                },
-                {
                     path: "/partner/signin",
                     element: <LoginPartner />,
                 },
