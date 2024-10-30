@@ -1,6 +1,7 @@
 import { logout } from "@/redux/feature/authSlice";
 import { Logout } from "@/utils/AlertUtil";
-import React from "react";
+import EachUtils from "@/utils/EachUtils";
+import React, { useEffect, useState } from "react";
 import { FaThLarge } from "react-icons/fa";
 import {
     FaArrowRightFromBracket,
@@ -15,10 +16,11 @@ import {
     FaUsers,
 } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 const DashboardLayout = () => {
-    const [isOpen, setIsOpen] = React.useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const location = useLocation().pathname;
     const dispatch = useDispatch();
 
     const handleLogout = () => {
@@ -26,6 +28,33 @@ const DashboardLayout = () => {
             dispatch(logout());
         });
     };
+
+    useEffect(() => {
+        setIsOpen(false);
+    }, [location]);
+
+    const list = [
+        {
+            name: "Dashboard",
+            link: "/dashboard/partner",
+            icon: <FaThLarge size={14} color="#eee" />,
+        },
+        {
+            name: "Profile",
+            link: "/dashboard/partner/profile",
+            icon: <FaUser size={14} color="#eee" />,
+        },
+        {
+            name: "Campaign",
+            link: "/dashboard/partner/campaign",
+            icon: <FaHeart size={14} color="#eee" />,
+        },
+        {
+            name: "Withdrawal",
+            link: "/dashboard/partner/withdrawal",
+            icon: <FaMoneyCheckDollar size={14} color="#eee" />,
+        },
+    ];
 
     return (
         <>
@@ -57,82 +86,37 @@ const DashboardLayout = () => {
                     </Link>
 
                     <main className=" flex flex-col gap-y-2">
-                        <Link
-                            to="/dashboard/partner"
-                            className={`flex gap-4 p-4 rounded-md hover:bg-gray-800 duration-300 items-center ${
-                                isOpen ? "justify-start" : "justify-start"
-                            } `}
-                        >
-                            <div className={`${!isOpen && "mx-auto"}`}>
-                                <FaThLarge size={14} color="#eee" />
-                            </div>
-                            <h1
-                                className={`${
-                                    isOpen ? "" : "hidden"
-                                } text-sm md:text-md text-white`}
-                            >
-                                Dashboard
-                            </h1>
-                        </Link>
-
-                        <Link
-                            to="/dashboard/partner/profile"
-                            className={`flex gap-4 p-4 rounded-md hover:bg-gray-800 duration-300 items-center ${
-                                isOpen ? "justify-start" : "justify-start"
-                            } `}
-                        >
-                            <div className={`${!isOpen && "mx-auto"}`}>
-                                <FaUser size={14} color="#eee" />
-                            </div>
-                            <h1
-                                className={`${
-                                    isOpen ? "" : "hidden"
-                                } text-sm md:text-md text-white`}
-                            >
-                                Profile
-                            </h1>
-                        </Link>
-
-                        <Link
-                            to="/dashboard/partner/campaign"
-                            className={`flex gap-4 p-4 rounded-md hover:bg-gray-800 duration-300 items-center ${
-                                isOpen ? "justify-start" : "justify-start"
-                            } `}
-                        >
-                            <div className={`${!isOpen && "mx-auto"}`}>
-                                <FaHeart size={14} color="#eee" />
-                            </div>
-                            <h1
-                                className={`${
-                                    isOpen ? "" : "hidden"
-                                } text-sm md:text-md text-white`}
-                            >
-                                Campaign
-                            </h1>
-                        </Link>
-
-                        <Link
-                            to="/dashboard/partner/withdrawal"
-                            className={`flex gap-4 p-4 rounded-md hover:bg-gray-800 duration-300 items-center ${
-                                isOpen ? "justify-start" : "justify-start"
-                            } `}
-                        >
-                            <div className={`${!isOpen && "mx-auto"}`}>
-                                <FaMoneyCheckDollar size={14} color="#eee" />
-                            </div>
-                            <h1
-                                className={`${
-                                    isOpen ? "" : "hidden"
-                                } text-sm md:text-md text-white`}
-                            >
-                                Withdrawal
-                            </h1>
-                        </Link>
+                        <EachUtils
+                            of={list}
+                            render={(item) => (
+                                <Link
+                                    to={item.link}
+                                    className={`flex gap-4 p-4 rounded-md hover:bg-primary duration-300 items-center ${
+                                        isOpen
+                                            ? "justify-start"
+                                            : "justify-start"
+                                    }  ${
+                                        location === item.link && "bg-primary"
+                                    }`}
+                                >
+                                    <div className={`${!isOpen && "mx-auto"}`}>
+                                        {item.icon}
+                                    </div>
+                                    <h1
+                                        className={`${
+                                            isOpen ? "" : "hidden"
+                                        } text-sm md:text-md text-white`}
+                                    >
+                                        {item.name}
+                                    </h1>
+                                </Link>
+                            )}
+                        />
                     </main>
 
                     <div
                         onClick={handleLogout}
-                        className={`flex gap-4 p-4 rounded-md hover:bg-gray-800 duration-300 cursor-pointer items-center ${
+                        className={`flex gap-4 p-4 rounded-md hover:bg-primary duration-300 cursor-pointer items-center ${
                             isOpen ? "justify-start" : "justify-start"
                         } `}
                     >
