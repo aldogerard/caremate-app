@@ -31,7 +31,7 @@ export const registerPartner = createAsyncThunk(
 const authSLice = createSlice({
     name: "auth",
     initialState: {
-        isLogin: false,
+        isLogin: null,
         token: null,
         role: null,
         id: null,
@@ -47,7 +47,7 @@ const authSLice = createSlice({
             state.role = role;
         },
         logout: (state, action) => {
-            state.isLogin = null;
+            state.isLogin = false;
             state.id = null;
             state.token = null;
             state.role = null;

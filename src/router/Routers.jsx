@@ -40,15 +40,16 @@ const Routers = () => {
         },
         {
             path: "/",
-            element: (
-                <DashboardProtected>
-                    <DashboardLayout />
-                </DashboardProtected>
-            ),
+            element: <DashboardLayout />,
             children: [
                 {
                     path: "/dashboard/partner",
-                    element: <Outlet />,
+                    element: (
+                        <DashboardProtected>
+                            <Outlet />
+                        </DashboardProtected>
+                    ),
+
                     children: [
                         {
                             path: "",

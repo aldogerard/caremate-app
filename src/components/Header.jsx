@@ -2,7 +2,7 @@ import { logout } from "@/redux/feature/authSlice";
 import { Logout } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
-import { FaBars, FaSeedling, FaXmark } from "react-icons/fa6";
+import { FaAngleDown, FaBars, FaSeedling, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
@@ -26,6 +26,7 @@ const Header = () => {
     const handleLogout = () => {
         Logout(() => {
             dispatch(logout());
+            setIsDetailOpen(false);
         });
     };
 
@@ -75,6 +76,20 @@ const Header = () => {
         },
     ];
 
+    const dashboardList = [
+        {
+            name: "Dashboard",
+        },
+    ];
+
+    const capitalizeFirstLetter = (string) => {
+        return string
+            .toLowerCase()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+    };
+
     return (
         <section className="flex justify-center w-full bg-light fixed z-50 border-b">
             <main className="container relative lg:flex lg:items-center lg:justify-between">
@@ -105,9 +120,7 @@ const Header = () => {
                     }`}
                 >
                     <ul
-                        className={`relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between ${
-                            isLogin ? "lg:w-[560px]" : "lg:w-[400px]"
-                        } `}
+                        className={`relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between lg:w-[440px]`}
                     >
                         <EachUtils
                             of={link}
@@ -124,24 +137,28 @@ const Header = () => {
                                 </Link>
                             )}
                         />
-                        {isLogin && (
-                            <Link
-                                to={
-                                    role === "PARTNER"
-                                        ? "/dashboard/partner"
-                                        : "/dashboard/admin"
-                                }
-                            >
-                                <li className={"transition-template"}>
-                                    Dashboard
-                                </li>
-                            </Link>
-                        )}
                         <div
-                            onClick={!isLogin ? handleIsDetail : handleLogout}
+                            onClick={handleIsDetail}
                             className="cursor-pointer"
                         >
-                            {isLogin && <h1>Logout</h1>}
+                            {isLogin && (
+                                <div
+                                    className={` border-accent flex gap-2 justify-between items-center transition-template ${
+                                        isDetailOpen && "border-primary"
+                                    }`}
+                                >
+                                    <h1 className="capitalize">
+                                        Hi, {capitalizeFirstLetter(role)}
+                                    </h1>
+                                    <FaAngleDown
+                                        size={12}
+                                        className={`${
+                                            isDetailOpen &&
+                                            "rotate-180 transition-template"
+                                        }`}
+                                    />
+                                </div>
+                            )}
                             {!isLogin && <h1>Login</h1>}
                         </div>
                         <div
@@ -150,16 +167,30 @@ const Header = () => {
                             } flex-col top-[152px] w-52 bg-light border gap-1 p-2 rounded-md lg:top-8 lg:right-0`}
                         >
                             <EachUtils
-                                of={loginList}
+                                of={!isLogin ? loginList : dashboardList}
                                 render={(item) => (
                                     <Link
-                                        to={item.link}
+                                        to={
+                                            item.link
+                                                ? item.link
+                                                : role === "PARTNER"
+                                                ? "/dashboard/partner"
+                                                : "/dashboard/admin"
+                                        }
                                         className="w-full hover:bg-accent/10 transition-template px-2 py-1 rounded-md"
                                     >
                                         <li>{item.name}</li>
                                     </Link>
                                 )}
                             />
+                            {isLogin && (
+                                <div
+                                    onClick={handleLogout}
+                                    className="w-full hover:bg-accent/10 transition-template px-2 py-1 rounded-md cursor-pointer"
+                                >
+                                    <li>Logout</li>
+                                </div>
+                            )}
                         </div>
                     </ul>
                 </nav>

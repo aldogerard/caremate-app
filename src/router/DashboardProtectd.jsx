@@ -1,14 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
-let i = 0;
 const DashboardProtected = ({ children }) => {
     const { isLogin } = useSelector((state) => state.auth);
 
-    i = i + 1;
-
-    if (i > 4) {
+    if (isLogin !== null) {
         if (isLogin) {
             return children;
         }

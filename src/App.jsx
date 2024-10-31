@@ -19,6 +19,8 @@ const App = () => {
         if (isMount) {
             if (!isExpired) {
                 dispatch(setAuth({ token, role, id }));
+            } else {
+                dispatch(setAuth({ token: null, role: null, id: null }));
             }
         } else {
             setIsMount(true);
