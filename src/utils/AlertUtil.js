@@ -45,3 +45,26 @@ export const Logout = (cb) => {
         }
     });
 };
+
+export const Update = (cb) => {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Update your profile!",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, update!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            cb();
+        }
+    });
+};
+
+export const SuccessUpdate = () => {
+    Swal.fire({
+        icon: "success",
+        text: "You already update profile",
+    });
+};

@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 const DashboardLayout = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(window.innerWidth > 1023);
     const location = useLocation().pathname;
     const dispatch = useDispatch();
 
@@ -30,8 +30,27 @@ const DashboardLayout = () => {
     };
 
     useEffect(() => {
-        setIsOpen(false);
+        if (window.innerWidth < 1023) {
+            setIsOpen(false);
+        }
     }, [location]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 1023) {
+                setIsOpen(true);
+            }
+            if (window.innerWidth < 1000) {
+                setIsOpen(false);
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     const list = [
         {
@@ -65,7 +84,7 @@ const DashboardLayout = () => {
                     } px-2 justify-between transition-all fixed bg-dark z-50 duration-300 flex flex-col py-8 h-screen`}
                 >
                     <div
-                        className={`cursor-pointer absolute p-2 bg-white border border-dark rounded-full top-20 -right-[12px] ${
+                        className={`cursor-pointer absolute p-2 bg-white border border-dark rounded-full top-20 -right-[12px] lg:hidden ${
                             !isOpen ? "rotate-180" : ""
                         }`}
                         onClick={() => setIsOpen(!isOpen)}

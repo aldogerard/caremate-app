@@ -143,7 +143,7 @@ const Header = () => {
                         >
                             {isLogin && (
                                 <div
-                                    className={` border-accent flex gap-2 justify-between items-center transition-template ${
+                                    className={` border-accent flex gap-2 items-center transition-template ${
                                         isDetailOpen && "border-primary"
                                     }`}
                                 >
