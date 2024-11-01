@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FaSchool } from "react-icons/fa6";
+import { FaMoneyCheck, FaSchool } from "react-icons/fa6";
 import { TbClock } from "react-icons/tb";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
     const { currentPartner } = useSelector((state) => state.partner);
@@ -29,7 +30,8 @@ const Dashboard = () => {
                 </h1>
             </div>
             <div className="flex justify-start gap-4">
-                <div
+                <Link
+                    to={"/dashboard/partner/profile"}
                     className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
                 >
                     <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
@@ -43,8 +45,9 @@ const Dashboard = () => {
                             {capitalizeFirstLetter(status)}
                         </h2>
                     </div>
-                </div>
-                <div
+                </Link>
+                <Link
+                    to={"/dashboard/partner/campaign"}
                     className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
                 >
                     <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
@@ -55,10 +58,26 @@ const Dashboard = () => {
                     </h1>
                     <div className="flex items-end gap-2">
                         <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
-                            10
+                            7
                         </h2>
                     </div>
-                </div>
+                </Link>
+                <Link
+                    to={"/dashboard/partner/withdrawal"}
+                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
+                >
+                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
+                        <FaMoneyCheck size={52} className="text-primary" />
+                    </div>
+                    <h1 className="font-light mt-8 mb-2 text-black">
+                        Withdrawal
+                    </h1>
+                    <div className="flex items-end gap-2">
+                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
+                            3
+                        </h2>
+                    </div>
+                </Link>
             </div>
         </>
     );

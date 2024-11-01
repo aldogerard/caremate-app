@@ -80,7 +80,11 @@ const Campaign = () => {
             <div className="flex flex-col gap-4 w-full mt-10 lg:flex-row lg:flex-wrap lg:justify-start">
                 <EachUtils
                     of={sub}
-                    render={(item) => filter === "Active" && <CardCampaign />}
+                    render={(item) =>
+                        filter === "Completed" && (
+                            <CardCampaign status={filter} />
+                        )
+                    }
                 />
             </div>
         </>
