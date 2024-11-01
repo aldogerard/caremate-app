@@ -30,6 +30,14 @@ const Profile = () => {
     const { currentPartner } = useSelector((state) => state.partner);
     const { currentPartnerDoc, url } = useSelector((state) => state.partnerDoc);
 
+    const [status, setStatus] = useState("UNVERIFIED");
+
+    useEffect(() => {
+        if (currentPartner !== null) {
+            setStatus(currentPartner.status);
+        }
+    }, [currentPartner]);
+
     useEffect(() => {
         try {
             dispatch(fetchPartnerById({ id }));
@@ -128,12 +136,22 @@ const Profile = () => {
                     currentPartnerDoc={currentPartnerDoc}
                 />
             )}
-            {filter === "verif" && currentPartnerDoc !== null && (
-                <h1 className="text-primary text-center mt-32 text-xs lg:text-lg">
-                    You have submitted a verification request, please wait for
-                    approval
-                </h1>
-            )}
+            {filter === "verif" &&
+                currentPartnerDoc !== null &&
+                status === "UNVERIFIED" && (
+                    <h1 className="text-primary text-center mt-32 text-xs lg:text-lg">
+                        You have submitted a verification request, please wait
+                        for approval
+                    </h1>
+                )}
+
+            {filter === "verif" &&
+                currentPartnerDoc !== null &&
+                status === "VERIFIED" && (
+                    <h1 className="text-primary text-center mt-32 text-xs lg:text-lg">
+                        Your foundation has been successfully verified
+                    </h1>
+                )}
         </>
     );
 };

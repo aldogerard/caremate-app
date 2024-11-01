@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaCarRear, FaHourglass, FaHouseChimneyMedical } from "react-icons/fa6";
+import { FaSchool } from "react-icons/fa6";
 import { TbClock } from "react-icons/tb";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
 const Dashboard = () => {
     const { currentPartner } = useSelector((state) => state.partner);
@@ -29,7 +28,7 @@ const Dashboard = () => {
                     Dashboard
                 </h1>
             </div>
-            <div className="flex justify-start">
+            <div className="flex justify-start gap-4">
                 <div
                     className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
                 >
@@ -42,6 +41,21 @@ const Dashboard = () => {
                     <div className="flex items-end gap-2">
                         <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
                             {capitalizeFirstLetter(status)}
+                        </h2>
+                    </div>
+                </div>
+                <div
+                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
+                >
+                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
+                        <FaSchool size={52} className="text-primary" />
+                    </div>
+                    <h1 className="font-light mt-8 mb-2 text-black">
+                        Campaign
+                    </h1>
+                    <div className="flex items-end gap-2">
+                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
+                            10
                         </h2>
                     </div>
                 </div>

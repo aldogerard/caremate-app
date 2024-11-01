@@ -65,8 +65,10 @@ const FormProfile = (props) => {
                             disabled={!isEdit}
                             name="name"
                             placeholder="Enter your foundation name"
-                            className={`px-5 py-4 text-black/80 outline-none rounded-md border focus:shadow-sm  bg-white ${
-                                !isEdit && "text-black/40 cursor-not-allowed"
+                            className={`px-5 py-4  outline-none rounded-md border focus:shadow-sm  bg-white ${
+                                !isEdit
+                                    ? "text-black/40 cursor-not-allowed"
+                                    : "text-black/80"
                             }`}
                         />
                     </div>
@@ -92,8 +94,12 @@ const FormProfile = (props) => {
                             onInput={handleChange}
                             name="email"
                             placeholder="Enter your email"
-                            className={`px-5 py-4 text-black/80 outline-none rounded-md border focus:shadow-sm  bg-white 
-                            ${!isEdit && "text-black/40 cursor-not-allowed"}
+                            className={`px-5 py-4  outline-none rounded-md border focus:shadow-sm  bg-white 
+                            ${
+                                !isEdit
+                                    ? "text-black/40 cursor-not-allowed"
+                                    : "text-black/80"
+                            }
                             `}
                         />
                     </div>
@@ -117,8 +123,12 @@ const FormProfile = (props) => {
                             disabled={!isEdit}
                             name="contactAddress"
                             placeholder="Enter your contact address"
-                            className={`px-5 py-4 text-black/80 no-arrow outline-none rounded-md border focus:shadow-sm bg-white
-                            ${!isEdit && "text-black/40 cursor-not-allowed"}`}
+                            className={`px-5 py-4 no-arrow outline-none rounded-md border focus:shadow-sm bg-white
+                            ${
+                                !isEdit
+                                    ? "text-black/40 cursor-not-allowed"
+                                    : "text-black/80"
+                            }`}
                         />
                     </div>
 
@@ -141,8 +151,10 @@ const FormProfile = (props) => {
                             disabled={!isEdit}
                             name="phoneNumber"
                             placeholder="Enter your phone number"
-                            className={`px-5 py-4 text-black/80 no-arrow outline-none rounded-md border focus:shadow-sm bg-white ${
-                                !isEdit && "text-black/40 cursor-not-allowed"
+                            className={`px-5 py-4 no-arrow outline-none rounded-md border focus:shadow-sm bg-white ${
+                                !isEdit
+                                    ? "text-black/40 cursor-not-allowed"
+                                    : "text-black/80"
                             }`}
                         />
                     </div>
@@ -155,9 +167,6 @@ const FormProfile = (props) => {
                             >
                                 Description
                             </label>
-                            {/* <p className="text-xs font-medium text-error">
-                            *Maximum 200 letters
-                        </p> */}
                         </div>
                         <textarea
                             value={updatedPartner.description || ""}
@@ -169,8 +178,10 @@ const FormProfile = (props) => {
                             name="description"
                             placeholder="Enter description for your foundation"
                             maxLength={300}
-                            className={`px-5 py-4 h-40 lg:h-32  text-black/80 outline-none rounded-md border focus:shadow-sm  bg-white resize-none ${
-                                !isEdit && "text-black/40 cursor-not-allowed"
+                            className={`px-5 py-4 h-40 lg:h-32 outline-none rounded-md border focus:shadow-sm  bg-white resize-none ${
+                                !isEdit
+                                    ? "text-black/40 cursor-not-allowed"
+                                    : "text-black/80"
                             }`}
                         />
                     </div>

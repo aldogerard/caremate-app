@@ -7,11 +7,11 @@ import { Outlet, RouterProvider } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
 import AuthProtected from "./AuthProtected";
 import DashboardLayout from "@/layouts/DashboardLayout";
-import DashboardProtected from "./DashboardProtectd";
 import Profile from "@/pages/partner/dashboard/Profile";
 import Campaign from "@/pages/partner/dashboard/Campaign";
 import Withdrawal from "@/pages/partner/dashboard/Withdrawal";
 import Dashboard from "@/pages/partner/dashboard/Dashboard";
+import PartnerProtected from "./PartnerProtected";
 
 const Routers = () => {
     const router = createBrowserRouter([
@@ -45,9 +45,9 @@ const Routers = () => {
                 {
                     path: "/dashboard/partner",
                     element: (
-                        <DashboardProtected>
+                        <PartnerProtected>
                             <Outlet />
-                        </DashboardProtected>
+                        </PartnerProtected>
                     ),
 
                     children: [

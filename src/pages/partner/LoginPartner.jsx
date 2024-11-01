@@ -59,7 +59,7 @@ const LoginPartner = () => {
                 // Success("Successfully login");
                 return navigate("/");
             } else {
-                Failed(status);
+                Failed(status || "Failed to login");
             }
             dispatch(clear());
         }
