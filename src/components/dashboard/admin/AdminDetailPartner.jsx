@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "react-modal";
 
 const AdminDetailPartner = (props) => {
-    const { isOpen, closeModal } = props;
+    const { isOpen, closeModal, status } = props;
 
     const customStyles = {
         content: {
@@ -48,7 +48,64 @@ const AdminDetailPartner = (props) => {
                             <h1 className="text-dark">Jalan Topaz No 7</h1>
                         </div>
                     </div>
+                    <div className="w-full">
+                        <h1 className="text-dark/70">Address</h1>
+                        <div className="px-4 py-3 border rounded-md shadow-sm overflow-scroll h-32">
+                            <h1 className="text-dark">
+                                Lorem ipsum dolor sit amet elementum phasellus
+                                mus dignissim ullamcorper eros sed libero cras
+                                risus fermentum magna aenean mollis iaculis
+                                sociosqu si pharetra lacinia habitasse gravida
+                                suspendisse lacus placerat per sapien bibendum
+                                rhoncus litora dis porta dui ex class interdum
+                                enim leo nostra ridiculus auctor vel tempor
+                            </h1>
+                        </div>
+                    </div>
                 </div>
+                {status === "In Review" && (
+                    <>
+                        <div>
+                            <h1 className="text-dark/70 mb-2">Document</h1>
+                            <div className="flex flex-row gap-2 flex-wrap items-center">
+                                <div className="px-4 py-3 border rounded-lg border-primary cursor-pointer">
+                                    <h1 className="text-base text-dark">
+                                        Certification of Foundation Estabishment
+                                    </h1>
+                                </div>
+                                <div className="px-4 py-3 border rounded-lg border-primary cursor-pointer">
+                                    <h1 className="text-base text-dark">
+                                        Financial Report
+                                    </h1>
+                                </div>
+                                <div className="px-4 py-3 border rounded-lg border-primary cursor-pointer">
+                                    <h1 className="text-base text-dark">
+                                        Registered Certificate
+                                    </h1>
+                                </div>
+                                <div className="px-4 py-3 border rounded-lg border-primary cursor-pointer">
+                                    <h1 className="text-base text-dark">
+                                        Foundation Financial Plan
+                                    </h1>
+                                </div>
+                                <div className="px-4 py-3 border rounded-lg border-primary cursor-pointer">
+                                    <h1 className="text-base text-dark">
+                                        Bank Account
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-row gap-2 flex-wrap justify-end items-center">
+                            <div className="w-28 py-3 flex justify-center shadow-md items-center bg-primary cursor-pointer rounded-md hover:bg-emerald-600 transition-template">
+                                <h1 className="text-sm text-light">Approve</h1>
+                            </div>
+                            <div className="w-28 py-3 flex justify-center shadow-md items-center bg-rose-600 cursor-pointer rounded-md hover:bg-error transition-template">
+                                <h1 className="text-sm text-light">Reject</h1>
+                            </div>
+                        </div>
+                    </>
+                )}
             </main>
         </Modal>
     );

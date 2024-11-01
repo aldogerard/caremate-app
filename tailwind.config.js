@@ -17,7 +17,7 @@ export default {
                 secondary: "#064E3B",
                 accent: "#A1A1AA",
                 background: "#F8FAFC",
-                warning: "#FBBF24",
+                warning: "#D97706",
                 error: "#BE123C",
             },
         },

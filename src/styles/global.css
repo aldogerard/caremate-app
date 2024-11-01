@@ -9,7 +9,7 @@
 }
 
 body {
-    @apply bg-light overflow-x-hidden;
+    @apply bg-background overflow-x-hidden;
 }
 
 * {

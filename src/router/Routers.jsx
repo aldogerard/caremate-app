@@ -17,6 +17,8 @@ import AdminProtected from "./AdminProtected";
 import AdminDashboard from "@/pages/admin/dashboard/AdminDashboard";
 import AdminPartner from "@/pages/admin/dashboard/AdminPartner";
 import Home from "@/pages/landing/Home";
+import AdminCampaign from "@/pages/admin/dashboard/AdminCampaign";
+import AdminWithdrawal from "@/pages/admin/dashboard/AdminWIthdrawal";
 
 const Routers = () => {
     const router = createBrowserRouter([
@@ -65,11 +67,11 @@ const Routers = () => {
                         },
                         {
                             path: "campaign",
-                            element: <Campaign />,
+                            element: <AdminCampaign />,
                         },
                         {
                             path: "withdrawal",
-                            element: <Withdrawal />,
+                            element: <AdminWithdrawal />,
                         },
                     ],
                 },

@@ -22,6 +22,10 @@ const option = [
 
 const FormCampaign = (props) => {
     const { isOpen, closeModal } = props;
+
+    const oneWeekFromNow = new Date();
+    oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
+
     const [isSelectOpen, setIsSelectOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState("Select Category");
     const [value, setValue] = useState({
@@ -53,6 +57,22 @@ const FormCampaign = (props) => {
             endDate: null,
         });
         closeModal();
+    };
+
+    const handleChange = (e) => {
+        if (e?.target) {
+            const { name, value } = e.target;
+        } else {
+            const { startDate } = e;
+            if (startDate >= oneWeekFromNow) {
+                setValue(e);
+            } else {
+                setValue({
+                    startDate: null,
+                    endDate: null,
+                });
+            }
+        }
     };
 
     return (
@@ -169,13 +189,14 @@ const FormCampaign = (props) => {
                                     >
                                         Range Date
                                     </label>
+                                    <h1 className="text-xs text-warning font-medium">
+                                        *Minimum start date is 1 week from now
+                                    </h1>
                                 </div>
                                 <div className="w-full h-max border py-2 rounded-md">
                                     <Datepicker
                                         value={value}
-                                        onChange={(newValue) =>
-                                            setValue(newValue)
-                                        }
+                                        onChange={handleChange}
                                         primaryColor="blue"
                                     />
                                 </div>

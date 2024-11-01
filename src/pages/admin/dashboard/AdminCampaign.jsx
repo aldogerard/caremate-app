@@ -1,24 +1,27 @@
+import AdminDetailCampaign from "@/components/dashboard/admin/AdminDetailCampaign";
 import AdminDetailPartner from "@/components/dashboard/admin/AdminDetailPartner";
 import EachUtils from "@/utils/EachUtils";
+import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useState } from "react";
 
 const sub = [
     {
-        name: "In Review",
+        name: "Pending",
     },
     {
-        name: "Verified",
+        name: "Active",
     },
     {
-        name: "Reject",
+        name: "Completed",
+    },
+    {
+        name: "Rejected",
     },
 ];
 
-// inreview, reject, approved
-
-const AdminPartner = () => {
+const AdminCampaign = () => {
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-    const [filter, setFilter] = useState("In Review");
+    const [filter, setFilter] = useState("Pending");
 
     function limitText(text, limit) {
         const words = text.split("");
@@ -37,7 +40,7 @@ const AdminPartner = () => {
         <>
             <div className="w-full py-2 mb-10 border-b border-black/70">
                 <h1 className="text-xl md:text-4xl font-medium text-black">
-                    Partner
+                    Campaign
                 </h1>
             </div>
             <div className="flex py-2 mb-6 gap-8 justify-start">
@@ -61,18 +64,22 @@ const AdminPartner = () => {
                     <thead>
                         <tr className="border-b">
                             <th className="p-4 w-[5%]">No</th>
-                            <th className="w-[20%]">Foundation Name</th>
-                            <th className="w-[15%]">Phone</th>
-                            <th className="w-[20%]">Address</th>
-                            <th className="w-[40%]">Desc</th>
-                            <th className="w-[20%] pr-4">Action</th>
+                            <th className="w-[15%]">Foundation Name</th>
+                            <th className="w-[25%]">Campaign Title</th>
+                            <th className="w-[20%]">Category</th>
+                            {filter === "Active" ||
+                                (filter === "Completed" && (
+                                    <th className="w-[15%]">Raise Ammount</th>
+                                ))}
+                            <th className="w-[15%]">Goal Ammount</th>
+                            <th className="w-[10%] pr-4">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <EachUtils
                             of={sub}
                             render={(item, index) =>
-                                filter === "In Review" ? (
+                                filter === "Pending" ? (
                                     <tr
                                         className={`${
                                             index % 2 == 0 && "bg-primary/10"
@@ -80,17 +87,28 @@ const AdminPartner = () => {
                                     >
                                         <td className="p-5">{index + 1}</td>
                                         <td>
-                                            {limitText("Yayasan Enigma", 25)}
-                                        </td>
-                                        <td>08126384124</td>
-                                        <td>
-                                            {limitText("Jalan topaz No 7", 25)}
+                                            {limitText(
+                                                "Yayasan engima camp",
+                                                20
+                                            )}
                                         </td>
                                         <td>
                                             {limitText(
-                                                "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi natus, soluta distinctio consequuntur quisquam quis at dolores suscipit quasi doloremque consequatur, adipisci omnis. Sunt, consequuntur. Laborum illum odio quam voluptas cupiditate quos dicta alias earum. Ex natus quidem vero, sit vitae eligendi impedit quia nesciunt optio incidunt fuga delectus nisi.",
-                                                60
+                                                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit atque dolorem, aperiam unde reprehenderit consequatur nobis iste quis voluptatum voluptates, obcaecati officia ducimus nostrum mollitia veniam.",
+                                                40
                                             )}
+                                        </td>
+                                        <td>Infrastructure Development</td>
+                                        {filter === "Active" ||
+                                            (filter === "Completed" && (
+                                                <td>
+                                                    <FormatRupiah
+                                                        value={324000}
+                                                    />
+                                                </td>
+                                            ))}
+                                        <td>
+                                            <FormatRupiah value={1000000} />
                                         </td>
                                         <td className="pr-4">
                                             <div
@@ -118,7 +136,7 @@ const AdminPartner = () => {
                     </tbody>
                 </table>
             </div>
-            <AdminDetailPartner
+            <AdminDetailCampaign
                 isOpen={isDetailModalOpen}
                 closeModal={handleDetailModal}
                 status={filter}
@@ -127,4 +145,4 @@ const AdminPartner = () => {
     );
 };
 
-export default AdminPartner;
+export default AdminCampaign;
