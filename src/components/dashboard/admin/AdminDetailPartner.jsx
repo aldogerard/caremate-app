@@ -29,12 +29,24 @@ const AdminDetailPartner = (props) => {
                         <h2>Close</h2>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                    <div>
-                        <h1 className="text-dark">Name</h1>
-                        <h1 className="text-dark text-lg">
-                            Yayasan Enigma Camp
-                        </h1>
+                <div className="flex flex-row gap-2 flex-wrap justify-between items-center">
+                    <div className="w-[49%]">
+                        <h1 className="text-dark/70">Foundation Name</h1>
+                        <div className="px-4 py-3 border rounded-md shadow-sm">
+                            <h1 className="text-dark">Yayasan Enigma Camp</h1>
+                        </div>
+                    </div>
+                    <div className="w-[49%]">
+                        <h1 className="text-dark/70">Phone Number</h1>
+                        <div className="px-4 py-3 border rounded-md shadow-sm">
+                            <h1 className="text-dark">0812394129381</h1>
+                        </div>
+                    </div>
+                    <div className="w-full">
+                        <h1 className="text-dark/70">Address</h1>
+                        <div className="px-4 py-3 border rounded-md shadow-sm overflow-scroll">
+                            <h1 className="text-dark">Jalan Topaz No 7</h1>
+                        </div>
                     </div>
                 </div>
             </main>

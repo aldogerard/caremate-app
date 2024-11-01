@@ -16,6 +16,7 @@ import AdminDashboardLayout from "@/layouts/AdminDashboardLayout";
 import AdminProtected from "./AdminProtected";
 import AdminDashboard from "@/pages/admin/dashboard/AdminDashboard";
 import AdminPartner from "@/pages/admin/dashboard/AdminPartner";
+import Home from "@/pages/landing/Home";
 
 const Routers = () => {
     const router = createBrowserRouter([
@@ -26,7 +27,7 @@ const Routers = () => {
             children: [
                 {
                     path: "/",
-                    element: <></>,
+                    element: <Home />,
                 },
                 {
                     path: "/about",
