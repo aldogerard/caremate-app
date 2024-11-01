@@ -6,12 +6,16 @@ import RegisterPartner from "@/pages/partner/RegisterPartner";
 import { Outlet, RouterProvider } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
 import AuthProtected from "./AuthProtected";
-import DashboardLayout from "@/layouts/DashboardLayout";
 import Profile from "@/pages/partner/dashboard/Profile";
 import Campaign from "@/pages/partner/dashboard/Campaign";
 import Withdrawal from "@/pages/partner/dashboard/Withdrawal";
 import Dashboard from "@/pages/partner/dashboard/Dashboard";
 import PartnerProtected from "./PartnerProtected";
+import PartnerDashboardLayout from "@/layouts/PartnerDashboardLayout";
+import AdminDashboardLayout from "@/layouts/AdminDashboardLayout";
+import AdminProtected from "./AdminProtected";
+import AdminDashboard from "@/pages/admin/dashboard/AdminDashboard";
+import AdminPartner from "@/pages/admin/dashboard/AdminPartner";
 
 const Routers = () => {
     const router = createBrowserRouter([
@@ -40,16 +44,47 @@ const Routers = () => {
         },
         {
             path: "/",
-            element: <DashboardLayout />,
+            element: <AdminDashboardLayout />,
+            children: [
+                {
+                    path: "/dashboard/admin",
+                    element: (
+                        // <AdminProtected>
+                        <Outlet />
+                        // </AdminProtected>
+                    ),
+                    children: [
+                        {
+                            path: "",
+                            element: <AdminDashboard />,
+                        },
+                        {
+                            path: "partner",
+                            element: <AdminPartner />,
+                        },
+                        {
+                            path: "campaign",
+                            element: <Campaign />,
+                        },
+                        {
+                            path: "withdrawal",
+                            element: <Withdrawal />,
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            path: "/",
+            element: <PartnerDashboardLayout />,
             children: [
                 {
                     path: "/dashboard/partner",
                     element: (
-                        <PartnerProtected>
-                            <Outlet />
-                        </PartnerProtected>
+                        // <PartnerProtected>
+                        <Outlet />
+                        // </PartnerProtected>
                     ),
-
                     children: [
                         {
                             path: "",

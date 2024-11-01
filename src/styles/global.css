@@ -54,3 +54,8 @@ input {
     background-color: white; /* Warna latar belakang normal */
     color: rgba(0, 0, 0, 0.8); /* Warna teks */
 }
+
+th,
+tr {
+    @apply font-normal text-dark;
+}

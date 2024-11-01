@@ -9,6 +9,7 @@ const FormVerif = (props) => {
         fr: "",
         rc: "",
         ffp: "",
+        ba: "",
     });
 
     const handleChange = (e) => {
@@ -133,6 +134,32 @@ const FormVerif = (props) => {
                             />
                         </div>
                     </div>
+                    <div className="flex flex-col gap-1 w-full lg:w-[32%]">
+                        <div className="flex justify-between items-center">
+                            <label htmlFor="ba" className="text-black/80">
+                                Bank Account
+                            </label>
+                        </div>
+                        <div className="border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-28">
+                            <h1
+                                className={`text-sm lg:text-lg font-medium text-accent ${
+                                    formData.ba?.name && "text-black/80"
+                                }`}
+                            >
+                                {formData.ba?.name || "Upload your file"}
+                            </h1>
+                            <input
+                                type="file"
+                                required
+                                id="ba"
+                                name="ba"
+                                onChange={handleChange}
+                                accept=".pdf"
+                                className="absolute w-full h-full opacity-0 cursor-pointer"
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-1 w-full lg:w-[32%]" />
                 </div>
                 <div className="text-lg mt-8 flex gap-2 justify-end border-t pt-8">
                     <button

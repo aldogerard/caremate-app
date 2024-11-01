@@ -81,9 +81,7 @@ const Campaign = () => {
                 <EachUtils
                     of={sub}
                     render={(item) =>
-                        filter === "Completed" && (
-                            <CardCampaign status={filter} />
-                        )
+                        filter === "Active" && <CardCampaign status={filter} />
                     }
                 />
             </div>

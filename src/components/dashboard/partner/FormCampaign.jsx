@@ -187,7 +187,7 @@ const FormCampaign = (props) => {
                                         htmlFor="phoneNumber"
                                         className="text-black/80"
                                     >
-                                        Range Date
+                                        Image
                                     </label>
                                 </div>
                                 <div className="border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-40">

@@ -18,7 +18,7 @@ import {
 import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
-const DashboardLayout = () => {
+const PartnerDashboardLayout = () => {
     const [isOpen, setIsOpen] = useState(window.innerWidth > 1023);
     const location = useLocation().pathname;
     const dispatch = useDispatch();
@@ -164,4 +164,4 @@ const DashboardLayout = () => {
     );
 };
 
-export default DashboardLayout;
+export default PartnerDashboardLayout;

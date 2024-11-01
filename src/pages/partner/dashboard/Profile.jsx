@@ -122,7 +122,7 @@ const Profile = () => {
                     )}
                 />
             </div>
-            {filter === "edit" && currentPartner !== null && (
+            {filter === "edit" && (
                 <FormProfile
                     handleClickEdit={handleClickEdit}
                     isEdit={isEdit}

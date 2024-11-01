@@ -56,7 +56,7 @@ const FormProfile = (props) => {
                             </label>
                         </div>
                         <input
-                            value={updatedPartner.name}
+                            value={updatedPartner?.name}
                             type="text"
                             required
                             onInput={handleChange}
@@ -85,7 +85,7 @@ const FormProfile = (props) => {
                             )}
                         </div>
                         <input
-                            value={updatedPartner.email}
+                            value={updatedPartner?.email}
                             type="email"
                             required
                             id="email"
@@ -114,7 +114,7 @@ const FormProfile = (props) => {
                             </label>
                         </div>
                         <input
-                            value={updatedPartner.contactAddress}
+                            value={updatedPartner?.contactAddress}
                             type="text"
                             required
                             id="contactAddress"
@@ -142,7 +142,7 @@ const FormProfile = (props) => {
                             </label>
                         </div>
                         <input
-                            value={updatedPartner.phoneNumber}
+                            value={updatedPartner?.phoneNumber}
                             type="number"
                             required
                             id="phoneNumber"
@@ -169,7 +169,7 @@ const FormProfile = (props) => {
                             </label>
                         </div>
                         <textarea
-                            value={updatedPartner.description || ""}
+                            value={updatedPartner?.description || ""}
                             type="text"
                             id="description"
                             autoComplete="off"
