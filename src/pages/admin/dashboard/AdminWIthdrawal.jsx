@@ -1,5 +1,6 @@
 import AdminDetailCampaign from "@/components/dashboard/admin/AdminDetailCampaign";
 import AdminDetailPartner from "@/components/dashboard/admin/AdminDetailPartner";
+import AdminDetailWithdrawal from "@/components/dashboard/admin/AdminDetailWithdrawal";
 import EachUtils from "@/utils/EachUtils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useState } from "react";
@@ -121,7 +122,7 @@ const AdminWithdrawal = () => {
                     </tbody>
                 </table>
             </div>
-            <AdminDetailCampaign
+            <AdminDetailWithdrawal
                 isOpen={isDetailModalOpen}
                 closeModal={handleDetailModal}
                 status={filter}

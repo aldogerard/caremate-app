@@ -42,7 +42,7 @@ const Withdrawal = () => {
                 <EachUtils
                     of={sub}
                     render={(item) =>
-                        filter === "Pending" && (
+                        filter === "Completed" && (
                             <CardWithdrawal status={filter} />
                         )
                     }

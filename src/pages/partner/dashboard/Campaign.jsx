@@ -1,4 +1,5 @@
 import CardCampaign from "@/components/dashboard/partner/CardCampaign";
+import DetailCampaign from "@/components/dashboard/partner/DetailCampaign";
 import FormCampaign from "@/components/dashboard/partner/FormCampaign";
 import { Failed } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
@@ -8,10 +9,10 @@ import { Link } from "react-router-dom";
 
 const sub = [
     {
-        name: "Active",
+        name: "Pending",
     },
     {
-        name: "Pending",
+        name: "Active",
     },
     {
         name: "Completed",
@@ -22,8 +23,8 @@ const sub = [
 ];
 
 const Campaign = () => {
-    const [filter, setFilter] = useState("Active");
-
+    const [filter, setFilter] = useState("Pending");
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [isFormModalOpen, setIsFormModalOpen] = useState(false);
 
     const { currentPartner } = useSelector((state) => state.partner);
@@ -40,6 +41,10 @@ const Campaign = () => {
             return Failed("Your foundation has not been verified");
         }
         setIsFormModalOpen((state) => !state);
+    };
+
+    const handleDetailModal = () => {
+        setIsDetailModalOpen((state) => !state);
     };
 
     return (
@@ -81,10 +86,20 @@ const Campaign = () => {
                 <EachUtils
                     of={sub}
                     render={(item) =>
-                        filter === "Active" && <CardCampaign status={filter} />
+                        filter === "Completed" && (
+                            <CardCampaign
+                                status={filter}
+                                openModal={handleDetailModal}
+                            />
+                        )
                     }
                 />
             </div>
+            <DetailCampaign
+                isOpen={isDetailModalOpen}
+                closeModal={handleDetailModal}
+                status={filter}
+            />
         </>
     );
 };

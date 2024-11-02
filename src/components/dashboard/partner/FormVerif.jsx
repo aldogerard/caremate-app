@@ -30,7 +30,7 @@ const FormVerif = (props) => {
         <>
             <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <p className="text-xs lg:text-sm font-medium text-error mb-6">
-                    *Maximum files is 1MB
+                    Maximum files is 1MB (.pdf)
                 </p>
                 <div className="flex flex-col gap-2 gap-y-6 w-full items-end lg:flex-row lg:flex-wrap lg:justify-between">
                     <div className="flex flex-col gap-1 w-full lg:w-[32%]">
