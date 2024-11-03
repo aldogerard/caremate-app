@@ -11,6 +11,7 @@
     },
     "dependencies": {
         "@arismun/format-rupiah": "^3.0.0",
+        "@react-pdf/renderer": "^4.0.0",
         "@reduxjs/toolkit": "^2.3.0",
         "axios": "^1.7.7",
         "dayjs": "^1.11.13",

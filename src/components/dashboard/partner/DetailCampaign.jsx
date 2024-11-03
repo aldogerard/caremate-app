@@ -8,6 +8,8 @@ import EachUtils from "@/utils/EachUtils";
 import CardCampaignReport from "./CardCampaignReport";
 import { Confirm, Success } from "@/utils/AlertUtil";
 import CustomModal from "@/components/CustomModal";
+import { pdf, PDFDownloadLink } from "@react-pdf/renderer";
+import Invoice from "@/components/PDF/Invoice";
 
 const data = [
     {
@@ -17,6 +19,16 @@ const data = [
         name: "Report",
     },
 ];
+
+const invoiceData = {
+    foundationName: "Yayasan Enigma Malang",
+    address: "Jalan topaz no.7, Lowokwaru, Malang",
+    campaignTitle: "Health Awareness Campaign",
+    totalAmount: "1500000",
+    startDate: "2024-11-01",
+    category: "Infrastructure Development",
+    endDate: "2024-11-30",
+};
 
 const DetailCampaign = (props) => {
     const { isOpen, closeModal, status, item, currentImageUrl } = props;
@@ -34,10 +46,22 @@ const DetailCampaign = (props) => {
         closeModal();
     };
 
-    const handleRequestWithdrawal = () => {
-        Confirm("Request a withdrawal", () => {
+    const handleRequestWithdrawal = (e) => {
+        e.preventDefault();
+
+        Confirm("Request a withdrawal", async () => {
             handleModal();
             Success("Successfully request a withdrawal");
+
+            const blob = await pdf(<Invoice item={item} />).toBlob();
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "invoice.pdf");
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
         });
     };
 
@@ -142,11 +166,16 @@ const DetailCampaign = (props) => {
                             </div>
                             {status === "COMPLETED" && !item?.isWithdrawal && (
                                 <>
-                                    <Button
+                                    <PDFDownloadLink
+                                        document={<Invoice item={item} />}
+                                        fileName="invoice.pdf"
                                         onClick={handleRequestWithdrawal}
-                                        type={"submit"}
-                                        name={"Request a withdrawal"}
-                                    />
+                                    >
+                                        <Button
+                                            type={"submit"}
+                                            name={"Request a withdrawal"}
+                                        />
+                                    </PDFDownloadLink>
                                 </>
                             )}
                         </div>

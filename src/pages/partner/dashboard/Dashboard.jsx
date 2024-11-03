@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import CardDashboard from "@/components/dashboard/CardDashboard";
 import Title from "@/components/dashboard/Title";
 import EachUtils from "@/utils/EachUtils";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import Invoice from "@/components/PDF/Invoice";
 
 const data = [
     {

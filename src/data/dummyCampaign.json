@@ -11,7 +11,9 @@
         "goalAmount": 200000,
         "status": "ACTIVE",
         "partnerId": null,
-        "partnerName": "Enigma Camp Malang"
+        "partnerName": "Enigma Camp Malang",
+        "isWithdrawal": false,
+        "address": "Jalan merdeka bara no 1, Merdeka, Surabaya"
     },
     {
         "id": "766b86fc-33b9-43e3-87b2-65760f721446",
@@ -25,7 +27,9 @@
         "goalAmount": 450000,
         "status": "REJECTED",
         "partnerId": null,
-        "partnerName": "Yayasan Bahari Dinoyo"
+        "partnerName": "Yayasan Bahari Dinoyo",
+        "isWithdrawal": false,
+        "address": "Jalan dinoyo utara no 19 A, Dinoyo, Surabaya"
     },
     {
         "id": "766b86fc-33b9-43e3-87b2-65760f721446",
@@ -40,7 +44,8 @@
         "status": "COMPLETED",
         "partnerId": null,
         "partnerName": "Yayasan Anak Malang",
-        "isWithdrawal": false
+        "isWithdrawal": false,
+        "address": "Jalan topaz no 7, Lowokwaru, Malang"
     },
     {
         "id": "766b86fc-33b9-43e3-87b2-65760f721446",
@@ -54,6 +59,8 @@
         "goalAmount": 450000,
         "status": "PENDING",
         "partnerId": null,
-        "partnerName": "Yayasan Panti Satu"
+        "partnerName": "Yayasan Panti Satu",
+        "isWithdrawal": false,
+        "address": "Jalan besar ijen kota, malang, Malang"
     }
 ]
