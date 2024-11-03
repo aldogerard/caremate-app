@@ -1,5 +1,5 @@
 import { logout } from "@/redux/feature/authSlice";
-import { getDetailPartner } from "@/redux/feature/partner/PartnerSlice";
+import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
 import { Logout } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";

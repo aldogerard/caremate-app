@@ -1,6 +1,6 @@
 import axiosInstance from "@/api/axios";
 import CardCampaignSkleton from "@/components/Skleton/CardCampaignSkleton";
-import { setCurrentCampaign } from "@/redux/feature/partner/CampaignSlice";
+import { setCurrentCampaign } from "@/redux/feature/partner/campaignSlice";
 import { formatDate, limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useEffect, useState } from "react";

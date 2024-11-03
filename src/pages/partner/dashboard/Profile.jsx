@@ -10,7 +10,7 @@ import {
     getDetailPartner,
     updateDocumentPartner,
     updateProfilePartner,
-} from "@/redux/feature/partner/PartnerSlice";
+} from "@/redux/feature/partner/partnerSlice";
 
 import ButtonFile from "@/components/ButtonFile";
 

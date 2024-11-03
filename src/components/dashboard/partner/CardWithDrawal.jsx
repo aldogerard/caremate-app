@@ -8,14 +8,14 @@ import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useEffect, useState } from "react";
 
 const CardWithdrawal = (props) => {
-    const { item, status } = props;
+    const { withdrawal, status } = props;
     const [imageUrl, setImageUrl] = useState("");
 
     useEffect(() => {
         const fetchImageUrl = async () => {
             try {
                 const response = await axiosInstance.get(
-                    `/file/${item.campaignImageName}`
+                    `/file/${withdrawal.campaignImageName}`
                 );
                 return setImageUrl(response.data);
             } catch (error) {
@@ -24,10 +24,10 @@ const CardWithdrawal = (props) => {
         };
 
         fetchImageUrl();
-    }, [item.campaignImageName]);
+    }, [withdrawal.campaignImageName]);
 
     const handleClickMessage = () => {
-        Message(item?.message);
+        Message(withdrawal?.message);
     };
 
     return imageUrl !== "" ? (
@@ -38,18 +38,20 @@ const CardWithdrawal = (props) => {
                 className="h-24 lg:h-40 aspect-square object-cover rounded-lg"
             />
             <div className="flex flex-col w-max justify-between">
-                <h1 className="text-sm lg:text-lg  text-dark">{item.title}</h1>
+                <h1 className="text-sm lg:text-lg  text-dark">
+                    {withdrawal.title}
+                </h1>
                 <div className="lg:flex justify-between hidden">
                     <div>
                         <h1 className="text-xs text-dark">Start date</h1>
                         <h1 className="text-primary text-xs font-medium">
-                            {formatDate(item.startDate)}
+                            {formatDate(withdrawal.startDate)}
                         </h1>
                     </div>
                     <div>
                         <h1 className="text-xs text-dark">End date</h1>
                         <h1 className="text-primary text-xs font-medium">
-                            {formatDate(item.endDate)}
+                            {formatDate(withdrawal.endDate)}
                         </h1>
                     </div>
                 </div>
@@ -57,18 +59,18 @@ const CardWithdrawal = (props) => {
                     <div>
                         <h1 className="text-xs text-dark">Total amount</h1>
                         <h1 className="text-primary text-xs font-medium">
-                            <FormatRupiah value={item.totalAmount} />
+                            <FormatRupiah value={withdrawal.totalAmount} />
                         </h1>
                     </div>
                     <div>
                         <h1 className="text-xs text-dark">Tax</h1>
                         <h1 className="text-primary text-xs font-medium">
-                            <FormatRupiah value={item.totalTax} />
+                            <FormatRupiah value={withdrawal.total} />
                         </h1>
                     </div>
                     {status === "COMPLETED" && (
                         <ButtonFile
-                            fileName={item.invoiceFileName}
+                            fileName={withdrawal.invoiceFileName}
                             name={"Invoice"}
                         />
                     )}

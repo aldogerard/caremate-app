@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CardDashboard from "@/components/dashboard/CardDashboard";
 import Title from "@/components/dashboard/Title";
 import EachUtils from "@/utils/EachUtils";
-import { getDetailPartner } from "@/redux/feature/partner/PartnerSlice";
+import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
 
 const data = [
     {

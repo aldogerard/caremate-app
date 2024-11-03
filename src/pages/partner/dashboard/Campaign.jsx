@@ -9,7 +9,7 @@ import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getCampaignByPartnerId } from "@/redux/feature/partner/CampaignSlice";
+import { getCampaignByPartnerId } from "@/redux/feature/partner/campaignSlice";
 
 const data = [
     {
