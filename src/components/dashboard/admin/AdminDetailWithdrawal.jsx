@@ -1,50 +1,89 @@
+import axiosInstance from "@/api/axios";
+import Button from "@/components/Button";
+import ButtonFile from "@/components/ButtonFile";
+import CustomModal from "@/components/CustomModal";
+import { Confirm, InputMessage, Success } from "@/utils/AlertUtil";
+import { formatDate, validateFile } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
-import React from "react";
-import Modal from "react-modal";
+import React, { useEffect, useState } from "react";
 
 const AdminDetailWithdrawal = (props) => {
-    const { isOpen, closeModal, status } = props;
+    const { isOpen, closeModal, status, currentWithdrawal } = props;
+    const [isApprove, setIsApprove] = useState(false);
+    const [invoice, setInvoice] = useState("");
+    const [message, setMessage] = useState("");
 
-    console.log(status);
-
-    const customStyles = {
-        content: {
-            width: "50%",
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            borderRadius: "12px",
-            transform: "translate(-40%, -50%)",
-        },
+    const handleChangeFile = (e) => {
+        const { files } = e.target;
+        if (files.length < 1) {
+            return setInvoice("");
+        }
+        if (validateFile(files, "pdf")) {
+            return setInvoice(files[0]);
+        } else {
+            return setInvoice("");
+        }
     };
-    const image = "https://account.enigmacamp.com/2.jpg";
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const data = new FormData();
+
+        data.append("invoice", invoice);
+        data.append("id", "id");
+
+        Confirm("Approved a withdrawal", () => {
+            Success("Successfully approved a withdrawal");
+            e.target.reset();
+            handleCloseModal();
+        });
+    };
+
+    const handleReject = () => {
+        Confirm("Rejected a withdrawal", () => {
+            InputMessage(setMessage, () => {
+                Success("Successfully rejected a withdrawal");
+                handleCloseModal();
+            });
+        });
+    };
+
+    const handleCloseModal = () => {
+        setInvoice("");
+        closeModal();
+        setIsApprove(false);
+    };
+
+    const handleIsApprove = () => {
+        setInvoice("");
+        setIsApprove((state) => !state);
+    };
 
     return (
-        <Modal style={customStyles} isOpen={isOpen}>
+        <CustomModal isOpen={isOpen}>
             <main className="flex flex-col gap-8">
                 <div className="flex justify-between items-center">
                     <h1 className="text-xl text-dark">Detail Withdrawal</h1>
-                    <div
-                        onClick={closeModal}
-                        className="bg-rose-500 px-4 py-2 rounded-md shadow-md text-light cursor-pointer hover:bg-rose-700 transition-template"
-                    >
-                        <h2>Close</h2>
-                    </div>
+                    <Button
+                        type={"button"}
+                        onClick={handleCloseModal}
+                        name={"Close"}
+                    />
                 </div>
                 <div className="flex flex-row gap-4 flex-wrap justify-between items-center">
                     <div className="w-[49%]">
                         <h1 className="text-dark/70">Foundation Name</h1>
                         <div className="px-4 py-3 border rounded-md shadow-sm">
-                            <h1 className="text-dark">Yayasan Enigma Camp</h1>
+                            <h1 className="text-dark">
+                                {currentWithdrawal?.partnerName}
+                            </h1>
                         </div>
                     </div>
                     <div className="w-[49%]">
                         <h1 className="text-dark/70">Category</h1>
                         <div className="px-4 py-3 border rounded-md shadow-sm">
                             <h1 className="text-dark">
-                                Infrastructure Development
+                                {currentWithdrawal?.category}
                             </h1>
                         </div>
                     </div>
@@ -52,11 +91,7 @@ const AdminDetailWithdrawal = (props) => {
                         <h1 className="text-dark/70">Campaign Title</h1>
                         <div className="px-4 py-3 border rounded-md shadow-sm min-h-20">
                             <h1 className="text-dark">
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Odit atque dolorem, aperiam
-                                unde reprehenderit consequatur nobis iste quis
-                                voluptatum voluptates, obcaecati officia ducimus
-                                nostrum mollitia veniam.
+                                {currentWithdrawal?.title}
                             </h1>
                         </div>
                     </div>
@@ -65,72 +100,111 @@ const AdminDetailWithdrawal = (props) => {
                             <h1 className="text-dark/70">Total Withdrawal</h1>
                             <div className="px-4 py-3 border rounded-md shadow-sm">
                                 <h1 className="text-dark">
-                                    <FormatRupiah value={1000000} />
+                                    <FormatRupiah
+                                        value={currentWithdrawal?.totalAmount}
+                                    />
                                 </h1>
                             </div>
                         </div>
                         <div className="w-[33%]">
                             <h1 className="text-dark/70">Start Date</h1>
                             <div className="px-4 py-3 border rounded-md shadow-sm">
-                                <h1 className="text-dark">28 October 2024</h1>
-                            </div>
-                        </div>
-                        <div className="w-[33%]">
-                            <h1 className="text-dark/70">End Date</h1>
-                            <div className="px-4 py-3 border rounded-md shadow-sm">
-                                <h1 className="text-dark">30 December 2024</h1>
-                            </div>
-                        </div>
-                    </div>
-                    {status === "Completed" && (
-                        <div>
-                            <h1 className="text-dark/70 mb-2">Invoice</h1>
-                            <div className="px-8 py-3 border rounded-lg border-primary cursor-pointer">
-                                <h1 className="text-base text-dark">
-                                    Invoice withdrawal
+                                <h1 className="text-dark">
+                                    {formatDate(currentWithdrawal?.startDate)}
                                 </h1>
                             </div>
                         </div>
-                    )}
-                    {status === "Pending" && (
-                        <>
-                            <div className="flex flex-col gap-1 w-full">
-                                <div className="flex justify-between items-center">
-                                    <label
-                                        htmlFor="cfe"
-                                        className="text-black/80"
-                                    >
-                                        Invoice
-                                    </label>
-                                </div>
-                                <div className="border-dashed w-full overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-28">
-                                    <h1
-                                        className={`text-sm lg:text-lg font-medium text-accent `}
-                                    >
-                                        Upload invoice withdrawal
-                                    </h1>
-                                    <input
-                                        type="file"
-                                        required
-                                        id="cfe"
-                                        name="cfe"
-                                        multiple
-                                        accept=".pdf"
-                                        className={`absolute w-full h-full opacity-0 cursor-pointer`}
-                                    />
-                                </div>
+                        <div className="w-[33%]">
+                            <h1 className="text-dark/70">End Datee</h1>
+                            <div className="px-4 py-3 border rounded-md shadow-sm">
+                                <h1 className="text-dark">
+                                    {formatDate(currentWithdrawal?.endDate)}
+                                </h1>
                             </div>
+                        </div>
+                    </div>
 
-                            <div className="flex flex-row gap-2 flex-wrap justify-end items-center w-full mt-4">
-                                <div className="w-32 py-3 flex justify-center shadow-md items-center bg-primary cursor-pointer rounded-md hover:bg-emerald-600 transition-template">
-                                    <h1 className="text-light">Submit</h1>
+                    {status === "PENDING" && (
+                        <>
+                            <form className="w-full" onSubmit={handleSubmit}>
+                                {isApprove && (
+                                    <div className="flex flex-col gap-1 w-full">
+                                        <div className="flex justify-between items-center">
+                                            <label
+                                                htmlFor="invoice"
+                                                className="text-black/80"
+                                            >
+                                                Invoice
+                                            </label>
+                                        </div>
+                                        <div className="border-dashed w-full overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-28">
+                                            <h1
+                                                className={`text-sm lg:text-base font-medium text-accent ${
+                                                    invoice?.name &&
+                                                    "text-black/70"
+                                                }`}
+                                            >
+                                                {invoice?.name ||
+                                                    "Upload invoice withdrawal"}
+                                            </h1>
+                                            <input
+                                                type="file"
+                                                required
+                                                id="invoice"
+                                                name="invoice"
+                                                onChange={handleChangeFile}
+                                                accept=".pdf"
+                                                className={`absolute w-full h-full opacity-0 cursor-pointer`}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="flex flex-row gap-2 flex-wrap justify-end items-center w-full mt-4">
+                                    {!isApprove && (
+                                        <>
+                                            <Button
+                                                type={"button"}
+                                                name={"Upload invoice"}
+                                                onClick={handleIsApprove}
+                                            />
+                                            <Button
+                                                type={"reset"}
+                                                name={"Reject"}
+                                                onClick={handleReject}
+                                            />
+                                        </>
+                                    )}
+                                    {isApprove && (
+                                        <>
+                                            <Button
+                                                type={"submit"}
+                                                name={"Submit"}
+                                                disabled={invoice === ""}
+                                            />
+                                            <Button
+                                                type={"reset"}
+                                                name={"Cancel"}
+                                                onClick={handleIsApprove}
+                                            />
+                                        </>
+                                    )}
                                 </div>
-                            </div>
+                            </form>
                         </>
+                    )}
+                    {status === "COMPLETED" && (
+                        <div>
+                            <h1 className="text-dark/70 mb-2">Invoice</h1>
+                            <ButtonFile
+                                fileName={currentWithdrawal?.invoiceFileName}
+                                name={"Invoice withdrawal"}
+                            />
+                        </div>
                     )}
                 </div>
             </main>
-        </Modal>
+        </CustomModal>
     );
 };
 

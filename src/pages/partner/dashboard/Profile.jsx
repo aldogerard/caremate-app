@@ -1,157 +1,156 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import Title from "@/components/dashboard/Title";
+import Filter from "@/components/Filter";
 import FormProfile from "@/components/dashboard/partner/FormProfile";
 import FormVerif from "@/components/dashboard/partner/FormVerif";
+import { Failed, SuccessUpdate } from "@/utils/AlertUtil";
 import {
     createPartnerDoc,
     fetchPartnerDocByUserId,
 } from "@/redux/feature/PartnerDocSlice";
 import { fetchPartnerById, updatePartner } from "@/redux/feature/PartnerSlice";
-import { Failed, SuccessUpdate } from "@/utils/AlertUtil";
-import EachUtils from "@/utils/EachUtils";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
-const sub = [
+import dummy from "@/data/dummyPartner.json";
+import ButtonFile from "@/components/ButtonFile";
+
+const data = [
     {
         name: "Edit Profile",
-        filt: "edit",
     },
     {
         name: "Verification",
-        filt: "verif",
     },
 ];
 
 const Profile = () => {
-    const [isEdit, setIsEdit] = useState(false);
-    const [filter, setFilter] = useState("edit");
-
     const dispatch = useDispatch();
+
     const { id } = useSelector((state) => state.auth);
     const { currentPartner } = useSelector((state) => state.partner);
-    const { currentPartnerDoc, url } = useSelector((state) => state.partnerDoc);
+    const { currentPartnerDoc } = useSelector((state) => state.partnerDoc);
 
+    const [filter, setFilter] = useState(data[0].name);
+    const [isEdit, setIsEdit] = useState(false);
     const [status, setStatus] = useState("UNVERIFIED");
 
+    const [dummyPartner, setDummyPartner] = useState(dummy[0]);
+    const [dummyStatusPartner, setDummyStatusPartner] = useState(
+        dummy[0].status
+    );
+
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await dispatch(fetchPartnerById(id)).unwrap();
+                await dispatch(fetchPartnerDocByUserId(id)).unwrap();
+            } catch (error) {
+                console.log("Error fetching data:", error);
+            }
+        };
         if (currentPartner !== null) {
-            setStatus(currentPartner.status);
+            setStatus(currentPartner?.status);
         }
-    }, [currentPartner]);
+        fetchData();
+    }, [dispatch, currentPartner, id]);
 
-    useEffect(() => {
-        try {
-            dispatch(fetchPartnerById({ id }));
-        } catch (error) {}
-    }, [dispatch]);
-
-    useEffect(() => {
-        try {
-            dispatch(fetchPartnerDocByUserId({ id }));
-        } catch (error) {}
-    }, [dispatch]);
-
-    const handleClickEdit = () => {
+    const handleClickEditProfile = () => {
         setIsEdit((state) => !state);
     };
 
-    const handleSubmit = async (updatedPartner) => {
+    const handleSubmitFormProfile = async (updatedPartner) => {
         try {
             const partner = { ...updatedPartner, userId: id };
-            await dispatch(updatePartner(partner))
-                .unwrap()
-                .then(() => {
-                    SuccessUpdate();
-                })
-                .catch(() => {
-                    Failed("Failed to update");
-                });
-            dispatch(fetchPartnerById({ id }));
+            await dispatch(updatePartner(partner)).unwrap();
+            SuccessUpdate();
+            await dispatch(fetchPartnerById(id)).unwrap();
         } catch (error) {
+            Failed("Failed to update");
         } finally {
-            handleClickEdit();
+            handleClickEditProfile();
         }
     };
 
-    useEffect(() => {
-        if (url) {
-            window.open(url, "_blank");
-        }
-    }, [url]);
+    const handleSubmitVerification = async (formData) => {
+        const data = new FormData();
 
-    const handleSubmitVerif = async (formData) => {
-        const doc = new FormData();
-
-        const entries = Object.entries(formData);
-        entries.forEach(([key, value]) => {
-            doc.append(key, value);
+        Object.entries(formData).forEach(([key, value]) => {
+            data.append(key, value);
         });
-        doc.append("userId", id);
+        data.append("userId", id);
 
         try {
-            await dispatch(createPartnerDoc(doc))
+            await dispatch(createPartnerDoc(data))
                 .unwrap()
                 .then(() => {
                     alert("Successfully submit partner document");
-                })
-                .catch(() => {
-                    alert("Failed submit partner document");
                 });
-        } catch (error) {}
+        } catch (error) {
+            Failed("Failed verification document");
+        }
     };
 
     return (
         <>
-            <div className="w-full py-2 mb-10 border-b border-black/70">
-                <h1 className="text-xl md:text-4xl font-medium text-black">
-                    Profile
-                </h1>
-            </div>
-            <div className="flex py-2 mb-6 gap-8 justify-start">
-                <EachUtils
-                    of={sub}
-                    render={(item) => (
-                        <h1
-                            onClick={() => setFilter(item.filt)}
-                            className={`font-normal text-center w-24 cursor-pointer ${
-                                filter === item.filt &&
-                                "text-black border-primary border-b transition-template"
-                            } `}
-                        >
-                            {item.name}
-                        </h1>
-                    )}
-                />
-            </div>
-            {filter === "edit" && (
+            <Title name={"Profile"} />
+            <Filter data={data} setFilter={setFilter} filter={filter} />
+
+            {filter === "Edit Profile" && (
                 <FormProfile
-                    handleClickEdit={handleClickEdit}
                     isEdit={isEdit}
-                    currentPartner={currentPartner}
-                    handleSubmit={handleSubmit}
+                    currentPartner={dummyPartner}
+                    handleClickEditProfile={handleClickEditProfile}
+                    handleSubmitFormProfile={handleSubmitFormProfile}
                 />
             )}
-            {filter === "verif" && currentPartnerDoc === null && (
-                <FormVerif
-                    handleSubmitVerif={handleSubmitVerif}
-                    currentPartnerDoc={currentPartnerDoc}
-                />
-            )}
-            {filter === "verif" &&
-                currentPartnerDoc !== null &&
-                status === "UNVERIFIED" && (
+
+            {filter === "Verification" &&
+                (dummyStatusPartner === "UNVERIFIED" ||
+                    dummyStatusPartner === "REJECTED") && (
+                    <FormVerif
+                        currentPartnerDoc={currentPartnerDoc}
+                        handleSubmitVerification={handleSubmitVerification}
+                    />
+                )}
+
+            {filter === "Verification" &&
+                dummyStatusPartner === "IN REVIEW" && (
                     <h1 className="text-primary text-center mt-32 text-xs lg:text-lg">
                         You have submitted a verification request, please wait
                         for approval
                     </h1>
                 )}
 
-            {filter === "verif" &&
-                currentPartnerDoc !== null &&
-                status === "VERIFIED" && (
-                    <h1 className="text-primary text-center mt-32 text-xs lg:text-lg">
+            {filter === "Verification" && dummyStatusPartner === "VERIFIED" && (
+                <>
+                    <h1 className="text-primary mb-4 text-xs lg:text-xl ">
                         Your foundation has been successfully verified
                     </h1>
-                )}
+                    <div className="flex flex-row gap-2 flex-wrap items-center">
+                        <ButtonFile
+                            fileName={dummyPartner?.cfeFileName}
+                            name={"Certification of Foundation Estabishment"}
+                        />
+                        <ButtonFile
+                            fileName={dummyPartner?.frFileName}
+                            name={"Financial Report"}
+                        />
+                        <ButtonFile
+                            fileName={dummyPartner?.rcFileName}
+                            name={"Registered Certificate"}
+                        />
+                        <ButtonFile
+                            fileName={dummyPartner?.ffpFileName}
+                            name={"Foundation Financial Plan"}
+                        />
+                        <ButtonFile
+                            fileName={dummyPartner?.baFileName}
+                            name={"Bank Account"}
+                        />
+                    </div>
+                </>
+            )}
         </>
     );
 };

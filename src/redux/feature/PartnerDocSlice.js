@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 
 export const fetchPartnerDocByUserId = createAsyncThunk(
     "partnerDoc/fetchPartnerDocByUserId",
-    async ({ id }, { rejectWithValue }) => {
+    async (id, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get(
                 `/partner/document/${id}/users`
@@ -15,25 +15,13 @@ export const fetchPartnerDocByUserId = createAsyncThunk(
     }
 );
 
-export const fetchPartnerDocByName = createAsyncThunk(
-    "partnerDoc/fetchPartnerDocsName",
-    async (fileName, { rejectWithValue }) => {
-        try {
-            const response = await axiosInstance.get(`/files/${fileName}`);
-            return response.data;
-        } catch (e) {
-            return rejectWithValue(e.response.data);
-        }
-    }
-);
-
 export const createPartnerDoc = createAsyncThunk(
     "partnerDoc/createPartnerDocs",
-    async (doc, { rejectWithValue }) => {
+    async (data, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.post(
                 `/partner/documents`,
-                doc
+                data
             );
             return response.data;
         } catch (e) {
@@ -68,9 +56,6 @@ const PartnerDocSlice = createSlice({
                 };
                 state.paging = action.payload.paging;
                 state.status = "succeeded";
-            })
-            .addCase(fetchPartnerDocByName.fulfilled, (state, action) => {
-                state.url = action.payload;
             })
             .addCase(createPartnerDoc.fulfilled, (state, action) => {
                 state.status = action.payload.message;

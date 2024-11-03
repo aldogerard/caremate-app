@@ -1,83 +1,64 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaMoneyCheck, FaSchool } from "react-icons/fa6";
 import { TbClock } from "react-icons/tb";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+
+import CardDashboard from "@/components/dashboard/CardDashboard";
+import Title from "@/components/dashboard/Title";
+import EachUtils from "@/utils/EachUtils";
+
+const data = [
+    {
+        link: "/dashboard/partner/profile",
+        name: "Status Fondation",
+        data: "Unverified",
+        icon: <TbClock size={52} className="text-primary" />,
+    },
+    {
+        link: "/dashboard/partner/campaign",
+        name: "Campaign",
+        data: 7,
+        icon: <FaSchool size={52} className="text-primary" />,
+    },
+    {
+        link: "/dashboard/partner/withdrawal",
+        name: "Withdrawal",
+        data: 5,
+        icon: <FaMoneyCheck size={52} className="text-primary" />,
+    },
+];
 
 const Dashboard = () => {
     const { currentPartner } = useSelector((state) => state.partner);
-    const [status, setStatus] = useState("Unverified");
+    const [datas, setDatas] = useState(data);
 
     useEffect(() => {
         if (currentPartner !== null) {
-            setStatus(currentPartner.status);
+            setDatas((state) =>
+                state.map((item) =>
+                    item.name === "Status Fondation"
+                        ? { ...item, data: currentPartner.status }
+                        : item
+                )
+            );
         }
     }, [currentPartner]);
 
-    const capitalizeFirstLetter = (string) => {
-        return string
-            .toLowerCase()
-            .split(" ")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
-    };
-
     return (
         <>
-            <div className="w-full py-2 mb-10 border-b border-black/70">
-                <h1 className="text-xl md:text-4xl font-medium text-black">
-                    Dashboard
-                </h1>
-            </div>
-            <div className="flex justify-start gap-4">
-                <Link
-                    to={"/dashboard/partner/profile"}
-                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
-                >
-                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
-                        <TbClock size={52} className="text-primary" />
-                    </div>
-                    <h1 className="font-light mt-8 mb-2 text-black">
-                        Status Fondation
-                    </h1>
-                    <div className="flex items-end gap-2">
-                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
-                            {capitalizeFirstLetter(status)}
-                        </h2>
-                    </div>
-                </Link>
-                <Link
-                    to={"/dashboard/partner/campaign"}
-                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
-                >
-                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
-                        <FaSchool size={52} className="text-primary" />
-                    </div>
-                    <h1 className="font-light mt-8 mb-2 text-black">
-                        Campaign
-                    </h1>
-                    <div className="flex items-end gap-2">
-                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
-                            7
-                        </h2>
-                    </div>
-                </Link>
-                <Link
-                    to={"/dashboard/partner/withdrawal"}
-                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
-                >
-                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
-                        <FaMoneyCheck size={52} className="text-primary" />
-                    </div>
-                    <h1 className="font-light mt-8 mb-2 text-black">
-                        Withdrawal
-                    </h1>
-                    <div className="flex items-end gap-2">
-                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
-                            3
-                        </h2>
-                    </div>
-                </Link>
+            <Title name={"Dashboard"} />
+            <div className="flex justify-start gap-4 flex-wrap">
+                <EachUtils
+                    of={datas}
+                    render={(item) => (
+                        <CardDashboard
+                            link={item.link}
+                            name={item.name}
+                            data={item.data}
+                            icon={item.icon}
+                        />
+                    )}
+                />
             </div>
         </>
     );

@@ -1,0 +1,59 @@
+[
+    {
+        "id": "766b86fc-33b9-43e3-87b2-65760f721446",
+        "campaignImageName": "1729220403630, ayamgeprek.jpeg",
+        "category": "Infrastructure Development",
+        "currentAmount": 125600,
+        "title": "Sedekah sembako untuk 100 anak yatim",
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam maiores explicabo incidunt sunt ex, nulla sapiente est dolore quibusdam quia voluptatibus! Impedit rem quo sapiente saepe voluptatibus beatae sunt optio veniam aliquam nemo, non maxime in vero, omnis unde debitis.",
+        "startDate": "2024-11-01T00:00:00.000+00:00",
+        "endDate": "2024-11-21T00:00:00.000+00:00",
+        "goalAmount": 200000,
+        "status": "ACTIVE",
+        "partnerId": null,
+        "partnerName": "Enigma Camp Malang"
+    },
+    {
+        "id": "766b86fc-33b9-43e3-87b2-65760f721446",
+        "campaignImageName": "rawon.jpg",
+        "category": "Educational Assistance",
+        "currentAmount": 78500,
+        "title": "JUMAT BERKAH! Berbagi Makanan tuk Saudara Dhuafa",
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam maiores explicabo incidunt sunt ex, nulla sapiente est dolore quibusdam quia voluptatibus! Impedit rem quo sapiente saepe voluptatibus beatae sunt optio veniam aliquam nemo, non maxime in vero, omnis unde debitis.",
+        "startDate": "2024-09-11T00:00:00.000+00:00",
+        "endDate": "2024-10-05T00:00:00.000+00:00",
+        "goalAmount": 450000,
+        "status": "REJECTED",
+        "partnerId": null,
+        "partnerName": "Yayasan Bahari Dinoyo"
+    },
+    {
+        "id": "766b86fc-33b9-43e3-87b2-65760f721446",
+        "campaignImageName": "1729220403630, ayamgeprek.jpeg",
+        "category": "Educational Assistance",
+        "currentAmount": 323500,
+        "title": "JUMAT BERKAH! Berbagi Makanan tuk Saudara Dhuafa",
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam maiores explicabo incidunt sunt ex, nulla sapiente est dolore quibusdam quia voluptatibus! Impedit rem quo sapiente saepe voluptatibus beatae sunt optio veniam aliquam nemo, non maxime in vero, omnis unde debitis.",
+        "startDate": "2024-07-01T00:00:00.000+00:00",
+        "endDate": "2024-09-31T00:00:00.000+00:00",
+        "goalAmount": 350000,
+        "status": "COMPLETED",
+        "partnerId": null,
+        "partnerName": "Yayasan Anak Malang",
+        "isWithdrawal": false
+    },
+    {
+        "id": "766b86fc-33b9-43e3-87b2-65760f721446",
+        "campaignImageName": "rawon.jpg",
+        "category": "Educational Assistance",
+        "currentAmount": null,
+        "title": "PAHALA ABADI: Sediakan Air Bersih tuk Warga Dhuafa",
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam maiores explicabo incidunt sunt ex, nulla sapiente est dolore quibusdam quia voluptatibus! Impedit rem quo sapiente saepe voluptatibus beatae sunt optio veniam aliquam nemo, non maxime in vero, omnis unde debitis.",
+        "startDate": "2024-12-01T00:00:00.000+00:00",
+        "endDate": "2025-01-25T00:00:00.000+00:00",
+        "goalAmount": 450000,
+        "status": "PENDING",
+        "partnerId": null,
+        "partnerName": "Yayasan Panti Satu"
+    }
+]

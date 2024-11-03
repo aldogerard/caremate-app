@@ -17,7 +17,7 @@ export const fetchPartner = createAsyncThunk(
 
 export const fetchPartnerById = createAsyncThunk(
     "partner/fetchPartnersById",
-    async ({ id }, { rejectWithValue }) => {
+    async (id, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get(
                 `/partners/search/user/id/${id}`
@@ -33,7 +33,6 @@ export const updatePartner = createAsyncThunk(
     "partner/updatepartners",
     async (partner, { rejectWithValue }) => {
         try {
-            console.log({ partner });
             const response = await axiosInstance.put(`/partners`, partner);
             return response.data;
         } catch (e) {

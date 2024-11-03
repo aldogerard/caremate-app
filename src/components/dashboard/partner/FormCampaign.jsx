@@ -1,8 +1,11 @@
+import Button from "@/components/Button";
+import CustomModal from "@/components/CustomModal";
+import { Confirm, Success } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
+import { validateFile } from "@/utils/Utils";
 import React, { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
-import { FaAngleDown, FaAngleRight } from "react-icons/fa6";
-import Modal from "react-modal";
+import { FaAngleRight } from "react-icons/fa6";
 import Datepicker from "react-tailwindcss-datepicker";
 
 const option = [
@@ -21,53 +24,51 @@ const option = [
 ];
 
 const FormCampaign = (props) => {
+    const [formData, setFormData] = useState({
+        category: option[0].value,
+        title: "",
+        description: "",
+        goalAmount: 0,
+        startDate: null,
+        endDate: null,
+        image: null,
+    });
     const { isOpen, closeModal } = props;
 
     const oneWeekFromNow = new Date();
     oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
 
     const [isSelectOpen, setIsSelectOpen] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState("Select Category");
-    const [value, setValue] = useState({
-        startDate: null,
-        endDate: null,
-    });
-
-    const customStyles = {
-        content: {
-            width: "50%",
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            borderRadius: "12px",
-            transform: "translate(-40%, -50%)",
-        },
-    };
 
     const handleSelect = () => {
         setIsSelectOpen((state) => !state);
     };
 
     const handleCloseModal = () => {
-        setSelectedCategory("Select Category");
-        setValue({
+        setFormData({
+            category: option[0].value,
+            title: "",
+            description: "",
+            goalAmount: 0,
             startDate: null,
             endDate: null,
+            image: null,
         });
+        setIsSelectOpen(false);
         closeModal();
     };
 
     const handleChange = (e) => {
         if (e?.target) {
             const { name, value } = e.target;
+            setFormData({ ...formData, [name]: value });
         } else {
-            const { startDate } = e;
+            const { startDate, endDate } = e;
             if (startDate >= oneWeekFromNow) {
-                setValue(e);
+                setFormData({ ...formData, startDate, endDate });
             } else {
-                setValue({
+                setFormData({
+                    ...formData,
                     startDate: null,
                     endDate: null,
                 });
@@ -75,20 +76,40 @@ const FormCampaign = (props) => {
         }
     };
 
+    const handleChangeFile = (e) => {
+        const { name, files } = e.target;
+        if (files.length < 1) {
+            return setFormData({ ...formData, [name]: "" });
+        }
+        if (validateFile(files, "image")) {
+            return setFormData({ ...formData, [name]: files[0] });
+        } else {
+            return setFormData({ ...formData, [name]: "" });
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        Confirm("Add a new campaign", () => {
+            const data = new FormData();
+
+            Object.entries(formData).forEach(([key, value]) => {
+                data.append(key, value);
+            });
+
+            Success("Successfully add new campaign");
+            handleCloseModal();
+        });
+    };
+
     return (
         <>
-            <Modal style={customStyles} isOpen={isOpen}>
+            <CustomModal isOpen={isOpen}>
                 <main className="flex flex-col gap-8">
                     <div className="flex justify-between items-center">
                         <h1 className="text-xl text-dark">Add Campaign</h1>
-                        <div
-                            onClick={handleCloseModal}
-                            className="bg-rose-500 px-4 py-2 rounded-md shadow-md text-light cursor-pointer hover:bg-rose-700 transition-template"
-                        >
-                            <h2>Close</h2>
-                        </div>
                     </div>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-4 w-full lg:flex-row lg:flex-wrap lg:justify-between">
                             <div className="flex flex-col gap-1 w-full lg:w-[49%]">
                                 <div className="flex justify-between items-center">
@@ -103,6 +124,7 @@ const FormCampaign = (props) => {
                                     type="text"
                                     required
                                     id="title"
+                                    onInput={handleChange}
                                     autoComplete="off"
                                     name="title"
                                     placeholder="Enter the title of campaign"
@@ -113,7 +135,7 @@ const FormCampaign = (props) => {
                             <div className="flex flex-col gap-1 w-full lg:w-[49%]">
                                 <div className="flex justify-between items-center">
                                     <label
-                                        htmlFor="email"
+                                        htmlFor="category"
                                         className="text-black/80"
                                     >
                                         Category
@@ -122,11 +144,11 @@ const FormCampaign = (props) => {
                                 <div
                                     onClick={handleSelect}
                                     className={`flex relative items-center justify-between w-full border h-full rounded-md px-5 py-4 bg-white cursor-pointer ${
-                                        selectedCategory !==
+                                        formData.category !==
                                             "Select Category" && "text-dark"
                                     }`}
                                 >
-                                    <h1>{selectedCategory}</h1>
+                                    <h1>{formData.category}</h1>
                                     <FaAngleRight
                                         className={`transition-template ${
                                             isSelectOpen && "rotate-90"
@@ -142,9 +164,11 @@ const FormCampaign = (props) => {
                                             render={(item) => (
                                                 <h1
                                                     onClick={() =>
-                                                        setSelectedCategory(
-                                                            item.value
-                                                        )
+                                                        setFormData({
+                                                            ...formData,
+                                                            category:
+                                                                item.value,
+                                                        })
                                                     }
                                                     className="w-full p-1 px-2 rounded-md  hover:bg-primary/10 text-accent transition-template"
                                                 >
@@ -170,6 +194,7 @@ const FormCampaign = (props) => {
                                     name="goalAmount"
                                     placeholder="Enter the donation goal amount"
                                     decimalsLimit={0}
+                                    onInput={handleChange}
                                     prefix="Rp"
                                     groupSeparator="."
                                     decimalSeparator=","
@@ -183,10 +208,7 @@ const FormCampaign = (props) => {
 
                             <div className="flex flex-col gap-1 w-full lg:w-[49%]">
                                 <div className="flex justify-between items-center">
-                                    <label
-                                        htmlFor="phoneNumber"
-                                        className="text-black/80"
-                                    >
+                                    <label className="text-black/80">
                                         Range Date
                                     </label>
                                     <h1 className="text-xs text-warning font-medium">
@@ -195,7 +217,10 @@ const FormCampaign = (props) => {
                                 </div>
                                 <div className="w-full h-max border py-2 rounded-md">
                                     <Datepicker
-                                        value={value}
+                                        value={{
+                                            startDate: formData.startDate,
+                                            endDate: formData.endDate,
+                                        }}
                                         onChange={handleChange}
                                         primaryColor="blue"
                                     />
@@ -205,7 +230,7 @@ const FormCampaign = (props) => {
                             <div className="flex flex-col gap-1 w-full lg:w-[49%]">
                                 <div className="flex justify-between items-center">
                                     <label
-                                        htmlFor="phoneNumber"
+                                        htmlFor="image"
                                         className="text-black/80"
                                     >
                                         Image
@@ -213,9 +238,13 @@ const FormCampaign = (props) => {
                                 </div>
                                 <div className="border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-40">
                                     <h1
-                                        className={`text-sm lg:text-lg font-medium text-accent`}
+                                        className={`text-sm lg:text-base font-medium text-accent ${
+                                            formData.image?.name &&
+                                            "text-black/70"
+                                        }`}
                                     >
-                                        Upload your file
+                                        {formData.image?.name ||
+                                            "Upload image of campaign"}
                                     </h1>
                                     <input
                                         type="file"
@@ -223,6 +252,7 @@ const FormCampaign = (props) => {
                                         id="image"
                                         name="image"
                                         accept="image/*"
+                                        onChange={handleChangeFile}
                                         className={`absolute w-full h-full opacity-0 cursor-pointer`}
                                     />
                                 </div>
@@ -240,6 +270,7 @@ const FormCampaign = (props) => {
                                 <textarea
                                     type="text"
                                     id="description"
+                                    onInput={handleChange}
                                     autoComplete="off"
                                     name="description"
                                     placeholder="Enter description for your foundation"
@@ -248,17 +279,18 @@ const FormCampaign = (props) => {
                                 />
                             </div>
                         </div>
+
                         <div className="text-lg mt-4 flex gap-2 justify-end">
-                            <button
-                                type="submit"
-                                className={`bg-primary w-full lg:w-max py-3 lg:py-2 px-8 text-sm lg:text-lg rounded-md shadow-md text-light font-semibold outline-none hover:bg-emerald-600 `}
-                            >
-                                Save
-                            </button>
+                            <Button type={"submit"} name={"Submit"} />
+                            <Button
+                                type={"reset"}
+                                name={"Cancel"}
+                                onClick={handleCloseModal}
+                            />
                         </div>
                     </form>
                 </main>
-            </Modal>
+            </CustomModal>
         </>
     );
 };

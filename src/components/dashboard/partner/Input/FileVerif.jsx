@@ -1,0 +1,36 @@
+const FileVerif = (props) => {
+    const { title, name, formData, handleChangeFile } = props;
+    return (
+        <div className="flex flex-col gap-1 w-full lg:w-[32%]">
+            <div className="flex justify-between items-center">
+                <label htmlFor={name} className="text-black/80">
+                    {title}
+                </label>
+            </div>
+            <div
+                className={`${
+                    formData[name]?.name && "border-primary"
+                } border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-28`}
+            >
+                <h1
+                    className={`text-sm lg:text-base font-medium text-accent ${
+                        formData[name]?.name && "text-black/70"
+                    }`}
+                >
+                    {formData[name]?.name || "Upload your file"}
+                </h1>
+                <input
+                    type="file"
+                    required
+                    id={name}
+                    name={name}
+                    onChange={handleChangeFile}
+                    accept=".pdf"
+                    className={`absolute w-full h-full opacity-0 cursor-pointer`}
+                />
+            </div>
+        </div>
+    );
+};
+
+export default FileVerif;

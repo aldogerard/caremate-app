@@ -1,43 +1,49 @@
+import Button from "@/components/Button";
 import CardCampaign from "@/components/dashboard/partner/CardCampaign";
 import DetailCampaign from "@/components/dashboard/partner/DetailCampaign";
 import FormCampaign from "@/components/dashboard/partner/FormCampaign";
+import Title from "@/components/dashboard/Title";
+import Filter from "@/components/Filter";
 import { Failed } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
-const sub = [
+import dummy from "@/data/dummyCampaign.json";
+
+const data = [
     {
-        name: "Pending",
+        name: "PENDING",
     },
     {
-        name: "Active",
+        name: "ACTIVE",
     },
     {
-        name: "Completed",
+        name: "COMPLETED",
     },
     {
-        name: "Rejected",
+        name: "REJECTED",
     },
 ];
 
 const Campaign = () => {
-    const [filter, setFilter] = useState("Pending");
+    const { currentPartner } = useSelector((state) => state.partner);
+
+    const [filter, setFilter] = useState(data[0].name);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-
-    const { currentPartner } = useSelector((state) => state.partner);
-    const [status, setStatus] = useState("UNVERIFIED");
+    const [statusPartner, setStatusPartner] = useState("UNVERIFIED");
+    const [currentCampaign, setCurrentCampaign] = useState(null);
+    const [currentImageUrl, setCurrentImageUrl] = useState("");
 
     useEffect(() => {
         if (currentPartner !== null) {
-            setStatus(currentPartner.status);
+            setStatusPartner(currentPartner.status);
         }
     }, [currentPartner]);
 
     const handleFromModal = () => {
-        if (status === "VERIFIED") {
+        if (statusPartner === "VERIFIED") {
             return Failed("Your foundation has not been verified");
         }
         setIsFormModalOpen((state) => !state);
@@ -49,47 +55,34 @@ const Campaign = () => {
 
     return (
         <>
-            <div className="w-full py-2 pb-4 flex justify-between items-center mb-10 border-b border-black/70">
-                <h1 className="text-xl md:text-4xl font-medium text-black">
-                    Campaign
-                </h1>
-                <div
-                    onClick={handleFromModal}
-                    className=" bg-primary px-3 py-2 cursor-pointer  rounded-lg hover:shadow-md transition-template"
-                >
-                    <h1 className="font-medium text-light text-xs lg:text-sm">
-                        Add Campaign
-                    </h1>
+            <Title name={"Campaign"}>
+                <div className="pb-2">
+                    <Button
+                        type={"button"}
+                        name={"Add Campaign"}
+                        onClick={handleFromModal}
+                    />
                 </div>
-            </div>
+            </Title>
+
             <FormCampaign
                 isOpen={isFormModalOpen}
                 closeModal={handleFromModal}
             />
-            <div className="flex py-2 mb-6 gap-8 justify-start overflow-scroll">
-                <EachUtils
-                    of={sub}
-                    render={(item) => (
-                        <h1
-                            onClick={() => setFilter(item.name)}
-                            className={`font-normal text-center w-24 cursor-pointer ${
-                                filter === item.name &&
-                                "text-black border-primary border-b transition-template"
-                            } `}
-                        >
-                            {item.name}
-                        </h1>
-                    )}
-                />
-            </div>
+
+            <Filter data={data} setFilter={setFilter} filter={filter} />
+
             <div className="flex flex-col gap-4 w-full mt-10 lg:flex-row lg:flex-wrap lg:justify-start">
                 <EachUtils
-                    of={sub}
+                    of={dummy}
                     render={(item) =>
-                        filter === "Completed" && (
+                        filter === item.status && (
                             <CardCampaign
+                                item={item}
                                 status={filter}
                                 openModal={handleDetailModal}
+                                setCurrentCampaign={setCurrentCampaign}
+                                setCurrentImageUrl={setCurrentImageUrl}
                             />
                         )
                     }
@@ -99,6 +92,8 @@ const Campaign = () => {
                 isOpen={isDetailModalOpen}
                 closeModal={handleDetailModal}
                 status={filter}
+                item={currentCampaign}
+                currentImageUrl={currentImageUrl}
             />
         </>
     );
