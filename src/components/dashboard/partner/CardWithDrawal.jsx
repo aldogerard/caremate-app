@@ -15,7 +15,7 @@ const CardWithdrawal = (props) => {
         const fetchImageUrl = async () => {
             try {
                 const response = await axiosInstance.get(
-                    `/files/${item.campaignImageName}`
+                    `/file/${item.campaignImageName}`
                 );
                 return setImageUrl(response.data);
             } catch (error) {
@@ -58,6 +58,12 @@ const CardWithdrawal = (props) => {
                         <h1 className="text-xs text-dark">Total amount</h1>
                         <h1 className="text-primary text-xs font-medium">
                             <FormatRupiah value={item.totalAmount} />
+                        </h1>
+                    </div>
+                    <div>
+                        <h1 className="text-xs text-dark">Tax</h1>
+                        <h1 className="text-primary text-xs font-medium">
+                            <FormatRupiah value={item.totalTax} />
                         </h1>
                     </div>
                     {status === "COMPLETED" && (

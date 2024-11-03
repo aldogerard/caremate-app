@@ -24,6 +24,7 @@ const TableWithdrawal = (props) => {
                         <th className="w-[25%]">Campaign Title</th>
                         <th className="w-[20%]">Category</th>
                         <th className="w-[15%]">Total Withdrawal</th>
+                        <th className="w-[10%]">Tax</th>
                         <th className="w-[10%] pr-4">Action</th>
                     </tr>
                 </thead>
@@ -44,6 +45,9 @@ const TableWithdrawal = (props) => {
                                     <td>{res.category}</td>
                                     <td>
                                         <FormatRupiah value={res.totalAmount} />
+                                    </td>
+                                    <td>
+                                        <FormatRupiah value={res.totalTax} />
                                     </td>
                                     <td className="pr-4">
                                         <Button

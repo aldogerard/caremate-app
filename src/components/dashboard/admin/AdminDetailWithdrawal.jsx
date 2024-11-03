@@ -107,6 +107,16 @@ const AdminDetailWithdrawal = (props) => {
                             </div>
                         </div>
                         <div className="w-[33%]">
+                            <h1 className="text-dark/70">Tax</h1>
+                            <div className="px-4 py-3 border rounded-md shadow-sm">
+                                <h1 className="text-dark">
+                                    <FormatRupiah
+                                        value={currentWithdrawal?.totalTax}
+                                    />
+                                </h1>
+                            </div>
+                        </div>
+                        <div className="w-[33%]">
                             <h1 className="text-dark/70">Start Date</h1>
                             <div className="px-4 py-3 border rounded-md shadow-sm">
                                 <h1 className="text-dark">
@@ -115,7 +125,7 @@ const AdminDetailWithdrawal = (props) => {
                             </div>
                         </div>
                         <div className="w-[33%]">
-                            <h1 className="text-dark/70">End Datee</h1>
+                            <h1 className="text-dark/70">End Date</h1>
                             <div className="px-4 py-3 border rounded-md shadow-sm">
                                 <h1 className="text-dark">
                                     {formatDate(currentWithdrawal?.endDate)}
@@ -123,6 +133,16 @@ const AdminDetailWithdrawal = (props) => {
                             </div>
                         </div>
                     </div>
+                    {status === "REJECTED" && (
+                        <div className="w-full">
+                            <h1 className="text-dark/70">Message</h1>
+                            <div className="px-4 py-3 border rounded-md shadow-sm min-h-16">
+                                <h1 className="text-dark">
+                                    {currentWithdrawal?.message}
+                                </h1>
+                            </div>
+                        </div>
+                    )}
 
                     {status === "PENDING" && (
                         <>

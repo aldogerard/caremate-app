@@ -16,7 +16,7 @@ const AdminDetailCampaign = (props) => {
         const fetchImageUrl = async () => {
             try {
                 const response = await axiosInstance.get(
-                    `/files/${currentCampaign?.campaignImageName}`
+                    `/file/${currentCampaign?.campaignImageName}`
                 );
                 console.log(response.data);
                 return setImageUrl(response.data);

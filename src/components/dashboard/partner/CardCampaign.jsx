@@ -22,7 +22,7 @@ const CardCampaign = (props) => {
         const fetchImageUrl = async () => {
             try {
                 const response = await axiosInstance.get(
-                    `/files/${item.campaignImageName}`
+                    `/file/${item.campaignImageName}`
                 );
                 return setImageUrl(response.data);
             } catch (error) {

@@ -9,7 +9,7 @@ const CardCampaignReport = ({ item }) => {
         const fetchImageUrl = async () => {
             try {
                 const response = await axiosInstance.get(
-                    `/files/${item?.reportImageName}`
+                    `/file/${item?.reportImageName}`
                 );
                 return setImageUrl(response.data);
             } catch (error) {

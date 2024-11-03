@@ -8,6 +8,7 @@
         "status": "PENDING",
         "message": "",
         "totalAmount": 125600,
+        "totalTax": 3768,
         "invoiceFileName": null,
         "partnerName": "Yayasan Enigma Bahari",
         "category": "Operational Costs"
@@ -21,6 +22,7 @@
         "status": "COMPLETED",
         "message": "",
         "totalAmount": 295600,
+        "totalTax": 8868,
         "invoiceFileName": "SuratKeteranganLulus.pdf",
         "partnerName": "Yayasan Satu Anak",
         "category": "Infrastructure Development"
@@ -33,7 +35,8 @@
         "endDate": "2024-11-21T00:00:00.000+00:00",
         "status": "REJECTED",
         "message": "Lorem ipsum dolor Impedit",
-        "totalAmount": 295600,
+        "totalAmount": 1295600,
+        "totalTax": 38868,
         "invoiceFileName": null,
         "partnerName": "Yayasan Satu Anak",
         "category": "Infrastructure Development"

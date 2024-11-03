@@ -6,7 +6,7 @@ const ButtonFile = (props) => {
 
     const handleClick = async () => {
         try {
-            const response = await axiosInstance.get(`/files/${fileName}`);
+            const response = await axiosInstance.get(`/file/${fileName}`);
             window.open(response.data, "_blank");
         } catch (error) {
             console.log("Error : ", error);
