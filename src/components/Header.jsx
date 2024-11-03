@@ -1,6 +1,7 @@
 import { logout } from "@/redux/feature/authSlice";
 import { Logout } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
+import { capitalizeFirstLetter } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
 import { FaAngleDown, FaBars, FaSeedling, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -81,14 +82,6 @@ const Header = () => {
             name: "Dashboard",
         },
     ];
-
-    const capitalizeFirstLetter = (string) => {
-        return string
-            .toLowerCase()
-            .split(" ")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
-    };
 
     return (
         <section className="flex justify-center w-full bg-light fixed z-50 border-b">

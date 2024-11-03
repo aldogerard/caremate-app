@@ -1,5 +1,5 @@
 const FileVerif = (props) => {
-    const { title, name, formData, handleChangeFile } = props;
+    const { title, name, document, handleChangeFile } = props;
     return (
         <div className="flex flex-col gap-1 w-full lg:w-[32%]">
             <div className="flex justify-between items-center">
@@ -9,15 +9,15 @@ const FileVerif = (props) => {
             </div>
             <div
                 className={`${
-                    formData[name]?.name && "border-primary"
+                    document[name]?.name && "border-primary"
                 } border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-28`}
             >
                 <h1
                     className={`text-sm lg:text-base font-medium text-accent ${
-                        formData[name]?.name && "text-black/70"
+                        document[name]?.name && "text-black/70"
                     }`}
                 >
-                    {formData[name]?.name || "Upload your file"}
+                    {document[name]?.name || "Upload your file"}
                 </h1>
                 <input
                     type="file"

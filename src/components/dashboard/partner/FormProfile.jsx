@@ -17,8 +17,8 @@ const data = [
         type: "email",
     },
     {
-        title: "Contact Address",
-        name: "contactAddress",
+        title: "Address",
+        name: "address",
         type: "text",
     },
     {
@@ -34,15 +34,11 @@ const data = [
 ];
 
 const FormProfile = (props) => {
-    const {
-        isEdit,
-        currentPartner,
-        handleSubmitFormProfile,
-        handleClickEditProfile,
-    } = props;
+    const { isEdit, partner, handleSubmitFormProfile, handleClickEditProfile } =
+        props;
 
     const [isMount, setIsMount] = useState(false);
-    const [updatedPartner, setUpdatedPartner] = useState(currentPartner);
+    const [updatedPartner, setUpdatedPartner] = useState(partner);
     const [isEmailInvalid, setIsEmailInvalid] = useState(false);
 
     useEffect(() => {
@@ -50,10 +46,10 @@ const FormProfile = (props) => {
             const email = updatedPartner?.email;
             setIsEmailInvalid(!validateEmail(email) && email?.length > 0);
         } else {
-            setUpdatedPartner(currentPartner);
+            setUpdatedPartner(partner);
             setIsMount(true);
         }
-    }, [currentPartner, updatedPartner, isMount]);
+    }, [partner, updatedPartner, isMount]);
 
     const handleChangeInput = (e) => {
         const { name, value } = e.target;
@@ -61,7 +57,7 @@ const FormProfile = (props) => {
     };
 
     const handleCancelForm = () => {
-        setUpdatedPartner(currentPartner);
+        setUpdatedPartner(partner);
         handleClickEditProfile();
     };
 

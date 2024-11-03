@@ -5,18 +5,37 @@ import React, { useEffect, useState } from "react";
 import { FaThLarge } from "react-icons/fa";
 import {
     FaArrowRightFromBracket,
-    FaBasketShopping,
-    FaCarRear,
     FaChevronLeft,
-    FaEnvelopeOpenText,
     FaHeart,
     FaMoneyCheckDollar,
     FaSeedling,
     FaUser,
-    FaUsers,
 } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
+
+const list = [
+    {
+        name: "Dashboard",
+        link: "/dashboard/partner",
+        icon: <FaThLarge size={14} color="#eee" />,
+    },
+    {
+        name: "Profile",
+        link: "/dashboard/partner/profile",
+        icon: <FaUser size={14} color="#eee" />,
+    },
+    {
+        name: "Campaign",
+        link: "/dashboard/partner/campaign",
+        icon: <FaHeart size={14} color="#eee" />,
+    },
+    {
+        name: "Withdrawal",
+        link: "/dashboard/partner/withdrawal",
+        icon: <FaMoneyCheckDollar size={14} color="#eee" />,
+    },
+];
 
 const PartnerDashboardLayout = () => {
     const [isOpen, setIsOpen] = useState(window.innerWidth > 1023);
@@ -51,29 +70,6 @@ const PartnerDashboardLayout = () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
-
-    const list = [
-        {
-            name: "Dashboard",
-            link: "/dashboard/partner",
-            icon: <FaThLarge size={14} color="#eee" />,
-        },
-        {
-            name: "Profile",
-            link: "/dashboard/partner/profile",
-            icon: <FaUser size={14} color="#eee" />,
-        },
-        {
-            name: "Campaign",
-            link: "/dashboard/partner/campaign",
-            icon: <FaHeart size={14} color="#eee" />,
-        },
-        {
-            name: "Withdrawal",
-            link: "/dashboard/partner/withdrawal",
-            icon: <FaMoneyCheckDollar size={14} color="#eee" />,
-        },
-    ];
 
     return (
         <>

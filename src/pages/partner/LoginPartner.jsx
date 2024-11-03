@@ -1,5 +1,6 @@
-import { clear, login } from "@/redux/feature/authSlice";
+import { clearAuthStatus, login } from "@/redux/feature/authSlice";
 import { Failed, Success } from "@/utils/AlertUtil";
+import { validateEmail, validatePassword } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash, FaSeedling } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +21,6 @@ const LoginPartner = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { status } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (!isMount) {
@@ -37,46 +37,9 @@ const LoginPartner = () => {
         );
     }, [auth]);
 
-    const validateEmail = (str) => {
-        const regex = /^[\w.-]+@[\w.-]+\.\w+$/;
-        return regex.test(str);
-    };
-
-    const validatePassword = (str) => {
-        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-        return regex.test(str);
-    };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setAuth((state) => ({ ...state, [name]: value }));
-    };
-
-    useEffect(() => {
-        if (status !== null) {
-            if (status === "Logged in successfully") {
-                dispatch(clear());
-                // Success("Successfully login");
-                return navigate("/");
-            } else {
-                Failed(status || "Failed to login");
-            }
-            dispatch(clear());
-        }
-    }, [status]);
-
-    const handleSubmit = async (e) => {
-        try {
-            e.preventDefault();
-            dispatch(login(auth));
-            e.target.reset();
-            setAuth({
-                email: "",
-                password: "",
-            });
-        } catch (error) {
-            // console.log(error)
-        }
     };
 
     const handleClick = () => {
@@ -89,6 +52,27 @@ const LoginPartner = () => {
 
     const handleBlur = () => {
         setIsFocus(false);
+    };
+
+    const handleSubmit = async (e) => {
+        try {
+            e.preventDefault();
+            e.target.reset();
+            setAuth({
+                email: "",
+                password: "",
+            });
+
+            await dispatch(login(auth)).unwrap();
+
+            Success("Successfully login");
+
+            dispatch(clearAuthStatus());
+            return navigate("/");
+        } catch (error) {
+            Failed(error.message);
+            dispatch(clearAuthStatus());
+        }
     };
 
     return (

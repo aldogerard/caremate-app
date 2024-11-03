@@ -29,9 +29,9 @@ const data = [
 ];
 
 const FormVerif = (props) => {
-    const { handleSubmitVerification } = props;
+    const { partner, handleSubmitVerification } = props;
 
-    const [formData, setFormData] = useState({
+    const [document, setDocument] = useState({
         cfe: "",
         fr: "",
         rc: "",
@@ -42,22 +42,29 @@ const FormVerif = (props) => {
     const handleChangeFile = (e) => {
         const { name, files } = e.target;
         if (files.length < 1) {
-            return setFormData({ ...formData, [name]: "" });
+            return setDocument({ ...document, [name]: "" });
         }
         if (validateFile(files, "pdf")) {
-            return setFormData({ ...formData, [name]: files[0] });
+            return setDocument({ ...document, [name]: files[0] });
         } else {
-            return setFormData({ ...formData, [name]: "" });
+            return setDocument({ ...document, [name]: "" });
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleSubmitVerification(formData);
+
+        const data = new FormData();
+
+        Object.entries(document).forEach(([key, value]) => {
+            data.append(key, value);
+        });
+
+        handleSubmitVerification(data);
     };
 
     const handleClickMessage = () => {
-        Message("Lorem ipsum dolor impe");
+        Message(partner.message);
     };
 
     return (
@@ -66,7 +73,7 @@ const FormVerif = (props) => {
                 <p className="text-xs lg:text-sm font-medium text-error">
                     Maximum files is 1MB (.pdf)
                 </p>
-                {"REJECTED" === "REJECTED" && (
+                {partner.status === "REJECTED" && (
                     <Button
                         type={"button"}
                         name={"Message"}
@@ -82,7 +89,7 @@ const FormVerif = (props) => {
                             <FileVerif
                                 title={item.title}
                                 name={item.name}
-                                formData={formData}
+                                document={document}
                                 handleChangeFile={handleChangeFile}
                             />
                         )}

@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { FaMoneyCheck, FaSchool } from "react-icons/fa6";
 import { TbClock } from "react-icons/tb";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import CardDashboard from "@/components/dashboard/CardDashboard";
 import Title from "@/components/dashboard/Title";
 import EachUtils from "@/utils/EachUtils";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import Invoice from "@/components/PDF/Invoice";
+import { getDetailPartner } from "@/redux/feature/partner/PartnerSlice";
 
 const data = [
     {
@@ -31,20 +30,38 @@ const data = [
 ];
 
 const Dashboard = () => {
-    const { currentPartner } = useSelector((state) => state.partner);
+    const dispatch = useDispatch();
+
+    const { user } = useSelector((state) => state.auth);
+    const { partner } = useSelector((state) => state.partner);
+
     const [datas, setDatas] = useState(data);
 
     useEffect(() => {
-        if (currentPartner !== null) {
-            setDatas((state) =>
-                state.map((item) =>
+        if (partner) {
+            setDatas((prevState) =>
+                prevState.map((item) =>
                     item.name === "Status Fondation"
-                        ? { ...item, data: currentPartner.status }
+                        ? { ...item, data: partner.status }
                         : item
                 )
             );
         }
-    }, [currentPartner]);
+    }, [partner]);
+
+    useEffect(() => {
+        const fetchPartnerDetails = async () => {
+            try {
+                await dispatch(getDetailPartner(user.id)).unwrap();
+            } catch (error) {
+                console.error("Error fetching partner details:", error);
+            }
+        };
+
+        if (user?.id) {
+            fetchPartnerDetails();
+        }
+    }, [user]);
 
     return (
         <>

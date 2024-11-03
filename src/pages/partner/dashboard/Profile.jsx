@@ -5,14 +5,13 @@ import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
 import FormProfile from "@/components/dashboard/partner/FormProfile";
 import FormVerif from "@/components/dashboard/partner/FormVerif";
-import { Failed, SuccessUpdate } from "@/utils/AlertUtil";
+import { Failed, Success, SuccessUpdate } from "@/utils/AlertUtil";
 import {
-    createPartnerDoc,
-    fetchPartnerDocByUserId,
-} from "@/redux/feature/PartnerDocSlice";
-import { fetchPartnerById, updatePartner } from "@/redux/feature/PartnerSlice";
+    getDetailPartner,
+    updateDocumentPartner,
+    updateProfilePartner,
+} from "@/redux/feature/partner/PartnerSlice";
 
-import dummy from "@/data/dummyPartner.json";
 import ButtonFile from "@/components/ButtonFile";
 
 const data = [
@@ -27,44 +26,24 @@ const data = [
 const Profile = () => {
     const dispatch = useDispatch();
 
-    const { id } = useSelector((state) => state.auth);
-    const { currentPartner } = useSelector((state) => state.partner);
-    const { currentPartnerDoc } = useSelector((state) => state.partnerDoc);
+    const { user } = useSelector((state) => state.auth);
+    const { partner } = useSelector((state) => state.partner);
 
     const [filter, setFilter] = useState(data[0].name);
     const [isEdit, setIsEdit] = useState(false);
-    const [status, setStatus] = useState("UNVERIFIED");
-
-    const [dummyPartner, setDummyPartner] = useState(dummy[0]);
-    const [dummyStatusPartner, setDummyStatusPartner] = useState(
-        dummy[0].status
-    );
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await dispatch(fetchPartnerById(id)).unwrap();
-                await dispatch(fetchPartnerDocByUserId(id)).unwrap();
-            } catch (error) {
-                console.log("Error fetching data:", error);
-            }
-        };
-        if (currentPartner !== null) {
-            setStatus(currentPartner?.status);
-        }
-        fetchData();
-    }, [dispatch, currentPartner, id]);
 
     const handleClickEditProfile = () => {
         setIsEdit((state) => !state);
     };
 
-    const handleSubmitFormProfile = async (updatedPartner) => {
+    const handleSubmitFormProfile = async (data) => {
         try {
-            const partner = { ...updatedPartner, userId: id };
-            await dispatch(updatePartner(partner)).unwrap();
+            console.log(data);
+            await dispatch(
+                updateProfilePartner({ id: user.id, data: data })
+            ).unwrap();
             SuccessUpdate();
-            await dispatch(fetchPartnerById(id)).unwrap();
+            await fetchPartnerDetails();
         } catch (error) {
             Failed("Failed to update");
         } finally {
@@ -72,22 +51,30 @@ const Profile = () => {
         }
     };
 
-    const handleSubmitVerification = async (formData) => {
-        const data = new FormData();
-
-        Object.entries(formData).forEach(([key, value]) => {
-            data.append(key, value);
-        });
-        data.append("userId", id);
-
+    const handleSubmitVerification = async (data) => {
         try {
-            await dispatch(createPartnerDoc(data))
-                .unwrap()
-                .then(() => {
-                    alert("Successfully submit partner document");
-                });
+            await dispatch(
+                updateDocumentPartner({ id: user.id, data: data })
+            ).unwrap();
+            Success("Successfully submit document");
+            await fetchPartnerDetails();
         } catch (error) {
+            console.log(error);
             Failed("Failed verification document");
+        }
+    };
+
+    useEffect(() => {
+        if (user?.id) {
+            fetchPartnerDetails();
+        }
+    }, [user]);
+
+    const fetchPartnerDetails = async () => {
+        try {
+            await dispatch(getDetailPartner(user.id)).unwrap();
+        } catch (error) {
+            console.error("Error fetching partner details:", error);
         }
     };
 
@@ -96,59 +83,68 @@ const Profile = () => {
             <Title name={"Profile"} />
             <Filter data={data} setFilter={setFilter} filter={filter} />
 
-            {filter === "Edit Profile" && (
-                <FormProfile
-                    isEdit={isEdit}
-                    currentPartner={dummyPartner}
-                    handleClickEditProfile={handleClickEditProfile}
-                    handleSubmitFormProfile={handleSubmitFormProfile}
-                />
-            )}
-
-            {filter === "Verification" &&
-                (dummyStatusPartner === "UNVERIFIED" ||
-                    dummyStatusPartner === "REJECTED") && (
-                    <FormVerif
-                        currentPartnerDoc={currentPartnerDoc}
-                        handleSubmitVerification={handleSubmitVerification}
-                    />
-                )}
-
-            {filter === "Verification" &&
-                dummyStatusPartner === "IN REVIEW" && (
-                    <h1 className="text-primary text-center mt-32 text-xs lg:text-lg">
-                        You have submitted a verification request, please wait
-                        for approval
-                    </h1>
-                )}
-
-            {filter === "Verification" && dummyStatusPartner === "VERIFIED" && (
+            {partner && (
                 <>
-                    <h1 className="text-primary mb-4 text-xs lg:text-xl ">
-                        Your foundation has been successfully verified
-                    </h1>
-                    <div className="flex flex-row gap-2 flex-wrap items-center">
-                        <ButtonFile
-                            fileName={dummyPartner?.cfeFileName}
-                            name={"Certification of Foundation Estabishment"}
+                    {filter === "Edit Profile" && (
+                        <FormProfile
+                            isEdit={isEdit}
+                            partner={partner}
+                            handleClickEditProfile={handleClickEditProfile}
+                            handleSubmitFormProfile={handleSubmitFormProfile}
                         />
-                        <ButtonFile
-                            fileName={dummyPartner?.frFileName}
-                            name={"Financial Report"}
-                        />
-                        <ButtonFile
-                            fileName={dummyPartner?.rcFileName}
-                            name={"Registered Certificate"}
-                        />
-                        <ButtonFile
-                            fileName={dummyPartner?.ffpFileName}
-                            name={"Foundation Financial Plan"}
-                        />
-                        <ButtonFile
-                            fileName={dummyPartner?.baFileName}
-                            name={"Bank Account"}
-                        />
-                    </div>
+                    )}
+
+                    {filter === "Verification" &&
+                        (partner.status === "UNVERIFIED" ||
+                            partner.status === "REJECTED") && (
+                            <FormVerif
+                                partner={partner}
+                                handleSubmitVerification={
+                                    handleSubmitVerification
+                                }
+                            />
+                        )}
+
+                    {filter === "Verification" && (
+                        <>
+                            {partner.status === "VERIFIED" && (
+                                <h1 className="text-primary mb-4 text-xs lg:text-xl ">
+                                    Your foundation has been successfully
+                                    verified
+                                </h1>
+                            )}
+                            {partner.status === "IN_REVIEW" && (
+                                <h1 className="text-primary mb-4 text-xs lg:text-xl ">
+                                    You have submitted a verification request,
+                                    please wait for approval
+                                </h1>
+                            )}
+                            <div className="flex flex-row gap-2 flex-wrap items-center">
+                                <ButtonFile
+                                    fileName={partner?.cfeFileName}
+                                    name={
+                                        "Certification of Foundation Estabishment"
+                                    }
+                                />
+                                <ButtonFile
+                                    fileName={partner?.frFileName}
+                                    name={"Financial Report"}
+                                />
+                                <ButtonFile
+                                    fileName={partner?.rcFileName}
+                                    name={"Registered Certificate"}
+                                />
+                                <ButtonFile
+                                    fileName={partner?.ffpFileName}
+                                    name={"Foundation Financial Plan"}
+                                />
+                                <ButtonFile
+                                    fileName={partner?.baFileName}
+                                    name={"Bank Account"}
+                                />
+                            </div>
+                        </>
+                    )}
                 </>
             )}
         </>

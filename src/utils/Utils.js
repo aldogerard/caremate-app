@@ -23,6 +23,11 @@ export const validateEmail = (str) => {
     return regex.test(str);
 };
 
+export const validatePassword = (str) => {
+    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    return regex.test(str);
+};
+
 export const validateFile = (files, type) => {
     const maxSize = 1 * 1024 * 1024;
     if (!files[0]?.type.includes(type)) {
