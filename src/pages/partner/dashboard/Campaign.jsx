@@ -7,9 +7,9 @@ import Filter from "@/components/Filter";
 import { Failed } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import dummy from "@/data/dummyCampaign.json";
+import { getCampaignByPartnerId } from "@/redux/feature/partner/CampaignSlice";
 
 const data = [
     {
@@ -27,23 +27,32 @@ const data = [
 ];
 
 const Campaign = () => {
-    const { currentPartner } = useSelector((state) => state.partner);
+    const dispatch = useDispatch();
+
+    const { user } = useSelector((state) => state.auth);
+    const { partner } = useSelector((state) => state.partner);
+    const { campaign } = useSelector((state) => state.campaign);
 
     const [filter, setFilter] = useState(data[0].name);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-    const [statusPartner, setStatusPartner] = useState("UNVERIFIED");
-    const [currentCampaign, setCurrentCampaign] = useState(null);
-    const [currentImageUrl, setCurrentImageUrl] = useState("");
 
     useEffect(() => {
-        if (currentPartner !== null) {
-            setStatusPartner(currentPartner.status);
+        if (user?.id) {
+            fetchCampaign();
         }
-    }, [currentPartner]);
+    }, [user]);
+
+    const fetchCampaign = async () => {
+        try {
+            await dispatch(getCampaignByPartnerId(user.id)).unwrap();
+        } catch (error) {
+            console.error("Error fetching partner details:", error);
+        }
+    };
 
     const handleFromModal = () => {
-        if (statusPartner === "VERIFIED") {
+        if (partner.status !== "VERIFIED") {
             return Failed("Your foundation has not been verified");
         }
         setIsFormModalOpen((state) => !state);
@@ -55,46 +64,58 @@ const Campaign = () => {
 
     return (
         <>
-            <Title name={"Campaign"}>
-                <div className="pb-2">
-                    <Button
-                        type={"button"}
-                        name={"Add Campaign"}
-                        onClick={handleFromModal}
-                    />
-                </div>
-            </Title>
-
-            <FormCampaign
-                isOpen={isFormModalOpen}
-                closeModal={handleFromModal}
-            />
-
-            <Filter data={data} setFilter={setFilter} filter={filter} />
-
-            <div className="flex flex-col gap-4 w-full mt-10 lg:flex-row lg:flex-wrap lg:justify-start">
-                <EachUtils
-                    of={dummy}
-                    render={(item) =>
-                        filter === item.status && (
-                            <CardCampaign
-                                item={item}
-                                status={filter}
-                                openModal={handleDetailModal}
-                                setCurrentCampaign={setCurrentCampaign}
-                                setCurrentImageUrl={setCurrentImageUrl}
+            {partner && (
+                <>
+                    <Title name={"Campaign"}>
+                        <div className="pb-2">
+                            <Button
+                                type={"button"}
+                                name={"Add Campaign"}
+                                onClick={handleFromModal}
                             />
-                        )
-                    }
-                />
-            </div>
-            <DetailCampaign
-                isOpen={isDetailModalOpen}
-                closeModal={handleDetailModal}
-                status={filter}
-                item={currentCampaign}
-                currentImageUrl={currentImageUrl}
-            />
+                        </div>
+                    </Title>
+
+                    <FormCampaign
+                        isOpen={isFormModalOpen}
+                        closeModal={handleFromModal}
+                    />
+
+                    {campaign?.length > 0 ? (
+                        <>
+                            <Filter
+                                data={data}
+                                setFilter={setFilter}
+                                filter={filter}
+                            />
+
+                            <div className="flex flex-col gap-4 w-full mt-10 lg:flex-row lg:flex-wrap lg:justify-start">
+                                <EachUtils
+                                    of={campaign}
+                                    render={(item) =>
+                                        filter === item.status && (
+                                            <CardCampaign
+                                                item={item}
+                                                status={filter}
+                                                openModal={handleDetailModal}
+                                            />
+                                        )
+                                    }
+                                />
+                            </div>
+                            <DetailCampaign
+                                isOpen={isDetailModalOpen}
+                                closeModal={handleDetailModal}
+                                status={filter}
+                            />
+                        </>
+                    ) : (
+                        <div className="flex text-black justify-center items-center h-[50vh]">
+                            <h1>Campaign Not Found</h1>
+                        </div>
+                    )}
+                </>
+            )}
         </>
     );
 };

@@ -10,6 +10,7 @@ import { Confirm, Success } from "@/utils/AlertUtil";
 import CustomModal from "@/components/CustomModal";
 import { pdf, PDFDownloadLink } from "@react-pdf/renderer";
 import Invoice from "@/components/PDF/Invoice";
+import { useSelector } from "react-redux";
 
 const data = [
     {
@@ -20,18 +21,12 @@ const data = [
     },
 ];
 
-const invoiceData = {
-    foundationName: "Yayasan Enigma Malang",
-    address: "Jalan topaz no.7, Lowokwaru, Malang",
-    campaignTitle: "Health Awareness Campaign",
-    totalAmount: "1500000",
-    startDate: "2024-11-01",
-    category: "Infrastructure Development",
-    endDate: "2024-11-30",
-};
-
 const DetailCampaign = (props) => {
-    const { isOpen, closeModal, status, item, currentImageUrl } = props;
+    const { isOpen, closeModal, status } = props;
+
+    const { currentCampaign, currentCampaignUrl } = useSelector(
+        (state) => state.campaign
+    );
 
     const [filter, setFilter] = useState("Detail");
     const [isFormReportOpen, setIsFormReportOpen] = useState(false);
@@ -53,7 +48,7 @@ const DetailCampaign = (props) => {
             handleModal();
             Success("Successfully request a withdrawal");
 
-            const blob = await pdf(<Invoice item={item} />).toBlob();
+            const blob = await pdf(<Invoice item={currentCampaign} />).toBlob();
 
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
@@ -89,7 +84,7 @@ const DetailCampaign = (props) => {
                     >
                         <div className="w-72 h-32 rounded-xl overflow-hidden shadow-md">
                             <img
-                                src={currentImageUrl}
+                                src={currentCampaignUrl}
                                 alt=""
                                 className="w-full h-full object-cover"
                             />
@@ -98,7 +93,9 @@ const DetailCampaign = (props) => {
                         <div className="w-full">
                             <h1 className="text-dark/70">Campaign Title</h1>
                             <div className="px-4 py-3 border rounded-md shadow-sm min-h-[72px]">
-                                <h1 className="text-dark">{item?.title}</h1>
+                                <h1 className="text-dark">
+                                    {currentCampaign?.title}
+                                </h1>
                             </div>
                         </div>
 
@@ -112,7 +109,9 @@ const DetailCampaign = (props) => {
                                     <div className="px-4 py-3 border rounded-md shadow-sm">
                                         <h1 className="text-dark">
                                             <FormatRupiah
-                                                value={item?.currentAmount}
+                                                value={
+                                                    currentCampaign?.currentAmount
+                                                }
                                             />
                                         </h1>
                                     </div>
@@ -123,7 +122,7 @@ const DetailCampaign = (props) => {
                                 <div className="px-4 py-3 border rounded-md shadow-sm">
                                     <h1 className="text-dark">
                                         <FormatRupiah
-                                            value={item?.goalAmount}
+                                            value={currentCampaign?.goalAmount}
                                         />
                                     </h1>
                                 </div>
@@ -132,7 +131,7 @@ const DetailCampaign = (props) => {
                                 <h1 className="text-dark/70">Start Date</h1>
                                 <div className="px-4 py-3 border rounded-md shadow-sm">
                                     <h1 className="text-dark">
-                                        {formatDate(item?.startDate)}
+                                        {formatDate(currentCampaign?.startDate)}
                                     </h1>
                                 </div>
                             </div>
@@ -140,7 +139,7 @@ const DetailCampaign = (props) => {
                                 <h1 className="text-dark/70">End Date</h1>
                                 <div className="px-4 py-3 border rounded-md shadow-sm">
                                     <h1 className="text-dark">
-                                        {formatDate(item?.endDate)}
+                                        {formatDate(currentCampaign?.endDate)}
                                     </h1>
                                 </div>
                             </div>
@@ -150,7 +149,7 @@ const DetailCampaign = (props) => {
                             <h1 className="text-dark/70">Description</h1>
                             <div className="px-4 py-3 border rounded-md shadow-sm min-h-24">
                                 <h1 className="text-dark">
-                                    {item?.description}
+                                    {currentCampaign?.description}
                                 </h1>
                             </div>
                         </div>
@@ -160,29 +159,34 @@ const DetailCampaign = (props) => {
                                 <h1 className="text-dark/70">Category</h1>
                                 <div className="px-4 py-3 border rounded-md shadow-sm">
                                     <h1 className="text-dark">
-                                        {item?.category}
+                                        {currentCampaign?.category}
                                     </h1>
                                 </div>
                             </div>
-                            {status === "COMPLETED" && !item?.isWithdrawal && (
-                                <>
-                                    <PDFDownloadLink
-                                        document={<Invoice item={item} />}
-                                        fileName="invoice.pdf"
-                                        onClick={handleRequestWithdrawal}
-                                    >
-                                        <Button
-                                            type={"submit"}
-                                            name={"Request a withdrawal"}
-                                        />
-                                    </PDFDownloadLink>
-                                </>
-                            )}
+                            {status === "COMPLETED" &&
+                                !currentCampaign?.isWithdrawal && (
+                                    <>
+                                        <PDFDownloadLink
+                                            document={
+                                                <Invoice
+                                                    item={currentCampaign}
+                                                />
+                                            }
+                                            fileName="invoice.pdf"
+                                            onClick={handleRequestWithdrawal}
+                                        >
+                                            <Button
+                                                type={"submit"}
+                                                name={"Request a withdrawal"}
+                                            />
+                                        </PDFDownloadLink>
+                                    </>
+                                )}
                         </div>
                     </div>
                 )}
 
-                {filter === "Report" && !item?.isWithdrawal && (
+                {filter === "Report" && !currentCampaign?.isWithdrawal && (
                     <>
                         {isFormReportOpen && (
                             <div className="flex flex-col gap-2 -mt-8">

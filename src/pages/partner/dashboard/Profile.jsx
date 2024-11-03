@@ -32,6 +32,14 @@ const Profile = () => {
     const [filter, setFilter] = useState(data[0].name);
     const [isEdit, setIsEdit] = useState(false);
 
+    const fetchPartnerDetails = async () => {
+        try {
+            await dispatch(getDetailPartner(user.id)).unwrap();
+        } catch (error) {
+            console.error("Error fetching partner details:", error);
+        }
+    };
+
     const handleClickEditProfile = () => {
         setIsEdit((state) => !state);
     };
@@ -64,27 +72,13 @@ const Profile = () => {
         }
     };
 
-    useEffect(() => {
-        if (user?.id) {
-            fetchPartnerDetails();
-        }
-    }, [user]);
-
-    const fetchPartnerDetails = async () => {
-        try {
-            await dispatch(getDetailPartner(user.id)).unwrap();
-        } catch (error) {
-            console.error("Error fetching partner details:", error);
-        }
-    };
-
     return (
         <>
-            <Title name={"Profile"} />
-            <Filter data={data} setFilter={setFilter} filter={filter} />
-
             {partner && (
                 <>
+                    <Title name={"Profile"} />
+                    <Filter data={data} setFilter={setFilter} filter={filter} />
+
                     {filter === "Edit Profile" && (
                         <FormProfile
                             isEdit={isEdit}

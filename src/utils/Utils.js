@@ -15,6 +15,8 @@ export const capitalizeFirstLetter = (data) => {
         .toLowerCase()
         .split(" ")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+        ?.split("_")
         .join(" ");
 };
 

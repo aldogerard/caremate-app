@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "@/redux/feature/authSlice";
 import PartnerSlice from "./feature/partner/PartnerSlice";
-import PartnerDocSlice from "./feature/partner/PartnerDocSlice";
+import CampaignSlice from "./feature/partner/CampaignSlice";
 
 const store = configureStore({
     reducer: {
         auth: authSlice,
         partner: PartnerSlice,
-        partnerDoc: PartnerDocSlice,
+        campaign: CampaignSlice,
     },
 });
 

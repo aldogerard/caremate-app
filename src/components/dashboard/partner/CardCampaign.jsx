@@ -1,20 +1,21 @@
 import axiosInstance from "@/api/axios";
 import CardCampaignSkleton from "@/components/Skleton/CardCampaignSkleton";
+import { setCurrentCampaign } from "@/redux/feature/partner/CampaignSlice";
 import { formatDate, limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const CardCampaign = (props) => {
-    const { item, status, openModal, setCurrentCampaign, setCurrentImageUrl } =
-        props;
+    const { item, status, openModal } = props;
+
+    const dispatch = useDispatch();
 
     const [imageUrl, setImageUrl] = useState("");
-
     const percent = (item.currentAmount / item.goalAmount) * 100;
 
     const handleClick = () => {
-        setCurrentCampaign(item);
-        setCurrentImageUrl(imageUrl);
+        dispatch(setCurrentCampaign({ item, imageUrl }));
         openModal();
     };
 

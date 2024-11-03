@@ -1,4 +1,5 @@
 import { logout } from "@/redux/feature/authSlice";
+import { getDetailPartner } from "@/redux/feature/partner/PartnerSlice";
 import { Logout } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
@@ -11,7 +12,7 @@ import {
     FaSeedling,
     FaUser,
 } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 const list = [
@@ -38,15 +39,13 @@ const list = [
 ];
 
 const PartnerDashboardLayout = () => {
-    const [isOpen, setIsOpen] = useState(window.innerWidth > 1023);
     const location = useLocation().pathname;
+
     const dispatch = useDispatch();
 
-    const handleLogout = () => {
-        Logout(() => {
-            dispatch(logout());
-        });
-    };
+    const { user } = useSelector((state) => state.auth);
+
+    const [isOpen, setIsOpen] = useState(window.innerWidth > 1023);
 
     useEffect(() => {
         if (window.innerWidth < 1023) {
@@ -71,6 +70,25 @@ const PartnerDashboardLayout = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (user?.id) {
+            fetchPartnerDetails();
+        }
+    }, [user]);
+
+    const fetchPartnerDetails = async () => {
+        try {
+            await dispatch(getDetailPartner(user.id)).unwrap();
+        } catch (error) {
+            console.error("Error fetching partner details:", error);
+        }
+    };
+
+    const handleLogout = () => {
+        Logout(() => {
+            dispatch(logout());
+        });
+    };
     return (
         <>
             <section className="flex  bg-dark relative ">

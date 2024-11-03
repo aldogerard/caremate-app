@@ -84,9 +84,9 @@ const Routers = () => {
                 {
                     path: "/dashboard/partner",
                     element: (
-                        // <PartnerProtected>
-                        <Outlet />
-                        // </PartnerProtected>
+                        <PartnerProtected>
+                            <Outlet />
+                        </PartnerProtected>
                     ),
                     children: [
                         {
