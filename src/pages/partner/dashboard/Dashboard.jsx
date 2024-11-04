@@ -7,6 +7,9 @@ import CardDashboard from "@/components/dashboard/CardDashboard";
 import Title from "@/components/dashboard/Title";
 import EachUtils from "@/utils/EachUtils";
 import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
+import { getCampaignByPartnerId } from "@/redux/feature/partner/campaignSlice";
+import { getWithdrawalByPartnerId } from "@/redux/feature/partner/withdrawalSlice";
+import Loader from "@/components/Loader";
 
 const data = [
     {
@@ -34,27 +37,37 @@ const Dashboard = () => {
 
     const { user } = useSelector((state) => state.auth);
     const { partner } = useSelector((state) => state.partner);
+    const { campaigns } = useSelector((state) => state.campaign);
+    const { withdrawals } = useSelector((state) => state.withdrawal);
 
     const [datas, setDatas] = useState(data);
 
     useEffect(() => {
-        if (partner) {
-            setDatas((prevState) =>
-                prevState.map((item) =>
-                    item.name === "Status Fondation"
-                        ? { ...item, data: partner.status }
-                        : item
-                )
-            );
-        }
-    }, [partner]);
+        if (!partner) return;
+
+        const updatedDatas = datas.map((item) => {
+            switch (item.name) {
+                case "Status Fondation":
+                    return { ...item, data: partner?.status };
+                case "Campaign":
+                    return { ...item, data: campaigns?.length || 0 };
+                case "Withdrawal":
+                    return { ...item, data: withdrawals?.length || 0 };
+                default:
+                    return item;
+            }
+        });
+        setDatas(updatedDatas);
+    }, [partner, campaigns, withdrawals]);
 
     useEffect(() => {
         const fetchPartnerDetails = async () => {
             try {
                 await dispatch(getDetailPartner(user.id)).unwrap();
+                await dispatch(getCampaignByPartnerId(user.id)).unwrap();
+                await dispatch(getWithdrawalByPartnerId(user.id)).unwrap();
             } catch (error) {
-                console.error("Error fetching partner details:", error);
+                console.error("Error fetching : ", error);
             }
         };
 
@@ -66,19 +79,25 @@ const Dashboard = () => {
     return (
         <>
             <Title name={"Dashboard"} />
-            <div className="flex justify-start gap-4 flex-wrap">
-                <EachUtils
-                    of={datas}
-                    render={(item) => (
-                        <CardDashboard
-                            link={item.link}
-                            name={item.name}
-                            data={item.data}
-                            icon={item.icon}
+            {partner && (
+                <>
+                    <div className="flex justify-start gap-4 flex-wrap">
+                        <EachUtils
+                            of={datas}
+                            render={(item) => (
+                                <CardDashboard
+                                    link={item.link}
+                                    name={item.name}
+                                    data={item.data}
+                                    icon={item.icon}
+                                />
+                            )}
                         />
-                    )}
-                />
-            </div>
+                    </div>
+                </>
+            )}
+
+            {!partner && <Loader />}
         </>
     );
 };

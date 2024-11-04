@@ -1,11 +1,13 @@
 import Button from "@/components/Button";
 import CustomModal from "@/components/CustomModal";
-import { Confirm, Success } from "@/utils/AlertUtil";
+import { createCampaign } from "@/redux/feature/partner/campaignSlice";
+import { Confirm, Failed, Success } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import { validateFile } from "@/utils/Utils";
 import React, { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import { FaAngleRight } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
 import Datepicker from "react-tailwindcss-datepicker";
 
 const option = [
@@ -24,6 +26,8 @@ const option = [
 ];
 
 const FormCampaign = (props) => {
+    const { isOpen, closeModal, handleSaveCampaign } = props;
+
     const [formData, setFormData] = useState({
         category: option[0].value,
         title: "",
@@ -33,16 +37,13 @@ const FormCampaign = (props) => {
         endDate: null,
         image: null,
     });
-    const { isOpen, closeModal } = props;
 
     const oneWeekFromNow = new Date();
     oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
 
     const [isSelectOpen, setIsSelectOpen] = useState(false);
 
-    const handleSelect = () => {
-        setIsSelectOpen((state) => !state);
-    };
+    const handleSelect = () => setIsSelectOpen((state) => !state);
 
     const handleCloseModal = () => {
         setFormData({
@@ -90,14 +91,13 @@ const FormCampaign = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (formData.category === option[0].value) {
+            return Failed("Select category");
+        }
+
         Confirm("Add a new campaign", () => {
-            const data = new FormData();
-
-            Object.entries(formData).forEach(([key, value]) => {
-                data.append(key, value);
-            });
-
-            Success("Successfully add new campaign");
+            handleSaveCampaign(formData);
             handleCloseModal();
         });
     };

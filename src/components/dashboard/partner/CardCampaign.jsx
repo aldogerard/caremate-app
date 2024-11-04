@@ -1,6 +1,8 @@
 import axiosInstance from "@/api/axios";
+import Button from "@/components/Button";
 import CardCampaignSkleton from "@/components/Skleton/CardCampaignSkleton";
 import { setCurrentCampaign } from "@/redux/feature/partner/campaignSlice";
+import { Message } from "@/utils/AlertUtil";
 import { formatDate, limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useEffect, useState } from "react";
@@ -44,11 +46,11 @@ const CardCampaign = (props) => {
                 alt="Image Campaign"
                 className="h-24 lg:h-40 aspect-square object-cover rounded-lg"
             />
-            <div className="flex flex-col w-max justify-between">
+            <div className="flex flex-col w-full justify-between">
                 <h1 className="text-sm lg:text-lg  text-dark">
                     {limitText(item.title, 50)}
                 </h1>
-                <div className="lg:flex justify-between hidden">
+                <div className="flex justify-between">
                     <div>
                         <h1 className="text-xs text-dark">Start date</h1>
                         <h1 className="text-primary text-xs font-medium">
@@ -82,12 +84,14 @@ const CardCampaign = (props) => {
                     </div>
                 )}
 
-                {(status === "PENDING" || status === "REJECTED") && (
-                    <div>
-                        <h1 className="text-xs text-dark">Goal amount</h1>
-                        <h1 className="text-primary text-xs font-medium">
-                            <FormatRupiah value={item.goalAmount} />
-                        </h1>
+                {(status === "IN_REVIEW" || status === "REJECTED") && (
+                    <div className="flex justify-between items-end">
+                        <div>
+                            <h1 className="text-xs text-dark">Goal amount</h1>
+                            <h1 className="text-primary text-xs font-medium">
+                                <FormatRupiah value={item.goalAmount} />
+                            </h1>
+                        </div>
                     </div>
                 )}
 

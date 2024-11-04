@@ -13,10 +13,8 @@ export const capitalizeFirstLetter = (data) => {
     if (typeof data !== "string") return data;
     return data
         .toLowerCase()
-        .split(" ")
+        .split(/[\s_]+/) // Memisahkan berdasarkan spasi dan underscore
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ")
-        ?.split("_")
         .join(" ");
 };
 

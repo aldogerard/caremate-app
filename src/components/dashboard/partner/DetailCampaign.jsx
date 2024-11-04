@@ -1,16 +1,18 @@
 import Button from "@/components/Button";
 import Filter from "@/components/Filter";
-import { formatDate } from "@/utils/Utils";
+import { formatDate, validateFile } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dummy from "@/data/dummyCampaignReport.json";
 import EachUtils from "@/utils/EachUtils";
 import CardCampaignReport from "./CardCampaignReport";
-import { Confirm, Success } from "@/utils/AlertUtil";
+import { Confirm, Message, Success } from "@/utils/AlertUtil";
 import CustomModal from "@/components/CustomModal";
 import { pdf, PDFDownloadLink } from "@react-pdf/renderer";
 import Invoice from "@/components/PDF/Invoice";
 import { useSelector } from "react-redux";
+import FormEditCampaign from "./FormEditCampaign";
+import FormCampaignReport from "./FormCampaignReport";
 
 const data = [
     {
@@ -22,14 +24,26 @@ const data = [
 ];
 
 const DetailCampaign = (props) => {
-    const { isOpen, closeModal, status } = props;
+    const {
+        isOpen,
+        closeModal,
+        status,
+        handleEditCampaign,
+        handleStopCampaign,
+        handleSubmitWithdrawal,
+        handleSaveCampaignReport,
+    } = props;
 
+    const { partner } = useSelector((state) => state.partner);
+    const { currentWithdrawal } = useSelector((state) => state.withdrawal);
     const { currentCampaign, currentCampaignUrl } = useSelector(
         (state) => state.campaign
     );
+    const { campaignReports } = useSelector((state) => state.campaignReport);
 
     const [filter, setFilter] = useState("Detail");
     const [isFormReportOpen, setIsFormReportOpen] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
 
     const handleFormReport = () => {
         setIsFormReportOpen((state) => !state);
@@ -38,26 +52,45 @@ const DetailCampaign = (props) => {
     const handleModal = () => {
         setIsFormReportOpen(false);
         setFilter("Detail");
+        setIsEdit(false);
         closeModal();
+    };
+
+    const handleIsEdit = () => {
+        setIsEdit((state) => !state);
     };
 
     const handleRequestWithdrawal = (e) => {
         e.preventDefault();
 
-        Confirm("Request a withdrawal", async () => {
+        Confirm("Request a withdrawal", () => {
             handleModal();
-            Success("Successfully request a withdrawal");
+            handleSubmitWithdrawal(async () => {
+                Success("Successfully request a withdrawal");
+                const blob = await pdf(
+                    <Invoice item={currentCampaign} parter={partner} />
+                ).toBlob();
 
-            const blob = await pdf(<Invoice item={currentCampaign} />).toBlob();
-
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", "invoice.pdf");
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", "withdrawal_invoice.pdf");
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            });
         });
+    };
+
+    const handleCLickStop = () => {
+        Confirm("Stop the campaign", () => {
+            handleStopCampaign();
+            handleModal();
+        });
+    };
+
+    const handleClickMessage = () => {
+        Message(currentWithdrawal?.message || "Lorem ipsum");
     };
 
     return (
@@ -77,195 +110,217 @@ const DetailCampaign = (props) => {
                 )}
 
                 {filter === "Detail" && (
-                    <div
-                        className={`flex flex-row gap-4 flex-wrap justify-between items-center ${
-                            status === "COMPLETED" && "-mt-8"
-                        }`}
-                    >
-                        <div className="w-72 h-32 rounded-xl overflow-hidden shadow-md">
-                            <img
-                                src={currentCampaignUrl}
-                                alt=""
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
+                    <>
+                        {!isEdit && (
+                            <div
+                                className={`flex flex-row gap-4 flex-wrap justify-between items-center ${
+                                    status === "COMPLETED" && "-mt-8"
+                                }`}
+                            >
+                                <div className="w-72 h-32 rounded-xl overflow-hidden shadow-md">
+                                    <img
+                                        src={currentCampaignUrl}
+                                        alt=""
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
 
-                        <div className="w-full">
-                            <h1 className="text-dark/70">Campaign Title</h1>
-                            <div className="px-4 py-3 border rounded-md shadow-sm min-h-[72px]">
-                                <h1 className="text-dark">
-                                    {currentCampaign?.title}
-                                </h1>
-                            </div>
-                        </div>
-
-                        <div className="flex w-full gap-4">
-                            {(status === "ACTIVE" ||
-                                status === "COMPLETED") && (
-                                <div className="w-[33%]">
+                                <div className="w-full">
                                     <h1 className="text-dark/70">
-                                        Raise Amount
+                                        Campaign Title
                                     </h1>
-                                    <div className="px-4 py-3 border rounded-md shadow-sm">
+                                    <div className="px-4 py-3 border rounded-md shadow-sm min-h-[72px]">
                                         <h1 className="text-dark">
-                                            <FormatRupiah
-                                                value={
-                                                    currentCampaign?.currentAmount
-                                                }
-                                            />
+                                            {currentCampaign?.title}
                                         </h1>
                                     </div>
                                 </div>
-                            )}
-                            <div className="w-[33%]">
-                                <h1 className="text-dark/70">Goal Amount</h1>
-                                <div className="px-4 py-3 border rounded-md shadow-sm">
-                                    <h1 className="text-dark">
-                                        <FormatRupiah
-                                            value={currentCampaign?.goalAmount}
-                                        />
-                                    </h1>
-                                </div>
-                            </div>
-                            <div className="w-[33%]">
-                                <h1 className="text-dark/70">Start Date</h1>
-                                <div className="px-4 py-3 border rounded-md shadow-sm">
-                                    <h1 className="text-dark">
-                                        {formatDate(currentCampaign?.startDate)}
-                                    </h1>
-                                </div>
-                            </div>
-                            <div className="w-[33%]">
-                                <h1 className="text-dark/70">End Date</h1>
-                                <div className="px-4 py-3 border rounded-md shadow-sm">
-                                    <h1 className="text-dark">
-                                        {formatDate(currentCampaign?.endDate)}
-                                    </h1>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div className="w-full">
-                            <h1 className="text-dark/70">Description</h1>
-                            <div className="px-4 py-3 border rounded-md shadow-sm min-h-24">
-                                <h1 className="text-dark">
-                                    {currentCampaign?.description}
-                                </h1>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-between items-end w-full mb-2">
-                            <div className="w-[49%]">
-                                <h1 className="text-dark/70">Category</h1>
-                                <div className="px-4 py-3 border rounded-md shadow-sm">
-                                    <h1 className="text-dark">
-                                        {currentCampaign?.category}
-                                    </h1>
-                                </div>
-                            </div>
-                            {status === "COMPLETED" &&
-                                !currentCampaign?.isWithdrawal && (
-                                    <>
-                                        <PDFDownloadLink
-                                            document={
-                                                <Invoice
-                                                    item={currentCampaign}
+                                <div className="flex w-full gap-4">
+                                    {(status === "ACTIVE" ||
+                                        status === "COMPLETED") && (
+                                        <div className="w-[33%]">
+                                            <h1 className="text-dark/70">
+                                                Raise Amount
+                                            </h1>
+                                            <div className="px-4 py-3 border rounded-md shadow-sm">
+                                                <h1 className="text-dark">
+                                                    <FormatRupiah
+                                                        value={
+                                                            currentCampaign?.currentAmount
+                                                        }
+                                                    />
+                                                </h1>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="w-[33%]">
+                                        <h1 className="text-dark/70">
+                                            Goal Amount
+                                        </h1>
+                                        <div className="px-4 py-3 border rounded-md shadow-sm">
+                                            <h1 className="text-dark">
+                                                <FormatRupiah
+                                                    value={
+                                                        currentCampaign?.goalAmount
+                                                    }
                                                 />
-                                            }
-                                            fileName="invoice.pdf"
-                                            onClick={handleRequestWithdrawal}
-                                        >
+                                            </h1>
+                                        </div>
+                                    </div>
+                                    <div className="w-[33%]">
+                                        <h1 className="text-dark/70">
+                                            Start Date
+                                        </h1>
+                                        <div className="px-4 py-3 border rounded-md shadow-sm">
+                                            <h1 className="text-dark">
+                                                {formatDate(
+                                                    currentCampaign?.startDate
+                                                )}
+                                            </h1>
+                                        </div>
+                                    </div>
+                                    <div className="w-[33%]">
+                                        <h1 className="text-dark/70">
+                                            End Date
+                                        </h1>
+                                        <div className="px-4 py-3 border rounded-md shadow-sm">
+                                            <h1 className="text-dark">
+                                                {formatDate(
+                                                    currentCampaign?.endDate
+                                                )}
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="w-full">
+                                    <h1 className="text-dark/70">
+                                        Description
+                                    </h1>
+                                    <div className="px-4 py-3 border rounded-md shadow-sm min-h-24">
+                                        <h1 className="text-dark">
+                                            {currentCampaign?.description}
+                                        </h1>
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-between items-end w-full mb-2">
+                                    <div className="w-[49%]">
+                                        <h1 className="text-dark/70">
+                                            Category
+                                        </h1>
+                                        <div className="px-4 py-3 border rounded-md shadow-sm">
+                                            <h1 className="text-dark">
+                                                {currentCampaign?.category}
+                                            </h1>
+                                        </div>
+                                    </div>
+
+                                    {status === "REJECTED" && (
+                                        <Button
+                                            type={"reset"}
+                                            name={"Rejected message"}
+                                            onClick={handleClickMessage}
+                                        />
+                                    )}
+
+                                    {status === "ACTIVE" && (
+                                        <div className="flex gap-2">
                                             <Button
                                                 type={"submit"}
-                                                name={"Request a withdrawal"}
+                                                name={"Edit"}
+                                                onClick={handleIsEdit}
                                             />
-                                        </PDFDownloadLink>
-                                    </>
-                                )}
-                        </div>
-                    </div>
+                                            <Button
+                                                type={"reset"}
+                                                name={"Stop Campaign"}
+                                                onClick={handleCLickStop}
+                                            />
+                                        </div>
+                                    )}
+
+                                    {status === "COMPLETED" &&
+                                        (!currentCampaign?.isWithdrawal ||
+                                            currentCampaign?.isWithdrawal ===
+                                                "REJECTED") && (
+                                            <PDFDownloadLink
+                                                document={
+                                                    <Invoice
+                                                        item={currentCampaign}
+                                                        partner={partner}
+                                                    />
+                                                }
+                                                fileName="withdrawal_invoice.pdf"
+                                                onClick={
+                                                    handleRequestWithdrawal
+                                                }
+                                            >
+                                                <Button
+                                                    type={"submit"}
+                                                    name={
+                                                        "Request a withdrawal"
+                                                    }
+                                                />
+                                            </PDFDownloadLink>
+                                        )}
+                                </div>
+                            </div>
+                        )}
+
+                        {isEdit && (
+                            <FormEditCampaign
+                                handleModal={handleModal}
+                                handleEditCampaign={handleEditCampaign}
+                                handleIsEdit={handleIsEdit}
+                            />
+                        )}
+                    </>
                 )}
 
-                {filter === "Report" && !currentCampaign?.isWithdrawal && (
+                {filter === "Report" && (
                     <>
-                        {isFormReportOpen && (
-                            <div className="flex flex-col gap-2 -mt-8">
-                                <div className="flex gap-2">
-                                    <div className="flex flex-col gap-1 w-full lg:w-[30%]">
-                                        <div className="flex justify-between items-center">
-                                            <label
-                                                htmlFor="phoneNumber"
-                                                className="text-black/80"
-                                            >
-                                                Image
-                                            </label>
-                                        </div>
-                                        <div className="border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-24">
-                                            <h1
-                                                className={`text-sm lg:text-lg font-medium text-accent`}
-                                            >
-                                                Upload your file
-                                            </h1>
-                                            <input
-                                                type="file"
-                                                required
-                                                id="image"
-                                                name="image"
-                                                accept="image/*"
-                                                className={`absolute w-full h-full opacity-0 cursor-pointer`}
-                                            />
-                                        </div>
-                                    </div>
+                        {currentCampaign?.isWithdrawal === "APPROVED" && (
+                            <>
+                                {isFormReportOpen && (
+                                    <FormCampaignReport
+                                        handleFormReport={handleFormReport}
+                                        handleModal={handleModal}
+                                        handleSaveCampaignReport={
+                                            handleSaveCampaignReport
+                                        }
+                                    />
+                                )}
 
-                                    <div className="flex flex-col gap-1 w-full lg:w-[70%]">
-                                        <div className="flex justify-between items-center">
-                                            <label
-                                                htmlFor="description"
-                                                className="text-black/80"
-                                            >
-                                                Description
-                                            </label>
-                                        </div>
-                                        <textarea
-                                            type="text"
-                                            id="description"
-                                            autoComplete="off"
-                                            name="description"
-                                            placeholder="Enter description for your foundation"
-                                            maxLength={165}
-                                            className={`px-5 py-4 h-24 lg:h-24 text-dark outline-none rounded-md border focus:shadow-sm  bg-white resize-none `}
+                                {!isFormReportOpen && (
+                                    <div className="-mt-8">
+                                        <Button
+                                            type={"submit"}
+                                            name={"Add Report"}
+                                            onClick={handleFormReport}
                                         />
                                     </div>
-                                </div>
-                                <div className="flex justify-end gap-2">
-                                    <Button type={"submit"} name={"Submit"} />
-                                    <Button
-                                        type={"reset"}
-                                        name={"Cancel"}
-                                        onClick={handleFormReport}
+                                )}
+
+                                <div className="flex flex-row flex-wrap  pb-4 gap-4 -mt-3">
+                                    <EachUtils
+                                        of={campaignReports || []}
+                                        render={(item) => (
+                                            <CardCampaignReport item={item} />
+                                        )}
                                     />
                                 </div>
-                            </div>
+                            </>
                         )}
 
-                        {!isFormReportOpen && (
-                            <div className="-mt-8">
-                                <Button
-                                    type={"submit"}
-                                    name={"Add Report"}
-                                    onClick={handleFormReport}
-                                />
+                        {currentCampaign?.isWithdrawal !== "APPROVED" && (
+                            <div className="flex justify-center items-center mb-12 text-primary">
+                                <h1>
+                                    Access after the withdrawal process is
+                                    complete
+                                </h1>
                             </div>
                         )}
-
-                        <div className="flex flex-row flex-wrap  pb-4 gap-4 -mt-3">
-                            <EachUtils
-                                of={dummy}
-                                render={(item) => (
-                                    <CardCampaignReport item={item} />
-                                )}
-                            />
-                        </div>
                     </>
                 )}
             </main>

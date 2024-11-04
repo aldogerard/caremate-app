@@ -3,12 +3,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const createCampaign = createAsyncThunk(
     "campaign/createCampaign",
-    async ({ id, data }, { rejectWithValue }) => {
+    async (data, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.post(`/campaign/${id}`, data);
+            const response = await axiosInstance.post(`/campaign`, data);
             return response.data;
         } catch (e) {
-            return rejectWithValue(e.response?.data || "Fetch to update");
+            console.log(e);
+            return rejectWithValue(e.response?.data || "Failed to create");
         }
     }
 );
@@ -20,7 +21,31 @@ export const getCampaignByPartnerId = createAsyncThunk(
             const response = await axiosInstance.get(`/campaign/partner/${id}`);
             return response.data;
         } catch (e) {
-            return rejectWithValue(e.response?.data || "Fetch to failed");
+            return rejectWithValue(e.response?.data || "Failed to fetch");
+        }
+    }
+);
+
+export const updateCampaignByPartnerId = createAsyncThunk(
+    "campaign/updateCampaignByPartnerId",
+    async ({ id, data }, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.patch(`/campaign/${id}`, data);
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Failed to update");
+        }
+    }
+);
+
+export const stopCampaignById = createAsyncThunk(
+    "campaign/stopCampaignById",
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.patch(`/campaign/${id}/stop`);
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Failed to update");
         }
     }
 );
@@ -60,6 +85,22 @@ const campaignSlice = createSlice({
                 state.status = "success";
             })
             .addCase(getCampaignByPartnerId.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(updateCampaignByPartnerId.fulfilled, (state, action) => {
+                console.log(action.payload);
+                state.status = "success";
+            })
+            .addCase(updateCampaignByPartnerId.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(stopCampaignById.fulfilled, (state, action) => {
+                console.log(action.payload);
+                state.status = "success";
+            })
+            .addCase(stopCampaignById.rejected, (state) => {
                 state.status = "failed";
             })
 

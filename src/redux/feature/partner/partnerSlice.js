@@ -54,7 +54,6 @@ const partnerSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getDetailPartner.fulfilled, (state, action) => {
-                console.log(action.payload);
                 state.partner = action.payload.data;
                 state.status = "success";
             })

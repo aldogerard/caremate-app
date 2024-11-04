@@ -1,5 +1,4 @@
 import { logout } from "@/redux/feature/authSlice";
-import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
 import { Logout } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
@@ -12,7 +11,7 @@ import {
     FaSeedling,
     FaUser,
 } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 const list = [
@@ -43,8 +42,6 @@ const PartnerDashboardLayout = () => {
 
     const dispatch = useDispatch();
 
-    const { user } = useSelector((state) => state.auth);
-
     const [isOpen, setIsOpen] = useState(window.innerWidth > 1023);
 
     useEffect(() => {
@@ -69,20 +66,6 @@ const PartnerDashboardLayout = () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
-
-    useEffect(() => {
-        if (user?.id) {
-            fetchPartnerDetails();
-        }
-    }, [user]);
-
-    const fetchPartnerDetails = async () => {
-        try {
-            await dispatch(getDetailPartner(user.id)).unwrap();
-        } catch (error) {
-            console.error("Error fetching partner details:", error);
-        }
-    };
 
     const handleLogout = () => {
         Logout(() => {

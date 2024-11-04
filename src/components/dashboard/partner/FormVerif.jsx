@@ -29,7 +29,7 @@ const data = [
 ];
 
 const FormVerif = (props) => {
-    const { partner, handleSubmitVerification } = props;
+    const { partner, handleSubmitVerification, handleIsEditDocument } = props;
 
     const [document, setDocument] = useState({
         cfe: "",
@@ -55,6 +55,8 @@ const FormVerif = (props) => {
         e.preventDefault();
 
         const data = new FormData();
+
+        console.log(document);
 
         Object.entries(document).forEach(([key, value]) => {
             data.append(key, value);
@@ -98,6 +100,13 @@ const FormVerif = (props) => {
                 </div>
                 <div className="text-lg mt-8 flex gap-2 justify-end">
                     <Button type={"submit"} name={"Submit"} />
+                    {partner.status !== "UNVERIFIED" && (
+                        <Button
+                            type={"reset"}
+                            name={"Cancel"}
+                            onClick={handleIsEditDocument}
+                        />
+                    )}
                 </div>
             </form>
         </>

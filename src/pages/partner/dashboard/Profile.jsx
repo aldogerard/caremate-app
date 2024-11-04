@@ -13,6 +13,8 @@ import {
 } from "@/redux/feature/partner/partnerSlice";
 
 import ButtonFile from "@/components/ButtonFile";
+import Loader from "@/components/Loader";
+import Button from "@/components/Button";
 
 const data = [
     {
@@ -31,12 +33,19 @@ const Profile = () => {
 
     const [filter, setFilter] = useState(data[0].name);
     const [isEdit, setIsEdit] = useState(false);
+    const [isEditDocument, setIsEditDocument] = useState(false);
+
+    useEffect(() => {
+        if (user?.id) {
+            fetchPartnerDetails();
+        }
+    }, [user]);
 
     const fetchPartnerDetails = async () => {
         try {
             await dispatch(getDetailPartner(user.id)).unwrap();
         } catch (error) {
-            console.error("Error fetching partner details:", error);
+            console.error("Error fetching : ", error);
         }
     };
 
@@ -46,7 +55,6 @@ const Profile = () => {
 
     const handleSubmitFormProfile = async (data) => {
         try {
-            console.log(data);
             await dispatch(
                 updateProfilePartner({ id: user.id, data: data })
             ).unwrap();
@@ -66,17 +74,62 @@ const Profile = () => {
             ).unwrap();
             Success("Successfully submit document");
             await fetchPartnerDetails();
+            setIsEditDocument(false);
         } catch (error) {
-            console.log(error);
             Failed("Failed verification document");
         }
     };
 
+    const handleIsEditDocument = () => {
+        setIsEditDocument((state) => !state);
+    };
+
+    const StatusMessage = ({ status }) => {
+        if (status === "VERIFIED") {
+            return (
+                <h1 className="text-primary mb-4 text-xs lg:text-lg">
+                    Your foundation has been successfully verified
+                </h1>
+            );
+        }
+        if (status === "IN_REVIEW") {
+            return (
+                <h1 className="text-primary mb-4 text-xs lg:text-lg">
+                    You have submitted a verification request, please wait for
+                    approval
+                </h1>
+            );
+        }
+        return null;
+    };
+
+    const DocumentButtons = ({ partner }) => (
+        <div className="flex flex-row gap-2 flex-wrap items-center">
+            <ButtonFile
+                fileName={partner?.cfeFileName}
+                name={"Certification of Foundation Establishment"}
+            />
+            <ButtonFile
+                fileName={partner?.frFileName}
+                name={"Financial Report"}
+            />
+            <ButtonFile
+                fileName={partner?.rcFileName}
+                name={"Registered Certificate"}
+            />
+            <ButtonFile
+                fileName={partner?.ffpFileName}
+                name={"Foundation Financial Plan"}
+            />
+            <ButtonFile fileName={partner?.baFileName} name={"Bank Account"} />
+        </div>
+    );
+
     return (
         <>
+            <Title name={"Profile"} />
             {partner && (
                 <>
-                    <Title name={"Profile"} />
                     <Filter data={data} setFilter={setFilter} filter={filter} />
 
                     {filter === "Edit Profile" && (
@@ -89,58 +142,36 @@ const Profile = () => {
                     )}
 
                     {filter === "Verification" &&
-                        (partner.status === "UNVERIFIED" ||
-                            partner.status === "REJECTED") && (
+                        (isEditDocument ||
+                            partner?.status === "UNVERIFIED") && (
                             <FormVerif
                                 partner={partner}
                                 handleSubmitVerification={
                                     handleSubmitVerification
                                 }
+                                handleIsEditDocument={handleIsEditDocument}
                             />
                         )}
 
-                    {filter === "Verification" && (
-                        <>
-                            {partner.status === "VERIFIED" && (
-                                <h1 className="text-primary mb-4 text-xs lg:text-xl ">
-                                    Your foundation has been successfully
-                                    verified
-                                </h1>
-                            )}
-                            {partner.status === "IN_REVIEW" && (
-                                <h1 className="text-primary mb-4 text-xs lg:text-xl ">
-                                    You have submitted a verification request,
-                                    please wait for approval
-                                </h1>
-                            )}
-                            <div className="flex flex-row gap-2 flex-wrap items-center">
-                                <ButtonFile
-                                    fileName={partner?.cfeFileName}
-                                    name={
-                                        "Certification of Foundation Estabishment"
-                                    }
-                                />
-                                <ButtonFile
-                                    fileName={partner?.frFileName}
-                                    name={"Financial Report"}
-                                />
-                                <ButtonFile
-                                    fileName={partner?.rcFileName}
-                                    name={"Registered Certificate"}
-                                />
-                                <ButtonFile
-                                    fileName={partner?.ffpFileName}
-                                    name={"Foundation Financial Plan"}
-                                />
-                                <ButtonFile
-                                    fileName={partner?.baFileName}
-                                    name={"Bank Account"}
-                                />
-                            </div>
-                        </>
-                    )}
+                    {filter === "Verification" &&
+                        !isEditDocument &&
+                        partner?.status !== "UNVERIFIED" && (
+                            <>
+                                <StatusMessage status={partner?.status} />
+                                <DocumentButtons partner={partner} />
+                                <div className="flex justify-end mt-6">
+                                    <Button
+                                        name={"Edit Document"}
+                                        type={"button"}
+                                        onClick={handleIsEditDocument}
+                                    />
+                                </div>
+                            </>
+                        )}
                 </>
             )}
+
+            {!partner && <Loader />}
         </>
     );
 };

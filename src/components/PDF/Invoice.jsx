@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const Invoice = ({ item }) => {
+const Invoice = ({ item, partner }) => {
     return (
         <Document>
             <Page style={styles.page}>
@@ -82,7 +82,7 @@ const Invoice = ({ item }) => {
                             {item?.partnerName || "Enigma Camp"}
                         </Text>
                         <Text style={styles.subHeader}>
-                            {item?.address || "Malang"}
+                            {partner?.address || ""}
                         </Text>
                     </View>
 

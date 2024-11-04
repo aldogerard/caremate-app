@@ -27,7 +27,7 @@ const CardWithdrawal = (props) => {
     }, [withdrawal.campaignImageName]);
 
     const handleClickMessage = () => {
-        Message(withdrawal?.message);
+        Message(withdrawal?.message || "Lorem  ipsum");
     };
 
     return imageUrl !== "" ? (
@@ -37,11 +37,11 @@ const CardWithdrawal = (props) => {
                 alt=""
                 className="h-24 lg:h-40 aspect-square object-cover rounded-lg"
             />
-            <div className="flex flex-col w-max justify-between">
+            <div className="flex flex-col w-full justify-between">
                 <h1 className="text-sm lg:text-lg  text-dark">
                     {withdrawal.title}
                 </h1>
-                <div className="lg:flex justify-between hidden">
+                <div className="flex justify-between">
                     <div>
                         <h1 className="text-xs text-dark">Start date</h1>
                         <h1 className="text-primary text-xs font-medium">
@@ -65,19 +65,19 @@ const CardWithdrawal = (props) => {
                     <div>
                         <h1 className="text-xs text-dark">Tax</h1>
                         <h1 className="text-primary text-xs font-medium">
-                            <FormatRupiah value={withdrawal.total} />
+                            <FormatRupiah value={withdrawal.totalTax} />
                         </h1>
                     </div>
-                    {status === "COMPLETED" && (
+                    {status === "APPROVED" && (
                         <ButtonFile
-                            fileName={withdrawal.invoiceFileName}
+                            fileName={"SuratKeteranganLulus.pdf"}
                             name={"Invoice"}
                         />
                     )}
                     {status === "REJECTED" && (
                         <Button
-                            type={"button"}
-                            name={"Message"}
+                            type={"reset"}
+                            name={">"}
                             onClick={handleClickMessage}
                         />
                     )}
