@@ -1,9 +1,8 @@
 import Button from "@/components/Button";
 import Filter from "@/components/Filter";
-import { formatDate, validateFile } from "@/utils/Utils";
+import { formatDate } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
-import React, { useEffect, useState } from "react";
-import dummy from "@/data/dummyCampaignReport.json";
+import React, { useState } from "react";
 import EachUtils from "@/utils/EachUtils";
 import CardCampaignReport from "./CardCampaignReport";
 import { Confirm, Message, Success } from "@/utils/AlertUtil";

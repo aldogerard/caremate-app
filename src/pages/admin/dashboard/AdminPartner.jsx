@@ -4,7 +4,6 @@ import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
 import React, { useEffect, useState } from "react";
 
-import dummy from "@/data/dummyPartner.json";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPartner } from "@/redux/feature/admin/adminPartnerSlice";
 import Loader from "@/components/Loader";

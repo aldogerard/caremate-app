@@ -4,7 +4,6 @@ import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
 import { useEffect, useState } from "react";
 
-import dummy from "@/data/dummyCampaign.json";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCampaign } from "@/redux/feature/admin/adminCampaignSlice";
 import Loader from "@/components/Loader";
