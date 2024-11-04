@@ -2,9 +2,10 @@ import { clearAuthStatus, register } from "@/redux/feature/authSlice";
 import { Failed, Success } from "@/utils/AlertUtil";
 import { validateEmail, validatePassword } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
-import { FaEye, FaEyeSlash, FaSeedling } from "react-icons/fa6";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "@/assets/images/logo.webp";
 
 const image = "https://account.enigmacamp.com/3.jpg";
 
@@ -128,8 +129,14 @@ const RegisterPartner = () => {
                 <img src={image} alt="hero" />
             </aside>
             <main className="flex flex-col h-full items-center py-4 lg:w-1/3 ">
-                <div className="flex justify-center items-center w-max">
-                    <FaSeedling className="text-primary text-4xl lg:text-6xl" />
+                <div className="flex gap-3 justify-center items-center w-max">
+                    <div className="w-14 h-14">
+                        <img
+                            src={logo}
+                            alt="Logo"
+                            className="w-full h-full object-contain"
+                        />
+                    </div>
                     <h1 className="text-xl font-semibold text-primary lg:text-3xl">
                         CareMate
                     </h1>

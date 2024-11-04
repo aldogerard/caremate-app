@@ -3,9 +3,11 @@ import { Logout } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import { capitalizeFirstLetter } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
-import { FaAngleDown, FaBars, FaSeedling, FaXmark } from "react-icons/fa6";
+import { FaAngleDown, FaBars, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+
+import logo from "@/assets/images/logo.webp";
 
 const Header = () => {
     const dispatch = useDispatch();
@@ -89,9 +91,15 @@ const Header = () => {
                 <header className="py-4 flex justify-between items-center padding">
                     <Link
                         to={"/"}
-                        className="flex justify-center items-center w-max gap-1 cursor-pointer"
+                        className="flex justify-center items-center w-max gap-2 cursor-pointer"
                     >
-                        <FaSeedling className="text-primary text-3xl" />
+                        <div className="w-7 h-7">
+                            <img
+                                src={logo}
+                                alt="Logo"
+                                className="w-full h-full object-contain"
+                            />
+                        </div>
                         <h1 className="text-xl font-semibold text-primary">
                             CareMate
                         </h1>

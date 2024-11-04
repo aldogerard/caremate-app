@@ -8,11 +8,11 @@ import {
     FaChevronLeft,
     FaHeart,
     FaMoneyCheckDollar,
-    FaSeedling,
-    FaUser,
 } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
+
+import logo from "@/assets/images/logo.webp";
 
 const AdminDashboardLayout = () => {
     const [isOpen, setIsOpen] = useState(window.innerWidth > 1023);
@@ -90,13 +90,19 @@ const AdminDashboardLayout = () => {
 
                     <Link
                         to="/"
-                        className="flex gap-3 w-max self-center items-center justify-start"
+                        className="flex gap-2 w-max self-center items-center justify-start"
                     >
-                        <div className="p-2 bg-primary rounded-md ">
-                            <FaSeedling size={24} color="#171717" />
+                        <div className="w-10 h-10">
+                            <img
+                                src={logo}
+                                alt="Logo"
+                                className="w-full h-full object-contain"
+                            />
                         </div>
                         {isOpen && (
-                            <h1 className="text-light text-xl">CareMate</h1>
+                            <h1 className="text-primary text-xl font-medium">
+                                CareMate
+                            </h1>
                         )}
                     </Link>
 
