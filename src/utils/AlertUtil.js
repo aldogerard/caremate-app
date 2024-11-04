@@ -85,7 +85,7 @@ export const SuccessUpdate = () => {
     });
 };
 
-export const InputMessage = async (setMessage, cb) => {
+export const InputMessage = async (cb) => {
     const { value: message } = await Swal.fire({
         title: "Enter the message",
         input: "text",
@@ -97,8 +97,7 @@ export const InputMessage = async (setMessage, cb) => {
         },
     });
     if (message) {
-        setMessage(message);
-        cb();
+        cb(message);
     }
 };
 

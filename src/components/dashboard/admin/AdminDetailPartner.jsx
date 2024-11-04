@@ -2,25 +2,49 @@ import axiosInstance from "@/api/axios";
 import Button from "@/components/Button";
 import ButtonFile from "@/components/ButtonFile";
 import CustomModal from "@/components/CustomModal";
-import { Confirm, InputMessage, Success } from "@/utils/AlertUtil";
+import {
+    approvePartner,
+    getAllPartner,
+    rejectPartner,
+} from "@/redux/feature/admin/adminPartnerSlice";
+import { Confirm, Failed, InputMessage, Success } from "@/utils/AlertUtil";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const AdminDetailPartner = (props) => {
     const { currentPartner, isOpen, closeModal, status } = props;
-    const [message, setMessage] = useState("");
+    const dispatch = useDispatch();
 
     const handleApprove = () => {
-        Confirm("Approved a partner", () => {
-            Success("Successfully approved a new partner");
-            closeModal();
+        Confirm("Approved a partner", async () => {
+            try {
+                await dispatch(approvePartner(currentPartner.id)).unwrap();
+                await dispatch(getAllPartner()).unwrap();
+                Success("Successfully approved a new partner");
+                closeModal();
+            } catch (error) {
+                console.log(error);
+                Failed("Failed approved a partner");
+            }
         });
     };
 
     const handleReject = () => {
         Confirm("Rejected a partner", () => {
-            InputMessage(setMessage, () => {
-                Success("Successfully rejected a partner");
-                closeModal();
+            InputMessage(async (message) => {
+                try {
+                    const data = new FormData();
+                    data.append("message", message);
+                    await dispatch(
+                        rejectPartner({ id: currentPartner.id, data })
+                    ).unwrap();
+                    await dispatch(getAllPartner()).unwrap();
+                    Success("Successfully rejected a partner");
+                    closeModal();
+                } catch (error) {
+                    console.log(error);
+                    Failed("Failed rejected a partner");
+                }
             });
         });
     };
@@ -78,7 +102,7 @@ const AdminDetailPartner = (props) => {
                         </div>
                     </div>
                 </div>
-                {(status === "IN REVIEW" || status === "VERIFIED") && (
+                {(status === "IN_REVIEW" || status === "VERIFIED") && (
                     <>
                         <div>
                             <h1 className="text-dark/70 mb-2">Document</h1>
@@ -107,7 +131,7 @@ const AdminDetailPartner = (props) => {
                                 />
                             </div>
                         </div>
-                        {status === "IN REVIEW" && (
+                        {status === "IN_REVIEW" && (
                             <div className="flex flex-row gap-2 flex-wrap justify-end items-center">
                                 <Button
                                     type="submit"

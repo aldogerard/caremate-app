@@ -1,14 +1,16 @@
 import Button from "@/components/Button";
-import EachUtils from "@/utils/EachUtils";
+import { setCurrentPartner } from "@/redux/feature/admin/adminPartnerSlice";
 import { limitText } from "@/utils/Utils";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 const TablePartner = (props) => {
-    let iteration = 0;
-    const { item, handleDetailModal, filter, setCurrentPartner } = props;
+    const { partners, handleDetailModal, filter } = props;
+
+    const dispatch = useDispatch();
 
     const handleClickDetail = (res) => {
-        setCurrentPartner(res);
+        dispatch(setCurrentPartner({ item: res }));
         handleDetailModal();
     };
 
@@ -27,38 +29,38 @@ const TablePartner = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {item.map((res, index) => {
-                        if (filter === res.status) {
-                            iteration++;
-                            return (
-                                <tr
-                                    className={`${
-                                        iteration % 2 === 0
-                                            ? "bg-primary/10"
-                                            : ""
-                                    }`}
-                                    key={index}
-                                >
-                                    <td className="p-5">{iteration}</td>{" "}
-                                    <td>{limitText(res.name, 25)}</td>
-                                    <td>{limitText(res.email, 25)}</td>
-                                    <td>{limitText(res.phoneNumber, 12)}</td>
-                                    <td>{limitText(res.address, 25)}</td>
-                                    <td>{limitText(res.description, 40)}</td>
-                                    <td className="pr-4">
-                                        <Button
-                                            type="button"
-                                            name={"Detail"}
-                                            onClick={() =>
-                                                handleClickDetail(res)
-                                            }
-                                        />
-                                    </td>
-                                </tr>
-                            );
-                        }
-                        return null;
-                    })}
+                    {partners
+                        .filter((res) => filter === res.status)
+                        .map((res, index) => (
+                            <tr
+                                className={
+                                    index % 2 === 0 ? "bg-primary/10" : ""
+                                }
+                                key={res.id}
+                            >
+                                <td className="p-5">{index + 1}</td>{" "}
+                                <td>{limitText(res.name, 25)}</td>
+                                <td>{limitText(res.email, 25)}</td>
+                                <td>{limitText(res.phoneNumber, 12)}</td>
+                                <td>{limitText(res.address, 25)}</td>
+                                <td>{limitText(res.description, 40)}</td>
+                                <td className="pr-4">
+                                    <Button
+                                        type="button"
+                                        name={"Detail"}
+                                        onClick={() => handleClickDetail(res)}
+                                    />
+                                </td>
+                            </tr>
+                        ))}
+                    {partners.filter((res) => filter === res.status).length ===
+                        0 && (
+                        <tr>
+                            <td colSpan="7" className="p-5 text-center">
+                                No partners found.
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
         </div>
