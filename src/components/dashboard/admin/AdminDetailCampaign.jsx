@@ -16,7 +16,6 @@ const AdminDetailCampaign = (props) => {
     const { currentCampaign, isOpen, closeModal, status } = props;
 
     const [imageUrl, setImageUrl] = useState("");
-    const [message, setMessage] = useState("");
 
     const dispatch = useDispatch();
 
@@ -49,6 +48,7 @@ const AdminDetailCampaign = (props) => {
             }
         });
     };
+
     const handleReject = () => {
         Confirm("Rejected a partner", () => {
             InputMessage(async (message) => {

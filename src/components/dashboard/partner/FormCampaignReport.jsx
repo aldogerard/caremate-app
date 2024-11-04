@@ -1,10 +1,18 @@
 import Button from "@/components/Button";
-import { Confirm } from "@/utils/AlertUtil";
+import {
+    createCampaignReport,
+    getCampaignReportByCampaignId,
+} from "@/redux/feature/partner/campaignReportSlice";
+import { Confirm, Success } from "@/utils/AlertUtil";
 import { validateFile } from "@/utils/Utils";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const FormCampaignReport = (props) => {
-    const { handleModal, handleFormReport, handleSaveCampaignReport } = props;
+    const { handleModal, handleFormReport } = props;
+
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
 
     const [formDataReport, setFormDataReport] = useState({
         description: null,
@@ -41,6 +49,24 @@ const FormCampaignReport = (props) => {
             handleModal();
         });
         e.target.reset();
+    };
+
+    const handleSaveCampaignReport = async (request) => {
+        try {
+            const data = new FormData();
+
+            data.append("description", request.descrtiption);
+            data.append("file", request.image);
+            data.append("campaignId", currentCampaign.id);
+
+            await dispatch(createCampaignReport(data)).unwrap();
+            Success("Successfully create campaign report");
+            await dispatch(getCampaignReportByCampaignId(user.id)).unwrap();
+            await fetchData();
+        } catch (error) {
+            console.log(error);
+            Failed("Failed create campaign report");
+        }
     };
 
     const handleCancel = () => {

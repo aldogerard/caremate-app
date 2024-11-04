@@ -2,16 +2,22 @@ import axiosInstance from "@/api/axios";
 import Button from "@/components/Button";
 import ButtonFile from "@/components/ButtonFile";
 import CustomModal from "@/components/CustomModal";
-import { Confirm, InputMessage, Success } from "@/utils/AlertUtil";
+import {
+    approveWithdrawal,
+    getAllWithdrawal,
+    rejectWithdrawal,
+} from "@/redux/feature/admin/adminWithdrawalSlice";
+import { Confirm, Failed, InputMessage, Success } from "@/utils/AlertUtil";
 import { formatDate, validateFile } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const AdminDetailWithdrawal = (props) => {
     const { isOpen, closeModal, status, currentWithdrawal } = props;
     const [isApprove, setIsApprove] = useState(false);
     const [invoice, setInvoice] = useState("");
-    const [message, setMessage] = useState("");
+    const dispatch = useDispatch();
 
     const handleChangeFile = (e) => {
         const { files } = e.target;
@@ -29,34 +35,56 @@ const AdminDetailWithdrawal = (props) => {
         e.preventDefault();
         const data = new FormData();
 
-        data.append("invoice", invoice);
-        data.append("id", "id");
+        data.append("file", invoice);
 
-        Confirm("Approved a withdrawal", () => {
-            Success("Successfully approved a withdrawal");
-            e.target.reset();
-            handleCloseModal();
+        handleApprove(data);
+    };
+
+    const handleApprove = (data) => {
+        Confirm("Approved a campaign", async () => {
+            try {
+                await dispatch(
+                    approveWithdrawal({ id: currentWithdrawal.id, file: data })
+                ).unwrap();
+                await dispatch(getAllWithdrawal()).unwrap();
+                Success("Successfully approved a new campaign");
+                closeModal();
+            } catch (error) {
+                console.log(error);
+                Failed("Failed approved a campaign");
+            }
         });
     };
 
     const handleReject = () => {
-        Confirm("Rejected a withdrawal", () => {
-            InputMessage(setMessage, () => {
-                Success("Successfully rejected a withdrawal");
-                handleCloseModal();
+        Confirm("Rejected a partner", () => {
+            InputMessage(async (message) => {
+                try {
+                    const data = new FormData();
+                    data.append("message", message);
+                    await dispatch(
+                        rejectWithdrawal({ id: currentWithdrawal.id, data })
+                    ).unwrap();
+                    await dispatch(getAllWithdrawal()).unwrap();
+                    Success("Successfully rejected a campaign");
+                    closeModal();
+                } catch (error) {
+                    console.log(error);
+                    Failed("Failed rejected a campaign");
+                }
             });
         });
+    };
+
+    const handleIsApprove = () => {
+        setInvoice("");
+        setIsApprove((state) => !state);
     };
 
     const handleCloseModal = () => {
         setInvoice("");
         closeModal();
         setIsApprove(false);
-    };
-
-    const handleIsApprove = () => {
-        setInvoice("");
-        setIsApprove((state) => !state);
     };
 
     return (
@@ -135,7 +163,7 @@ const AdminDetailWithdrawal = (props) => {
                     </div>
                     {status === "REJECTED" && (
                         <div className="w-full">
-                            <h1 className="text-dark/70">Message</h1>
+                            <h1 className="text-dark/70">Rejected Message</h1>
                             <div className="px-4 py-3 border rounded-md shadow-sm min-h-16">
                                 <h1 className="text-dark">
                                     {currentWithdrawal?.message}
@@ -213,7 +241,7 @@ const AdminDetailWithdrawal = (props) => {
                             </form>
                         </>
                     )}
-                    {status === "COMPLETED" && (
+                    {status === "APPROVED" && (
                         <div>
                             <h1 className="text-dark/70 mb-2">Invoice</h1>
                             <ButtonFile

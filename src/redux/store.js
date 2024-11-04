@@ -6,6 +6,7 @@ import withdrawalSlice from "./feature/partner/withdrawalSlice";
 import campaignReportSlice from "./feature/partner/campaignReportSlice";
 import adminPartnerSlice from "./feature/admin/adminPartnerSlice";
 import adminCampaignSlice from "./feature/admin/adminCampaignSlice";
+import adminWithdrawal from "./feature/admin/adminWithdrawalSlice";
 
 const store = configureStore({
     reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
 
         adminPartner: adminPartnerSlice,
         adminCampaign: adminCampaignSlice,
+        adminWithdrawal: adminWithdrawal,
     },
 });
 

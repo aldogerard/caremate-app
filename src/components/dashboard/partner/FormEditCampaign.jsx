@@ -1,15 +1,21 @@
 import Button from "@/components/Button";
-import { Confirm } from "@/utils/AlertUtil";
+import {
+    getCampaignByPartnerId,
+    updateCampaignByPartnerId,
+} from "@/redux/feature/partner/campaignSlice";
+import { Confirm, Failed, Success } from "@/utils/AlertUtil";
 import { validateFile } from "@/utils/Utils";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const FormEditCampaign = (props) => {
-    const { handleModal, handleEditCampaign, handleIsEdit } = props;
+    const { handleModal, handleIsEdit } = props;
 
+    const dispatch = useDispatch();
     const { currentCampaign, currentCampaignUrl } = useSelector(
         (state) => state.campaign
     );
+    const { user } = useSelector((state) => state.auth);
 
     const [formData, setFormData] = useState({
         title: currentCampaign?.title,
@@ -53,6 +59,34 @@ const FormEditCampaign = (props) => {
             image: null,
         });
         handleIsEdit();
+    };
+
+    const handleEditCampaign = async (formData) => {
+        const data = new FormData();
+
+        data.append("title", formData.title);
+        data.append("description", formData.description);
+        data.append("file", formData.image);
+        data.append("partnerId", user.id);
+
+        const startDate = new Date(currentCampaign.startDate);
+        const endDate = new Date(currentCampaign.endDate);
+
+        data.append("category", currentCampaign.category);
+        data.append("goalAmount", currentCampaign.goalAmount);
+        data.append("startDate", startDate);
+        data.append("endDate", endDate);
+
+        try {
+            await dispatch(
+                updateCampaignByPartnerId({ id: currentCampaign.id, data })
+            ).unwrap();
+            Success("Successfully update campaign");
+            await dispatch(getCampaignByPartnerId(user.id)).unwrap();
+        } catch (error) {
+            console.log(error);
+            Failed("Failed update campaign");
+        }
     };
 
     return (

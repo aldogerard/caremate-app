@@ -1,13 +1,16 @@
 import Button from "@/components/Button";
 import CustomModal from "@/components/CustomModal";
-import { createCampaign } from "@/redux/feature/partner/campaignSlice";
+import {
+    createCampaign,
+    getCampaignByPartnerId,
+} from "@/redux/feature/partner/campaignSlice";
 import { Confirm, Failed, Success } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import { validateFile } from "@/utils/Utils";
 import React, { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import { FaAngleRight } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Datepicker from "react-tailwindcss-datepicker";
 
 const option = [
@@ -26,7 +29,10 @@ const option = [
 ];
 
 const FormCampaign = (props) => {
-    const { isOpen, closeModal, handleSaveCampaign } = props;
+    const { isOpen, closeModal } = props;
+    const dispatch = useDispatch();
+
+    const { user } = useSelector((state) => state.auth);
 
     const [formData, setFormData] = useState({
         category: option[0].value,
@@ -100,6 +106,31 @@ const FormCampaign = (props) => {
             handleSaveCampaign(formData);
             handleCloseModal();
         });
+    };
+
+    const handleSaveCampaign = async (formData) => {
+        try {
+            const data = new FormData();
+
+            const sanitizedString = formData.goalAmount.replace(/[^0-9]/g, "");
+            const goalAmount = parseInt(sanitizedString, 10);
+
+            data.append("category", formData.category);
+            data.append("title", formData.title);
+            data.append("description", formData.description);
+            data.append("startDate", formData.startDate);
+            data.append("endDate", formData.endDate);
+            data.append("goalAmount", goalAmount);
+            data.append("partnerId", user.id);
+            data.append("file", formData.image);
+
+            await dispatch(createCampaign(data)).unwrap();
+            Success("Successfully add new campaign");
+        } catch (error) {
+            console.log(error);
+            Failed("Failed create campaign");
+        }
+        await dispatch(getCampaignByPartnerId(user.id)).unwrap();
     };
 
     return (

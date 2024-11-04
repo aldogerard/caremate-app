@@ -1,14 +1,11 @@
 import Button from "@/components/Button";
 import { setCurrentCampaign } from "@/redux/feature/admin/adminCampaignSlice";
-import EachUtils from "@/utils/EachUtils";
 import { limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
 import { useDispatch } from "react-redux";
 
 const TableCampaign = (props) => {
-    let iteration = 0;
-
     const { campaigns, handleDetailModal, filter } = props;
 
     const dispatch = useDispatch();

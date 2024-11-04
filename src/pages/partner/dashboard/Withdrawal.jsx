@@ -46,8 +46,6 @@ const Withdrawal = () => {
         }
     };
 
-    console.log(withdrawals);
-
     return (
         <>
             <Title name={"Withdrawal"} />

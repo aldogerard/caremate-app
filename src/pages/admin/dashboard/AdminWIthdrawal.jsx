@@ -2,15 +2,17 @@ import AdminDetailWithdrawal from "@/components/dashboard/admin/AdminDetailWithd
 import TableWithdrawal from "@/components/dashboard/admin/TableWithdrawal";
 import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
-import React, { useState } from "react";
-import dummy from "@/data/dummyWithdrawal.json";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllWithdrawal } from "@/redux/feature/admin/adminWithdrawalSlice";
+import Loader from "@/components/Loader";
 
 const data = [
     {
         name: "PENDING",
     },
     {
-        name: "COMPLETED",
+        name: "APPROVED",
     },
     {
         name: "REJECTED",
@@ -20,16 +22,24 @@ const data = [
 const AdminWithdrawal = () => {
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [filter, setFilter] = useState(data[0].name);
-    const [currentWithdrawal, setCurrentWithdrawal] = useState(null);
 
-    function limitText(text, limit) {
-        const words = text.split("");
-        if (words.length > limit) {
-            return words.slice(0, limit).join("") + "....";
-        } else {
-            return text;
-        }
-    }
+    const dispatch = useDispatch();
+
+    const { withdrawals, currentWithdrawal } = useSelector(
+        (state) => state.adminWithdrawal
+    );
+
+    useEffect(() => {
+        const fetchAllWithdrawal = async () => {
+            try {
+                await dispatch(getAllWithdrawal()).unwrap();
+            } catch (error) {
+                console.error("Error fetching : ", error);
+            }
+        };
+
+        fetchAllWithdrawal();
+    }, [dispatch]);
 
     const handleDetailModal = () => {
         setIsDetailModalOpen((state) => !state);
@@ -38,19 +48,23 @@ const AdminWithdrawal = () => {
     return (
         <>
             <Title name={"Withdrawal"} />
-            <Filter data={data} setFilter={setFilter} filter={filter} />
-            <TableWithdrawal
-                item={dummy}
-                filter={filter}
-                handleDetailModal={handleDetailModal}
-                setCurrentWithdrawal={setCurrentWithdrawal}
-            />
-            <AdminDetailWithdrawal
-                isOpen={isDetailModalOpen}
-                closeModal={handleDetailModal}
-                status={filter}
-                currentWithdrawal={currentWithdrawal}
-            />
+            {withdrawals !== null && (
+                <>
+                    <Filter data={data} setFilter={setFilter} filter={filter} />
+                    <TableWithdrawal
+                        withdrawals={withdrawals}
+                        filter={filter}
+                        handleDetailModal={handleDetailModal}
+                    />
+                    <AdminDetailWithdrawal
+                        isOpen={isDetailModalOpen}
+                        closeModal={handleDetailModal}
+                        status={filter}
+                        currentWithdrawal={currentWithdrawal}
+                    />
+                </>
+            )}
+            {withdrawals === null && <Loader />}
         </>
     );
 };

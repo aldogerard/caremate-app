@@ -4,24 +4,18 @@ import DetailCampaign from "@/components/dashboard/partner/DetailCampaign";
 import FormCampaign from "@/components/dashboard/partner/FormCampaign";
 import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
-import { Confirm, Failed, Success } from "@/utils/AlertUtil";
+import { Failed, Success } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
-    createCampaign,
     getCampaignByPartnerId,
     stopCampaignById,
-    updateCampaignByPartnerId,
 } from "@/redux/feature/partner/campaignSlice";
 import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
 import Loader from "@/components/Loader";
 import { createWithdrawal } from "@/redux/feature/partner/withdrawalSlice";
-import {
-    createCampaignReport,
-    getCampaignReportByPartnerId,
-} from "@/redux/feature/partner/campaignReportSlice";
 
 const data = [
     {
@@ -61,7 +55,6 @@ const Campaign = () => {
         try {
             await dispatch(getDetailPartner(user.id)).unwrap();
             await dispatch(getCampaignByPartnerId(user.id)).unwrap();
-            await dispatch(getCampaignReportByPartnerId(user.id)).unwrap();
         } catch (error) {
             console.error("Error fetching : ", error);
         }
@@ -76,59 +69,6 @@ const Campaign = () => {
 
     const handleDetailModal = () => {
         setIsDetailModalOpen((state) => !state);
-    };
-
-    const handleSaveCampaign = async (formData) => {
-        try {
-            const data = new FormData();
-
-            const sanitizedString = formData.goalAmount.replace(/[^0-9]/g, "");
-            const goalAmount = parseInt(sanitizedString, 10);
-
-            data.append("category", formData.category);
-            data.append("title", formData.title);
-            data.append("description", formData.description);
-            data.append("startDate", formData.startDate);
-            data.append("endDate", formData.endDate);
-            data.append("goalAmount", goalAmount);
-            data.append("partnerId", user.id);
-            data.append("file", formData.image);
-
-            await dispatch(createCampaign(data)).unwrap();
-            Success("Successfully add new campaign");
-        } catch (error) {
-            console.log(error);
-            Failed("Failed create campaign");
-        }
-        fetchData();
-    };
-
-    const handleEditCampaign = async (formData) => {
-        const data = new FormData();
-
-        data.append("title", formData.title);
-        data.append("description", formData.description);
-        data.append("file", formData.image);
-        data.append("partnerId", user.id);
-
-        const startDate = new Date(currentCampaign.startDate);
-        const endDate = new Date(currentCampaign.endDate);
-
-        data.append("category", currentCampaign.category);
-        data.append("goalAmount", currentCampaign.goalAmount);
-        data.append("startDate", startDate);
-        data.append("endDate", endDate);
-
-        try {
-            await dispatch(
-                updateCampaignByPartnerId({ id: currentCampaign.id, data })
-            ).unwrap();
-            Success("Successfully update campaign");
-        } catch (error) {
-            console.log(error);
-            Failed("Failed update campaign");
-        }
-        await fetchData();
     };
 
     const handleStopCampaign = async () => {
@@ -161,23 +101,6 @@ const Campaign = () => {
         }
     };
 
-    const handleSaveCampaignReport = async (request) => {
-        try {
-            const data = new FormData();
-
-            data.append("description", request.descrtiption);
-            data.append("file", request.image);
-            data.append("campaignId", currentCampaign.id);
-
-            await dispatch(createCampaignReport(data)).unwrap();
-            Success("Successfully create campaign report");
-            await fetchData();
-        } catch (error) {
-            console.log(error);
-            Failed("Failed create campaign report");
-        }
-    };
-
     return (
         <>
             <Title name={"Campaign"}>
@@ -194,7 +117,6 @@ const Campaign = () => {
                     <FormCampaign
                         isOpen={isFormModalOpen}
                         closeModal={handleFromModal}
-                        handleSaveCampaign={handleSaveCampaign}
                     />
 
                     {campaigns?.length > 0 ? (
@@ -223,12 +145,8 @@ const Campaign = () => {
                                 isOpen={isDetailModalOpen}
                                 closeModal={handleDetailModal}
                                 status={filter}
-                                handleEditCampaign={handleEditCampaign}
                                 handleStopCampaign={handleStopCampaign}
                                 handleSubmitWithdrawal={handleSubmitWithdrawal}
-                                handleSaveCampaignReport={
-                                    handleSaveCampaignReport
-                                }
                             />
                         </>
                     ) : (

@@ -28,7 +28,6 @@ const DetailCampaign = (props) => {
         isOpen,
         closeModal,
         status,
-        handleEditCampaign,
         handleStopCampaign,
         handleSubmitWithdrawal,
         handleSaveCampaignReport,
@@ -271,7 +270,6 @@ const DetailCampaign = (props) => {
                         {isEdit && (
                             <FormEditCampaign
                                 handleModal={handleModal}
-                                handleEditCampaign={handleEditCampaign}
                                 handleIsEdit={handleIsEdit}
                             />
                         )}

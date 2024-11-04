@@ -13,12 +13,12 @@ export const createCampaignReport = createAsyncThunk(
     }
 );
 
-export const getCampaignReportByPartnerId = createAsyncThunk(
-    "campaignReport/getCampaignReportByPartnerId",
+export const getCampaignReportByCampaignId = createAsyncThunk(
+    "campaignReport/getCampaignReportByCampaignId",
     async (id, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get(
-                `/campaign-report/partner/${id}`
+                `/campaign-report/ampaign/${id}`
             );
             return response.data;
         } catch (e) {
@@ -70,13 +70,13 @@ const campaignReportSlice = createSlice({
             })
 
             .addCase(
-                getCampaignReportByPartnerId.fulfilled,
+                getCampaignReportByCampaignId.fulfilled,
                 (state, action) => {
                     state.campaigns = action.payload.data;
                     state.status = "success";
                 }
             )
-            .addCase(getCampaignReportByPartnerId.rejected, (state) => {
+            .addCase(getCampaignReportByCampaignId.rejected, (state) => {
                 state.status = "failed";
             })
 
