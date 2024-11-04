@@ -34,7 +34,7 @@ const TablePartner = (props) => {
                         .map((res, index) => (
                             <tr
                                 className={
-                                    index % 2 === 0 ? "bg-primary/10" : ""
+                                    index % 2 !== 0 ? "bg-primary/10" : ""
                                 }
                                 key={res.id}
                             >

@@ -2,13 +2,16 @@ import AdminDetailCampaign from "@/components/dashboard/admin/AdminDetailCampaig
 import TableCampaign from "@/components/dashboard/admin/TableCampaign";
 import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import dummy from "@/data/dummyCampaign.json";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCampaign } from "@/redux/feature/admin/adminCampaignSlice";
+import Loader from "@/components/Loader";
 
 const data = [
     {
-        name: "PENDING",
+        name: "IN_REVIEW",
     },
     {
         name: "ACTIVE",
@@ -24,7 +27,25 @@ const data = [
 const AdminCampaign = () => {
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [filter, setFilter] = useState(data[0].name);
-    const [currentCampaign, setCurrentCampaign] = useState(null);
+
+    const dispatch = useDispatch();
+
+    const { campaigns, currentCampaign } = useSelector(
+        (state) => state.adminCampaign
+    );
+
+    useEffect(() => {
+        const fetchAllCampaign = async () => {
+            try {
+                await dispatch(getAllCampaign()).unwrap();
+            } catch (error) {
+                console.error("Error fetching : ", error);
+            }
+        };
+
+        fetchAllCampaign();
+    }, [dispatch]);
+
     const handleDetailModal = () => {
         setIsDetailModalOpen((state) => !state);
     };
@@ -32,19 +53,23 @@ const AdminCampaign = () => {
     return (
         <>
             <Title name={"Campaign"} />
-            <Filter data={data} setFilter={setFilter} filter={filter} />
-            <TableCampaign
-                item={dummy}
-                filter={filter}
-                handleDetailModal={handleDetailModal}
-                setCurrentCampaign={setCurrentCampaign}
-            />
-            <AdminDetailCampaign
-                isOpen={isDetailModalOpen}
-                closeModal={handleDetailModal}
-                status={filter}
-                currentCampaign={currentCampaign}
-            />
+            {campaigns !== null && (
+                <>
+                    <Filter data={data} setFilter={setFilter} filter={filter} />
+                    <TableCampaign
+                        campaigns={campaigns}
+                        filter={filter}
+                        handleDetailModal={handleDetailModal}
+                    />
+                    <AdminDetailCampaign
+                        isOpen={isDetailModalOpen}
+                        closeModal={handleDetailModal}
+                        status={filter}
+                        currentCampaign={currentCampaign}
+                    />
+                </>
+            )}
+            {campaigns === null && <Loader />}
         </>
     );
 };

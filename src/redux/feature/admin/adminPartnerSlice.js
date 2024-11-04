@@ -8,22 +8,7 @@ export const getAllPartner = createAsyncThunk(
             const response = await axiosInstance.get(`/partner`);
             return response.data;
         } catch (e) {
-            return rejectWithValue(e.response?.data || "Fetch to failed");
-        }
-    }
-);
-
-export const rejectPartner = createAsyncThunk(
-    "partner/approvePartner",
-    async ({ id, data }, { rejectWithValue }) => {
-        try {
-            const response = await axiosInstance.patch(
-                `/partner/${id}/reject`,
-                data
-            );
-            return response.data;
-        } catch (e) {
-            return rejectWithValue(e.response?.data || "Fetch to failed");
+            return rejectWithValue(e.response?.data || "Failed to fetch");
         }
     }
 );
@@ -37,23 +22,38 @@ export const approvePartner = createAsyncThunk(
             );
             return response.data;
         } catch (e) {
-            return rejectWithValue(e.response?.data || "Fetch to failed");
+            return rejectWithValue(e.response?.data || "Failed to approve");
+        }
+    }
+);
+
+export const rejectPartner = createAsyncThunk(
+    "partner/rejectPartner",
+    async ({ id, data }, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.patch(
+                `/partner/${id}/reject`,
+                data
+            );
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Failed to reject");
         }
     }
 );
 
 const adminPartnerSlice = createSlice({
-    name: "partner",
+    name: "adminPartner",
     initialState: {
         partners: null,
         currentPartner: null,
-        currentCampaignPartnerUrl: null,
+        currentPartnerUrl: null,
         status: null,
     },
     reducers: {
         setCurrentPartner: (state, action) => {
             state.currentPartner = action.payload.item;
-            // state.currentCampaignPartnerUrl = action.payload.imageUrl;
+            // state.currentPartnerUrl = action.payload.imageUrl;
         },
     },
     extraReducers: (builder) => {
@@ -70,6 +70,13 @@ const adminPartnerSlice = createSlice({
                 state.status = "success";
             })
             .addCase(approvePartner.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(rejectPartner.fulfilled, (state, action) => {
+                state.status = "success";
+            })
+            .addCase(rejectPartner.rejected, (state) => {
                 state.status = "failed";
             })
 

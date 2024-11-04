@@ -1,16 +1,20 @@
 import Button from "@/components/Button";
+import { setCurrentCampaign } from "@/redux/feature/admin/adminCampaignSlice";
 import EachUtils from "@/utils/EachUtils";
 import { limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
+import { useDispatch } from "react-redux";
 
 const TableCampaign = (props) => {
     let iteration = 0;
 
-    const { item, handleDetailModal, filter, setCurrentCampaign } = props;
+    const { campaigns, handleDetailModal, filter } = props;
+
+    const dispatch = useDispatch();
 
     const handleClickDetail = (res) => {
-        setCurrentCampaign(res);
+        dispatch(setCurrentCampaign({ item: res }));
         handleDetailModal();
     };
 
@@ -31,97 +35,39 @@ const TableCampaign = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {item.map((res, index) => {
-                        if (filter === res.status) {
-                            iteration++;
-                            return (
-                                <tr
-                                    className={`${
-                                        iteration % 2 == 0 && "bg-primary/10"
-                                    }  `}
-                                    key={index}
-                                >
-                                    <td className="p-5">{iteration}</td>
-                                    <td>{limitText(res.partnerName, 20)}</td>
-                                    <td>{limitText(res.title, 37)}</td>
-                                    <td>{res.category}</td>
-                                    {(filter === "ACTIVE" ||
-                                        filter === "COMPLETED") && (
-                                        <td>
-                                            <FormatRupiah
-                                                value={res.currentAmount}
-                                            />
-                                        </td>
-                                    )}
+                    {campaigns
+                        .filter((res) => filter === res.status)
+                        .map((res, index) => (
+                            <tr
+                                className={`${
+                                    index % 2 !== 0 && "bg-primary/10"
+                                }  `}
+                                key={res.id}
+                            >
+                                <td className="p-5">{index + 1}</td>
+                                <td>{limitText(res.partnerName, 20)}</td>
+                                <td>{limitText(res.title, 37)}</td>
+                                <td>{res.category}</td>
+                                {(filter === "ACTIVE" ||
+                                    filter === "COMPLETED") && (
                                     <td>
-                                        <FormatRupiah value={res.goalAmount} />
-                                    </td>
-                                    <td className="pr-4">
-                                        <Button
-                                            type="button"
-                                            name={"Detail"}
-                                            onClick={() =>
-                                                handleClickDetail(res)
-                                            }
+                                        <FormatRupiah
+                                            value={res.currentAmount}
                                         />
                                     </td>
-                                </tr>
-                            );
-                        }
-                        return null;
-                    })}
-                    {/* <EachUtils
-                        of={item}
-                        render={(item, index) =>
-                            filter === item.status ? (
-                                <tr
-                                    className={`${
-                                        index % 2 == 0 && "bg-primary/10"
-                                    }  `}
-                                >
-                                    <td className="p-5">{index + 1}</td>
-                                    <td>
-                                        {limitText("Yayasan engima camp", 20)}
-                                    </td>
-                                    <td>
-                                        {limitText(
-                                            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit atque dolorem, aperiam unde reprehenderit consequatur nobis iste quis voluptatum voluptates, obcaecati officia ducimus nostrum mollitia veniam.",
-                                            40
-                                        )}
-                                    </td>
-                                    <td>Infrastructure Development</td>
-                                    {filter === "Active" ||
-                                        (filter === "Completed" && (
-                                            <td>
-                                                <FormatRupiah value={324000} />
-                                            </td>
-                                        ))}
-                                    <td>
-                                        <FormatRupiah value={1000000} />
-                                    </td>
-                                    <td className="pr-4">
-                                        <div
-                                            onClick={handleDetailModal}
-                                            className=" cursor-pointer px-4 py-2 rounded-md shadow-sm hover:shadow-sm transition-template bg-primary flex justify-center items-center w-max text-light"
-                                        >
-                                            <h1>Detail</h1>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ) : (
-                                index === 0 && (
-                                    <tr>
-                                        <td
-                                            colSpan={6}
-                                            className="py-6 text-center"
-                                        >
-                                            Partner not found
-                                        </td>
-                                    </tr>
-                                )
-                            )
-                        }
-                    /> */}
+                                )}
+                                <td>
+                                    <FormatRupiah value={res.goalAmount} />
+                                </td>
+                                <td className="pr-4">
+                                    <Button
+                                        type="button"
+                                        name={"Detail"}
+                                        onClick={() => handleClickDetail(res)}
+                                    />
+                                </td>
+                            </tr>
+                        ))}
                 </tbody>
             </table>
         </div>

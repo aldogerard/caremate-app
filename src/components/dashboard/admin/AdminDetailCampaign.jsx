@@ -1,16 +1,24 @@
 import axiosInstance from "@/api/axios";
 import Button from "@/components/Button";
 import CustomModal from "@/components/CustomModal";
+import {
+    approveCampaign,
+    getAllCampaign,
+    rejectCampaign,
+} from "@/redux/feature/admin/adminCampaignSlice";
 import { Confirm, InputMessage, Success } from "@/utils/AlertUtil";
 import { formatDate } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const AdminDetailCampaign = (props) => {
     const { currentCampaign, isOpen, closeModal, status } = props;
 
     const [imageUrl, setImageUrl] = useState("");
     const [message, setMessage] = useState("");
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchImageUrl = async () => {
@@ -29,17 +37,34 @@ const AdminDetailCampaign = (props) => {
     }, [currentCampaign?.campaignImageName]);
 
     const handleApprove = () => {
-        Confirm("Approved a campaign", () => {
-            Success("Successfully approved a new campaign");
-            closeModal();
+        Confirm("Approved a campaign", async () => {
+            try {
+                await dispatch(approveCampaign(currentCampaign.id)).unwrap();
+                await dispatch(getAllCampaign()).unwrap();
+                Success("Successfully approved a new campaign");
+                closeModal();
+            } catch (error) {
+                console.log(error);
+                Failed("Failed approved a campaign");
+            }
         });
     };
-
     const handleReject = () => {
-        Confirm("Rejected a campaign", () => {
-            InputMessage(setMessage, () => {
-                Success("Successfully rejected a campaign");
-                closeModal();
+        Confirm("Rejected a partner", () => {
+            InputMessage(async (message) => {
+                try {
+                    const data = new FormData();
+                    data.append("message", message);
+                    await dispatch(
+                        rejectCampaign({ id: currentCampaign.id, data })
+                    ).unwrap();
+                    await dispatch(getAllCampaign()).unwrap();
+                    Success("Successfully rejected a campaign");
+                    closeModal();
+                } catch (error) {
+                    console.log(error);
+                    Failed("Failed rejected a campaign");
+                }
             });
         });
     };
@@ -139,7 +164,7 @@ const AdminDetailCampaign = (props) => {
                             </h1>
                         </div>
                     </div>
-                    {status === "PENDING" && (
+                    {status === "IN_REVIEW" && (
                         <div className="flex flex-row gap-2 flex-wrap justify-end items-center w-full mt-6">
                             <Button
                                 type="submit"

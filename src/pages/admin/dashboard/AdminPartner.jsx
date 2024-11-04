@@ -32,7 +32,7 @@ const AdminPartner = () => {
     );
 
     useEffect(() => {
-        const fetchPartnerDetails = async () => {
+        const fetchAllPartner = async () => {
             try {
                 await dispatch(getAllPartner()).unwrap();
             } catch (error) {
@@ -40,7 +40,7 @@ const AdminPartner = () => {
             }
         };
 
-        fetchPartnerDetails();
+        fetchAllPartner();
     }, [dispatch]);
 
     const handleDetailModal = () => {
