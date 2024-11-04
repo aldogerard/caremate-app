@@ -21,14 +21,15 @@ const AdminDetailCampaign = (props) => {
 
     useEffect(() => {
         const fetchImageUrl = async () => {
-            try {
-                const response = await axiosInstance.get(
-                    `/file/${currentCampaign?.campaignImageName}`
-                );
-                console.log(response.data);
-                return setImageUrl(response.data);
-            } catch (error) {
-                setImageUrl("");
+            if (currentCampaign) {
+                try {
+                    const response = await axiosInstance.get(
+                        `/file/${currentCampaign?.campaignImageName}`
+                    );
+                    return setImageUrl(response.data);
+                } catch (error) {
+                    setImageUrl("");
+                }
             }
         };
 
@@ -164,6 +165,17 @@ const AdminDetailCampaign = (props) => {
                             </h1>
                         </div>
                     </div>
+                    {status === "REJECTED" && (
+                        <div className="w-full">
+                            <h1 className="text-dark/70">Rejected Message</h1>
+                            <div className="px-4 py-3 border rounded-md shadow-sm min-h-16">
+                                <h1 className="text-dark">
+                                    {currentCampaign?.message}
+                                </h1>
+                            </div>
+                        </div>
+                    )}
+
                     {status === "IN_REVIEW" && (
                         <div className="flex flex-row gap-2 flex-wrap justify-end items-center w-full mt-6">
                             <Button

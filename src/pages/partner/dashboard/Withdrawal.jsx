@@ -60,16 +60,23 @@ const Withdrawal = () => {
                             />
                             <div className="flex flex-col gap-4 w-full mt-10 lg:flex-row lg:flex-wrap lg:justify-start">
                                 <EachUtils
-                                    of={withdrawals}
-                                    render={(item) =>
-                                        filter === item.status && (
-                                            <CardWithdrawal
-                                                withdrawal={item}
-                                                status={filter}
-                                            />
-                                        )
-                                    }
+                                    of={withdrawals.filter(
+                                        (res) => filter === res.status
+                                    )}
+                                    render={(item) => (
+                                        <CardWithdrawal
+                                            withdrawal={item}
+                                            status={filter}
+                                        />
+                                    )}
                                 />
+                                {withdrawals.filter(
+                                    (res) => filter === res.status
+                                ).length === 0 && (
+                                    <div className="flex justify-center items-center w-full text-black h-[50vh]">
+                                        <h1>No withdrawal found</h1>
+                                    </div>
+                                )}
                             </div>
                         </>
                     ) : (

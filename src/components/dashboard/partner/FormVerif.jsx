@@ -56,8 +56,6 @@ const FormVerif = (props) => {
 
         const data = new FormData();
 
-        console.log(document);
-
         Object.entries(document).forEach(([key, value]) => {
             data.append(key, value);
         });

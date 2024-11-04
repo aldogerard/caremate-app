@@ -4,7 +4,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const createWithdrawal = createAsyncThunk(
     "withDrawal/createWithdrawal",
     async (data, { rejectWithValue }) => {
-        console.log(data);
         try {
             const response = await axiosInstance.post(`/withdrawal`, data);
             return response.data;

@@ -8,7 +8,6 @@ export const createCampaign = createAsyncThunk(
             const response = await axiosInstance.post(`/campaign`, data);
             return response.data;
         } catch (e) {
-            console.log(e);
             return rejectWithValue(e.response?.data || "Failed to create");
         }
     }
@@ -89,7 +88,6 @@ const campaignSlice = createSlice({
             })
 
             .addCase(updateCampaignByPartnerId.fulfilled, (state, action) => {
-                console.log(action.payload);
                 state.status = "success";
             })
             .addCase(updateCampaignByPartnerId.rejected, (state) => {
@@ -97,7 +95,6 @@ const campaignSlice = createSlice({
             })
 
             .addCase(stopCampaignById.fulfilled, (state, action) => {
-                console.log(action.payload);
                 state.status = "success";
             })
             .addCase(stopCampaignById.rejected, (state) => {

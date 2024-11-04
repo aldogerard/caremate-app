@@ -129,7 +129,9 @@ const Campaign = () => {
 
                             <div className="flex flex-col gap-4 w-full mt-10 lg:flex-row lg:flex-wrap lg:justify-start">
                                 <EachUtils
-                                    of={campaigns}
+                                    of={campaigns.filter(
+                                        (res) => filter === res.status
+                                    )}
                                     render={(item) =>
                                         filter === item.status && (
                                             <CardCampaign
@@ -140,6 +142,13 @@ const Campaign = () => {
                                         )
                                     }
                                 />
+                                {campaigns.filter(
+                                    (res) => filter === res.status
+                                ).length === 0 && (
+                                    <div className="flex justify-center items-center w-full text-black h-[50vh]">
+                                        <h1>No campaign found</h1>
+                                    </div>
+                                )}
                             </div>
                             <DetailCampaign
                                 isOpen={isDetailModalOpen}

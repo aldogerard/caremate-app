@@ -81,7 +81,6 @@ const campaignReportSlice = createSlice({
             })
 
             .addCase(deleteCampaignReportById.fulfilled, (state, action) => {
-                console.log(action.payload);
                 state.status = "success";
             })
             .addCase(deleteCampaignReportById.rejected, (state) => {

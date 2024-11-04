@@ -57,7 +57,7 @@ const TablePartner = (props) => {
                         0 && (
                         <tr>
                             <td colSpan="7" className="p-5 text-center">
-                                No partners found.
+                                No partners found
                             </td>
                         </tr>
                     )}

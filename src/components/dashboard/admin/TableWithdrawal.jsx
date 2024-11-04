@@ -58,6 +58,14 @@ const TableWithdrawal = (props) => {
                                 </td>
                             </tr>
                         ))}
+                    {withdrawals.filter((res) => filter === res.status)
+                        .length === 0 && (
+                        <tr>
+                            <td colSpan="7" className="p-5 text-center">
+                                No withdrawal found
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
         </div>
