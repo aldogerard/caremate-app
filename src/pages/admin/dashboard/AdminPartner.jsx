@@ -10,6 +10,9 @@ import Loader from "@/components/Loader";
 
 const data = [
     {
+        name: "UNVERIFIED",
+    },
+    {
         name: "IN_REVIEW",
     },
     {

@@ -59,6 +59,7 @@ const adminPartnerSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getAllPartner.fulfilled, (state, action) => {
+                console.log(action.payload);
                 state.partners = action.payload.data;
                 state.status = "success";
             })

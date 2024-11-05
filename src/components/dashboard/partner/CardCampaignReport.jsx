@@ -9,7 +9,7 @@ const CardCampaignReport = ({ item }) => {
         const fetchImageUrl = async () => {
             try {
                 const response = await axiosInstance.get(
-                    `/file/${item?.reportImageName}`
+                    `/file/${item?.imageName}`
                 );
                 return setImageUrl(response.data);
             } catch (error) {
@@ -30,7 +30,9 @@ const CardCampaignReport = ({ item }) => {
                 />
             </div>
             <div className="p-2 pb-3 h-[120px]">
-                <h1 className="text-dark text-sm">{item?.description}</h1>
+                <h1 className="text-dark text-sm">
+                    {item?.description || "NaN"}
+                </h1>
             </div>
         </div>
     ) : (

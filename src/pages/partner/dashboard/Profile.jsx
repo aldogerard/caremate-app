@@ -5,7 +5,13 @@ import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
 import FormProfile from "@/components/dashboard/partner/FormProfile";
 import FormVerif from "@/components/dashboard/partner/FormVerif";
-import { Failed, Message, Success, SuccessUpdate } from "@/utils/AlertUtil";
+import {
+    Confirm,
+    Failed,
+    Message,
+    Success,
+    SuccessUpdate,
+} from "@/utils/AlertUtil";
 import {
     getDetailPartner,
     updateDocumentPartner,
@@ -51,33 +57,6 @@ const Profile = () => {
 
     const handleClickEditProfile = () => {
         setIsEdit((state) => !state);
-    };
-
-    const handleSubmitFormProfile = async (data) => {
-        try {
-            await dispatch(
-                updateProfilePartner({ id: user.id, data: data })
-            ).unwrap();
-            SuccessUpdate();
-            await fetchPartnerDetails();
-        } catch (error) {
-            Failed("Failed to update");
-        } finally {
-            handleClickEditProfile();
-        }
-    };
-
-    const handleSubmitVerification = async (data) => {
-        try {
-            await dispatch(
-                updateDocumentPartner({ id: user.id, data: data })
-            ).unwrap();
-            Success("Successfully submit document");
-            await fetchPartnerDetails();
-            setIsEditDocument(false);
-        } catch (error) {
-            Failed("Failed verification document");
-        }
     };
 
     const handleIsEditDocument = () => {
@@ -156,7 +135,6 @@ const Profile = () => {
                             isEdit={isEdit}
                             partner={partner}
                             handleClickEditProfile={handleClickEditProfile}
-                            handleSubmitFormProfile={handleSubmitFormProfile}
                         />
                     )}
 
@@ -165,10 +143,8 @@ const Profile = () => {
                             partner?.status === "UNVERIFIED") && (
                             <FormVerif
                                 partner={partner}
-                                handleSubmitVerification={
-                                    handleSubmitVerification
-                                }
                                 handleIsEditDocument={handleIsEditDocument}
+                                setIsEditDocument={setIsEditDocument}
                             />
                         )}
 

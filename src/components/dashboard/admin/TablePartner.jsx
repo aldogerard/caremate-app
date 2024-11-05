@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
 import { setCurrentPartner } from "@/redux/feature/admin/adminPartnerSlice";
+import EachUtils from "@/utils/EachUtils";
 import { limitText } from "@/utils/Utils";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -15,49 +16,56 @@ const TablePartner = (props) => {
     };
 
     return (
-        <div className="w-full border rounded-md shadow-sm">
-            <table className="w-full text-left">
-                <thead>
-                    <tr className="border-b">
-                        <th className="p-4 w-[4%]">No</th>
-                        <th className="w-[18%]">Foundation Name</th>
-                        <th className="w-[18%]">Email</th>
-                        <th className="w-[10%]">Phone</th>
-                        <th className="w-[20%]">Address</th>
-                        <th className="w-[30%]">Desc</th>
-                        <th className="w-[20%] pr-4">Action</th>
+        <div className="relative overflow-x-auto border rounded-md shadow-sm">
+            <table className="w-full text-sm lg:text-base text-left rtl:text-right text-gray-500">
+                <thead className="text-gray-700">
+                    <tr className="text-left border-b">
+                        <th scope="col" className="p-4">
+                            No
+                        </th>
+                        <th scope="col">Foundation Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {partners
-                        .filter((res) => filter === res.status)
-                        .map((res, index) => (
+                    <EachUtils
+                        of={partners.filter((res) => filter === res.status)}
+                        render={(item, index) => (
                             <tr
-                                className={
-                                    index % 2 !== 0 ? "bg-primary/10" : ""
-                                }
-                                key={res.id}
+                                className={`${
+                                    index % 2 === 0 && "bg-accent/5"
+                                }`}
+                                key={item.id}
                             >
-                                <td className="p-5">{index + 1}</td>{" "}
-                                <td>{limitText(res.name, 25)}</td>
-                                <td>{limitText(res.email, 25)}</td>
-                                <td>{limitText(res.phoneNumber, 12)}</td>
-                                <td>{limitText(res.address, 25)}</td>
-                                <td>{limitText(res.description, 40)}</td>
-                                <td className="pr-4">
+                                <td className="px-4 py-6">{index + 1}</td>
+                                <td>{limitText(item?.name || "", 20)}</td>
+                                <td>{limitText(item?.email || "", 20)}</td>
+                                <td>
+                                    {limitText(item?.phoneNumber || "", 12)}
+                                </td>
+                                <td>{limitText(item?.address || "", 20)}</td>
+                                <td>
+                                    {limitText(item?.description || "NaN", 30)}
+                                </td>
+                                <td>
                                     <Button
                                         type="button"
                                         name={"Detail"}
-                                        onClick={() => handleClickDetail(res)}
+                                        onClick={() => handleClickDetail(item)}
                                     />
                                 </td>
                             </tr>
-                        ))}
+                        )}
+                    />
                     {partners.filter((res) => filter === res.status).length ===
                         0 && (
                         <tr>
                             <td colSpan="7" className="p-5 text-center">
-                                No partners found
+                                No partner found
                             </td>
                         </tr>
                     )}

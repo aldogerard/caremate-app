@@ -2,16 +2,17 @@ import Button from "@/components/Button";
 import Filter from "@/components/Filter";
 import { formatDate } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EachUtils from "@/utils/EachUtils";
 import CardCampaignReport from "./CardCampaignReport";
 import { Confirm, Message, Success } from "@/utils/AlertUtil";
 import CustomModal from "@/components/CustomModal";
 import { pdf, PDFDownloadLink } from "@react-pdf/renderer";
 import Invoice from "@/components/PDF/Invoice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FormEditCampaign from "./FormEditCampaign";
 import FormCampaignReport from "./FormCampaignReport";
+import { getCampaignReportByCampaignId } from "@/redux/feature/partner/campaignReportSlice";
 
 const data = [
     {
@@ -33,15 +34,36 @@ const DetailCampaign = (props) => {
     } = props;
 
     const { partner } = useSelector((state) => state.partner);
-    const { currentWithdrawal } = useSelector((state) => state.withdrawal);
     const { currentCampaign, currentCampaignUrl } = useSelector(
         (state) => state.campaign
     );
+
+    const dispatch = useDispatch();
+
     const { campaignReports } = useSelector((state) => state.campaignReport);
 
     const [filter, setFilter] = useState("Detail");
     const [isFormReportOpen, setIsFormReportOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+
+    useEffect(() => {
+        if (currentCampaign !== null) {
+            const fetchData = async () => {
+                try {
+                    await dispatch(
+                        getCampaignReportByCampaignId(currentCampaign.id)
+                    ).unwrap();
+                } catch (error) {
+                    console.log("Error fetch : ", error);
+                }
+            };
+            fetchData();
+        }
+    }, [currentCampaign]);
+
+    useEffect(() => {
+        console.log({ campaignReports });
+    }, [campaignReports]);
 
     const handleFormReport = () => {
         setIsFormReportOpen((state) => !state);
@@ -88,7 +110,7 @@ const DetailCampaign = (props) => {
     };
 
     const handleClickMessage = () => {
-        Message(currentWithdrawal?.message || "Lorem ipsum");
+        Message(currentCampaign?.message || "Lorem ipsum");
     };
 
     return (

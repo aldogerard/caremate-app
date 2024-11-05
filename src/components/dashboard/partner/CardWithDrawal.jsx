@@ -70,7 +70,7 @@ const CardWithdrawal = (props) => {
                     </div>
                     {status === "APPROVED" && (
                         <ButtonFile
-                            fileName={"SuratKeteranganLulus.pdf"}
+                            fileName={withdrawal?.invoiceFileName}
                             name={"Invoice"}
                         />
                     )}

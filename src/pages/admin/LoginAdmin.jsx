@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import logo from "@/assets/images/logo.webp";
+import { validateEmail, validatePassword } from "@/utils/Utils";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { clearAuthStatus, login } from "@/redux/feature/authSlice";
+import { Failed, Success } from "@/utils/AlertUtil";
 
 const image = "https://account.enigmacamp.com/1.jpg";
 
@@ -15,6 +20,9 @@ const LoginAdmin = () => {
     const [isMount, setIsMount] = useState(false);
     const [isFocus, setIsFocus] = useState(false);
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (!isMount) {
             setIsMount(true);
@@ -22,24 +30,17 @@ const LoginAdmin = () => {
         }
         const { email, password } = auth;
 
-        const regex = /^[\w.-]+@[\w.-]+\.\w+$/;
-
         setIsEmailInvalid(
-            regex.test(email) || email.length <= 0 ? false : true
+            validateEmail(email) || email.length <= 0 ? false : true
         );
         setIsPasswordInvalid(
-            password.length >= 8 || password.length <= 0 ? false : true
+            validatePassword(password) || password.length <= 0 ? false : true
         );
     }, [auth]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setAuth((state) => ({ ...state, [name]: value }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        e.target.reset();
     };
 
     const handleClick = () => {
@@ -52,6 +53,29 @@ const LoginAdmin = () => {
 
     const handleBlur = () => {
         setIsFocus(false);
+    };
+
+    const handleSubmit = async (e) => {
+        try {
+            e.preventDefault();
+            e.target.reset();
+            setAuth({
+                email: "",
+                password: "",
+            });
+
+            console.log(auth);
+
+            await dispatch(login(auth)).unwrap();
+
+            Success("Successfully login");
+
+            dispatch(clearAuthStatus());
+            return navigate("/");
+        } catch (error) {
+            Failed(error.message);
+            dispatch(clearAuthStatus());
+        }
     };
 
     return (

@@ -45,7 +45,7 @@ const FormCampaign = (props) => {
     });
 
     const oneWeekFromNow = new Date();
-    oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
+    oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 6);
 
     const [isSelectOpen, setIsSelectOpen] = useState(false);
 

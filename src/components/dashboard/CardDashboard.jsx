@@ -1,19 +1,26 @@
 import { capitalizeFirstLetter } from "@/utils/Utils";
 import React from "react";
+import { TbClock } from "react-icons/tb";
 import { Link } from "react-router-dom";
 
 const CardDashboard = ({ link, name, data, icon }) => {
     return (
         <Link
             to={link}
-            className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
+            className={`flex flex-row items-starts gap-4 w-full lg:w-[32%] overflow-hidden rounded-2xl transition-template hover:border hover:border-primary bg-white px-5 py-6 shadow-md border`}
         >
-            <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>{icon}</div>
-            <h1 className="font-light mt-8 mb-2 text-black">{name}</h1>
-            <div className="flex items-end gap-2">
-                <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
+            <div
+                className={`flex justify-center items-center rounded-2xl bg-primary/15 p-3`}
+            >
+                {icon}
+            </div>
+            <div className="flex flex-col justify-end gap-1">
+                <h2 className="text-4xl lg:text-5xl font-semibold leading-none text-slate-800/80">
                     {capitalizeFirstLetter(data)}
                 </h2>
+                <h1 className="text-sm lg:text-lg font-medium text-slate-800/80">
+                    {name}
+                </h1>
             </div>
         </Link>
     );

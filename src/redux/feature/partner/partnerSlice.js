@@ -25,12 +25,29 @@ export const updateProfilePartner = createAsyncThunk(
     }
 );
 
-export const updateDocumentPartner = createAsyncThunk(
-    "partner/updateDocumentPartner",
+export const createDocumentPartner = createAsyncThunk(
+    "partner/createDocumentPartner",
     async ({ id, data }, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.patch(
                 `/partner/document/upload/${id}`,
+                data
+            );
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Fetch to update");
+        }
+    }
+);
+
+export const updateDocumentPartner = createAsyncThunk(
+    "partner/updateDocumentPartner",
+    async ({ id, data }, { rejectWithValue }) => {
+        try {
+            console.log(id);
+            console.log(data);
+            const response = await axiosInstance.patch(
+                `/partner/document/update/${id}`,
                 data
             );
             return response.data;
@@ -65,6 +82,13 @@ const partnerSlice = createSlice({
                 state.status = "success";
             })
             .addCase(updateProfilePartner.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(createDocumentPartner.fulfilled, (state) => {
+                state.status = "success";
+            })
+            .addCase(createDocumentPartner.rejected, (state) => {
                 state.status = "failed";
             })
 

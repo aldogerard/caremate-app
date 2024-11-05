@@ -15,19 +15,19 @@ const data = [
         link: "/dashboard/admin/partner",
         name: "Partners",
         data: 0,
-        icon: <FaUserFriends size={52} className="text-primary" />,
+        icon: <FaUserFriends className="text-primary lg:text-7xl text-5xl" />,
     },
     {
         link: "/dashboard/admin/campaign",
         name: "Campaigns",
         data: 0,
-        icon: <FaSchool size={52} className="text-primary" />,
+        icon: <FaSchool className="text-primary lg:text-7xl text-5xl" />,
     },
     {
         link: "/dashboard/admin/withdrawal",
         name: "Withdrawals",
         data: 0,
-        icon: <FaMoneyCheck size={52} className="text-primary" />,
+        icon: <FaMoneyCheck className="text-primary lg:text-7xl text-5xl" />,
     },
 ];
 
@@ -55,16 +55,12 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
+        console.log(partners);
         if (partners === null) return;
         const updatedDatas = datas.map((item) => {
             switch (item.name) {
                 case "Partners":
-                    return {
-                        ...item,
-                        data: partners.filter(
-                            (res) => res.status !== "UNVERIFIED"
-                        ).length,
-                    };
+                    return { ...item, data: partners.length };
                 case "Campaigns":
                     return { ...item, data: campaigns?.length };
                 case "Withdrawals":
@@ -82,7 +78,7 @@ const AdminDashboard = () => {
             {partners !== null &&
                 campaigns !== null &&
                 withdrawals !== null && (
-                    <div className="flex justify-start gap-4">
+                    <div className="flex justify-start gap-4 flex-wrap">
                         <EachUtils
                             of={datas}
                             render={(item) => (

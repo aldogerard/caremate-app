@@ -108,7 +108,7 @@ const PartnerDashboardLayout = () => {
                         )}
                     </Link>
 
-                    <main className=" flex flex-col gap-y-2">
+                    <main className=" flex flex-col gap-y-2 h-[74%]">
                         <EachUtils
                             of={list}
                             render={(item) => (

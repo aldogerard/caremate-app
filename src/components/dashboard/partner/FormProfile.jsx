@@ -1,9 +1,14 @@
 import Button from "@/components/Button";
-import { Update } from "@/utils/AlertUtil";
+import { Failed, SuccessUpdate, Update } from "@/utils/AlertUtil";
 import { validateEmail } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
 import InputProfile from "./Input/InputProfile";
 import EachUtils from "@/utils/EachUtils";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    getDetailPartner,
+    updateProfilePartner,
+} from "@/redux/feature/partner/partnerSlice";
 
 const data = [
     {
@@ -34,12 +39,14 @@ const data = [
 ];
 
 const FormProfile = (props) => {
-    const { isEdit, partner, handleSubmitFormProfile, handleClickEditProfile } =
-        props;
+    const { isEdit, partner, handleClickEditProfile } = props;
 
     const [isMount, setIsMount] = useState(false);
     const [updatedPartner, setUpdatedPartner] = useState(partner);
     const [isEmailInvalid, setIsEmailInvalid] = useState(false);
+
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (isMount) {
@@ -66,6 +73,22 @@ const FormProfile = (props) => {
         Update(() => {
             return handleSubmitFormProfile(updatedPartner);
         });
+    };
+
+    const handleSubmitFormProfile = async (data) => {
+        try {
+            await dispatch(
+                updateProfilePartner({ id: user.id, data: data })
+            ).unwrap();
+            SuccessUpdate();
+        } catch (error) {
+            console.log(error);
+            setUpdatedPartner(partner);
+            Failed("Failed to update");
+        } finally {
+            await dispatch(getDetailPartner(user.id)).unwrap();
+            handleClickEditProfile();
+        }
     };
 
     return (

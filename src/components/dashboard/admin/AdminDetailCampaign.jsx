@@ -111,7 +111,7 @@ const AdminDetailCampaign = (props) => {
                         <h1 className="text-dark/70">Campaign Title</h1>
                         <div className="px-4 py-3 border rounded-md shadow-sm min-h-20">
                             <h1 className="text-dark">
-                                {currentCampaign?.description}
+                                {currentCampaign?.title}
                             </h1>
                         </div>
                     </div>

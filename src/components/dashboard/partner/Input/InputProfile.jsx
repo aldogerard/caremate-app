@@ -43,7 +43,7 @@ const InputProfile = (props) => {
                 <textarea
                     {...commonProps}
                     placeholder="Enter description for your foundation"
-                    maxLength={300}
+                    maxLength={255}
                     className={`${commonProps.className} h-40 w-full lg:h-28 resize-none`}
                 />
             )}

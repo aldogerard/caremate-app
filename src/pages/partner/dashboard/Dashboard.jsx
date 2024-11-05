@@ -16,19 +16,19 @@ const data = [
         link: "/dashboard/partner/profile",
         name: "Status Fondation",
         data: "Unverified",
-        icon: <TbClock size={52} className="text-primary" />,
+        icon: <TbClock className="text-primary lg:text-7xl text-5xl" />,
     },
     {
         link: "/dashboard/partner/campaign",
-        name: "Campaign",
-        data: 7,
-        icon: <FaSchool size={52} className="text-primary" />,
+        name: "Total Campaigns",
+        data: 0,
+        icon: <FaSchool className="text-primary lg:text-7xl text-5xl" />,
     },
     {
         link: "/dashboard/partner/withdrawal",
-        name: "Withdrawal",
-        data: 5,
-        icon: <FaMoneyCheck size={52} className="text-primary" />,
+        name: "Total Withdrawals",
+        data: 0,
+        icon: <FaMoneyCheck className="text-primary lg:text-7xl text-5xl" />,
     },
 ];
 
@@ -49,9 +49,9 @@ const Dashboard = () => {
             switch (item.name) {
                 case "Status Fondation":
                     return { ...item, data: partner?.status };
-                case "Campaign":
+                case "Total Campaigns":
                     return { ...item, data: campaigns?.length || 0 };
-                case "Withdrawal":
+                case "Total Withdrawals":
                     return { ...item, data: withdrawals?.length || 0 };
                 default:
                     return item;

@@ -101,6 +101,16 @@ const AdminDetailPartner = (props) => {
                             </h1>
                         </div>
                     </div>
+                    {status === "REJECTED" && (
+                        <div className="w-full">
+                            <h1 className="text-dark/70">Rejected Message</h1>
+                            <div className="px-4 py-3 border rounded-md shadow-sm min-h-16">
+                                <h1 className="text-dark">
+                                    {currentPartner?.message}
+                                </h1>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 {(status === "IN_REVIEW" || status === "VERIFIED") && (
                     <>

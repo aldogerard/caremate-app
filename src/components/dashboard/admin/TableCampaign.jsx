@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
 import { setCurrentCampaign } from "@/redux/feature/admin/adminCampaignSlice";
+import EachUtils from "@/utils/EachUtils";
 import { limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
@@ -16,55 +17,58 @@ const TableCampaign = (props) => {
     };
 
     return (
-        <div className="w-full border rounded-md shadow-sm">
-            <table className="w-full text-left">
-                <thead>
+        <div className="relative overflow-x-auto border rounded-md shadow-sm">
+            <table className="w-full text-sm lg:text-base text-left rtl:text-right text-gray-500">
+                <thead className="text-gray-700">
                     <tr className="border-b">
-                        <th className="p-4 w-[5%]">No</th>
-                        <th className="w-[15%]">Foundation Name</th>
-                        <th className="w-[25%]">Campaign Title</th>
-                        <th className="w-[20%]">Category</th>
+                        <th scope="col" className="p-4">
+                            No
+                        </th>
+                        <th scope="col">Foundation Name</th>
+                        <th scope="col">Campaign Title</th>
+                        <th scope="col">Category</th>
                         {(filter === "ACTIVE" || filter === "COMPLETED") && (
-                            <th className="w-[15%]">Raise Ammount</th>
+                            <th scope="col">Raise Ammount</th>
                         )}
-                        <th className="w-[15%]">Goal Ammount</th>
-                        <th className="w-[10%] pr-4">Action</th>
+                        <th scope="col">Goal Ammount</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {campaigns
-                        .filter((res) => filter === res.status)
-                        .map((res, index) => (
+                    <EachUtils
+                        of={campaigns.filter((res) => filter === res.status)}
+                        render={(item, index) => (
                             <tr
                                 className={`${
-                                    index % 2 !== 0 && "bg-primary/10"
-                                }  `}
-                                key={res.id}
+                                    index % 2 === 0 && "bg-accent/5"
+                                } text-left `}
+                                key={item.id}
                             >
-                                <td className="p-5">{index + 1}</td>
-                                <td>{limitText(res.partnerName, 20)}</td>
-                                <td>{limitText(res.title, 37)}</td>
-                                <td>{res.category}</td>
+                                <td className="px-4 py-6">{index + 1}</td>
+                                <td>{limitText(item.partnerName, 20)}</td>
+                                <td>{limitText(item.title, 20)}</td>
+                                <td>{item.category}</td>
                                 {(filter === "ACTIVE" ||
                                     filter === "COMPLETED") && (
                                     <td>
                                         <FormatRupiah
-                                            value={res.currentAmount}
+                                            value={item.currentAmount}
                                         />
                                     </td>
                                 )}
                                 <td>
-                                    <FormatRupiah value={res.goalAmount} />
+                                    <FormatRupiah value={item.goalAmount} />
                                 </td>
-                                <td className="pr-4">
+                                <td>
                                     <Button
                                         type="button"
                                         name={"Detail"}
-                                        onClick={() => handleClickDetail(res)}
+                                        onClick={() => handleClickDetail(item)}
                                     />
                                 </td>
                             </tr>
-                        ))}
+                        )}
+                    />
                     {campaigns.filter((res) => filter === res.status).length ===
                         0 && (
                         <tr>

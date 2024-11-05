@@ -3,9 +3,9 @@ import {
     createCampaignReport,
     getCampaignReportByCampaignId,
 } from "@/redux/feature/partner/campaignReportSlice";
-import { Confirm, Success } from "@/utils/AlertUtil";
+import { Confirm, Failed, Success } from "@/utils/AlertUtil";
 import { validateFile } from "@/utils/Utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const FormCampaignReport = (props) => {
@@ -13,7 +13,7 @@ const FormCampaignReport = (props) => {
 
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
-
+    const { currentCampaign } = useSelector((state) => state.campaign);
     const [formDataReport, setFormDataReport] = useState({
         description: null,
         image: null,
@@ -55,16 +55,16 @@ const FormCampaignReport = (props) => {
         try {
             const data = new FormData();
 
-            data.append("description", request.descrtiption);
+            data.append("description", request.description);
             data.append("file", request.image);
             data.append("campaignId", currentCampaign.id);
 
             await dispatch(createCampaignReport(data)).unwrap();
             Success("Successfully create campaign report");
-            await dispatch(getCampaignReportByCampaignId(user.id)).unwrap();
-            await fetchData();
+            await dispatch(
+                getCampaignReportByCampaignId(currentCampaign.id)
+            ).unwrap();
         } catch (error) {
-            console.log(error);
             Failed("Failed create campaign report");
         }
     };

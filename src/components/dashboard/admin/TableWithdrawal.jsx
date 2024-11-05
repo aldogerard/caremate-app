@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
 import { setCurrentWithdrawal } from "@/redux/feature/admin/adminWithdrawalSlice";
+import EachUtils from "@/utils/EachUtils";
 import { limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
@@ -16,48 +17,51 @@ const TableWithdrawal = (props) => {
     };
 
     return (
-        <div className="w-full border rounded-md shadow-sm">
-            <table className="w-full text-left">
-                <thead>
+        <div className="relative overflow-x-auto border rounded-md shadow-sm">
+            <table className="w-full text-sm lg:text-base text-left rtl:text-right text-gray-500">
+                <thead className="text-gray-700">
                     <tr className="border-b">
-                        <th className="p-4 w-[5%]">No</th>
-                        <th className="w-[17%]">Foundation Name</th>
-                        <th className="w-[24%]">Campaign Title</th>
-                        <th className="w-[20%]">Category</th>
-                        <th className="w-[15%]">Total Withdrawal</th>
-                        <th className="w-[15%]">Tax</th>
-                        <th className="w-[10%] pr-4">Action</th>
+                        <th scope="col" className="p-4">
+                            No
+                        </th>
+                        <th scope="col">Foundation Name</th>
+                        <th scope="col">Campaign Title</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Total Withdrawal</th>
+                        <th scope="col">Tax</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {withdrawals
-                        .filter((res) => filter === res.status)
-                        .map((res, index) => (
+                    <EachUtils
+                        of={withdrawals.filter((res) => filter === res.status)}
+                        render={(item, index) => (
                             <tr
                                 className={`${
-                                    index % 2 !== 0 && "bg-primary/10"
-                                }  `}
-                                key={res.id}
+                                    index % 2 === 0 && "bg-accent/5"
+                                }`}
+                                key={item.id}
                             >
                                 <td className="p-5">{index + 1}</td>
-                                <td>{limitText(res.partnerName, 25)}</td>
-                                <td>{limitText(res.title, 37)}</td>
-                                <td>{limitText(res.category, 25)}</td>
+                                <td>{limitText(item.partnerName, 25)}</td>
+                                <td>{limitText(item.title, 37)}</td>
+                                <td>{limitText(item.category, 25)}</td>
                                 <td>
-                                    <FormatRupiah value={res.totalAmount} />
+                                    <FormatRupiah value={item.totalAmount} />
                                 </td>
                                 <td>
-                                    <FormatRupiah value={res.totalTax} />
+                                    <FormatRupiah value={item.totalTax} />
                                 </td>
-                                <td className="pr-4">
+                                <td>
                                     <Button
                                         type="button"
                                         name={"Detail"}
-                                        onClick={() => handleClickDetail(res)}
+                                        onClick={() => handleClickDetail(item)}
                                     />
                                 </td>
                             </tr>
-                        ))}
+                        )}
+                    />
                     {withdrawals.filter((res) => filter === res.status)
                         .length === 0 && (
                         <tr>

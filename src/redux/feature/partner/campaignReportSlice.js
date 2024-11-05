@@ -18,7 +18,7 @@ export const getCampaignReportByCampaignId = createAsyncThunk(
     async (id, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get(
-                `/campaign-report/ampaign/${id}`
+                `/campaign-report/campaign/${id}`
             );
             return response.data;
         } catch (e) {
@@ -52,11 +52,11 @@ const campaignReportSlice = createSlice({
             state.status = null;
         },
         clearCurrentCampaignReport: (state) => {
-            state.currentCampaign = null;
+            state.currentCampaignReport = null;
             state.currentCampaignReportUrl = null;
         },
         setCurrentCampaignReport: (state, action) => {
-            state.currentCampaign = action.payload.item;
+            state.currentCampaignReport = action.payload.item;
             state.currentCampaignReportUrl = action.payload.imageUrl;
         },
     },
@@ -72,7 +72,7 @@ const campaignReportSlice = createSlice({
             .addCase(
                 getCampaignReportByCampaignId.fulfilled,
                 (state, action) => {
-                    state.campaigns = action.payload.data;
+                    state.campaignReports = action.payload.data;
                     state.status = "success";
                 }
             )

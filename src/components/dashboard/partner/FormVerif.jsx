@@ -1,9 +1,15 @@
-import { Failed, Message } from "@/utils/AlertUtil";
+import { Confirm, Failed, Message, Success } from "@/utils/AlertUtil";
 import { validateFile } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
 import FileVerif from "./Input/FileVerif";
 import EachUtils from "@/utils/EachUtils";
 import Button from "@/components/Button";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    createDocumentPartner,
+    getDetailPartner,
+    updateDocumentPartner,
+} from "@/redux/feature/partner/partnerSlice";
 
 const data = [
     {
@@ -29,7 +35,7 @@ const data = [
 ];
 
 const FormVerif = (props) => {
-    const { partner, handleSubmitVerification, handleIsEditDocument } = props;
+    const { partner, handleIsEditDocument, setIsEditDocument } = props;
 
     const [document, setDocument] = useState({
         cfe: "",
@@ -38,6 +44,9 @@ const FormVerif = (props) => {
         ffp: "",
         ba: "",
     });
+
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
 
     const handleChangeFile = (e) => {
         const { name, files } = e.target;
@@ -60,7 +69,62 @@ const FormVerif = (props) => {
             data.append(key, value);
         });
 
-        handleSubmitVerification(data);
+        const { cfeFileName, frFileName, rcFileName, ffpFileName, baFileName } =
+            partner;
+        if (
+            cfeFileName == null &&
+            frFileName == null &&
+            rcFileName == null &&
+            ffpFileName == null &&
+            baFileName == null
+        ) {
+            const { cfe, fr, rc, ffp, ba } = document;
+            if (cfe == "" || fr == "" || rc == "" || ffp == "" || ba == "") {
+                return Failed("Please upload all files");
+            }
+            Confirm("Upload document verification", () => {
+                return handleSubmitVerification("upload", data);
+            });
+        } else {
+            Confirm(
+                "Changing the document will set the foundation status to In Review",
+                () => {
+                    return handleSubmitVerification("edit", data);
+                }
+            );
+        }
+    };
+
+    const handleSubmitVerification = async (type, data) => {
+        console.log(type);
+        try {
+            if (type === "upload") {
+                await dispatch(
+                    createDocumentPartner({ id: user.id, data: data })
+                ).unwrap();
+            } else {
+                await dispatch(
+                    updateDocumentPartner({
+                        id: user.id,
+                        data: data,
+                    })
+                ).unwrap();
+            }
+            Success("Successfully submit document");
+        } catch (error) {
+            console.log(error);
+            Failed("Failed verification document");
+        } finally {
+            setIsEditDocument(false);
+            setDocument({
+                cfe: "",
+                fr: "",
+                rc: "",
+                ffp: "",
+                ba: "",
+            });
+            await dispatch(getDetailPartner(user.id)).unwrap();
+        }
     };
 
     const handleClickMessage = () => {
@@ -98,13 +162,17 @@ const FormVerif = (props) => {
                 </div>
                 <div className="text-lg mt-8 flex gap-2 justify-end">
                     <Button type={"submit"} name={"Submit"} />
-                    {partner.status !== "UNVERIFIED" && (
-                        <Button
-                            type={"reset"}
-                            name={"Cancel"}
-                            onClick={handleIsEditDocument}
-                        />
-                    )}
+                    {partner?.cfe == null &&
+                        partner?.fr == null &&
+                        partner?.rc == null &&
+                        partner?.ffp == null &&
+                        partner?.ba == null && (
+                            <Button
+                                type={"reset"}
+                                name={"Cancel"}
+                                onClick={handleIsEditDocument}
+                            />
+                        )}
                 </div>
             </form>
         </>
