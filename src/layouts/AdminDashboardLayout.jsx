@@ -14,9 +14,36 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 import logo from "@/assets/images/logo.webp";
 
+const list = [
+    {
+        name: "Dashboard",
+        link: "/dashboard/admin",
+        icon: <FaThLarge size={14} color="#eee" />,
+        slug: "",
+    },
+    {
+        name: "Partner",
+        link: "/dashboard/admin/partner",
+        icon: <FaUserFriends size={14} color="#eee" />,
+        slug: "partner",
+    },
+    {
+        name: "Campaign",
+        link: "/dashboard/admin/campaign",
+        icon: <FaHeart size={14} color="#eee" />,
+        slug: "campaign",
+    },
+    {
+        name: "Withdrawal",
+        link: "/dashboard/admin/withdrawal",
+        icon: <FaMoneyCheckDollar size={14} color="#eee" />,
+        slug: "withdrawal",
+    },
+];
+
 const AdminDashboardLayout = () => {
     const [isOpen, setIsOpen] = useState(window.innerWidth > 1023);
-    const location = useLocation().pathname;
+    const location = useLocation().pathname.split("/")[3] || "";
     const dispatch = useDispatch();
 
     const handleLogout = () => {
@@ -47,29 +74,6 @@ const AdminDashboardLayout = () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
-
-    const list = [
-        {
-            name: "Dashboard",
-            link: "/dashboard/admin",
-            icon: <FaThLarge size={14} color="#eee" />,
-        },
-        {
-            name: "Partner",
-            link: "/dashboard/admin/partner",
-            icon: <FaUserFriends size={14} color="#eee" />,
-        },
-        {
-            name: "Campaign",
-            link: "/dashboard/admin/campaign",
-            icon: <FaHeart size={14} color="#eee" />,
-        },
-        {
-            name: "Withdrawal",
-            link: "/dashboard/admin/withdrawal",
-            icon: <FaMoneyCheckDollar size={14} color="#eee" />,
-        },
-    ];
 
     return (
         <>
@@ -117,7 +121,7 @@ const AdminDashboardLayout = () => {
                                             ? "justify-start"
                                             : "justify-start"
                                     }  ${
-                                        location === item.link && "bg-primary"
+                                        location === item.slug && "bg-primary"
                                     }`}
                                 >
                                     <div className={`${!isOpen && "mx-auto"}`}>

@@ -17,7 +17,7 @@ const Button = ({
             onClick={onClick}
             disabled={disabled}
             type={type}
-            className={`w-full lg:w-max lg:min-w-28 py-2 px-5 text-sm lg:text-lg rounded-md shadow-md text-light font-medium outline-none 
+            className={`w-full lg:w-max lg:min-w-28 py-2 px-5 text-sm lg:text-lg rounded-md shadow-sm text-light font-medium outline-none 
                 ${type === "submit" && submit}
                 ${type === "reset" && reset}
                 ${type === "button" && button}

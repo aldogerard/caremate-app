@@ -101,10 +101,9 @@ export const InputMessage = async (cb) => {
     }
 };
 
-export const Message = (prompt) => {
+export const Message = (prompt, type = "warning") => {
     Swal.fire({
-        icon: "warning",
-        title: "Sorry",
+        icon: type,
         text: prompt,
     });
 };

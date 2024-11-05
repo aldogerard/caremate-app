@@ -5,6 +5,7 @@ import { limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 const TableCampaign = (props) => {
     const { campaigns, handleDetailModal, filter } = props;
@@ -60,11 +61,17 @@ const TableCampaign = (props) => {
                                     <FormatRupiah value={item.goalAmount} />
                                 </td>
                                 <td>
-                                    <Button
-                                        type="button"
-                                        name={"Detail"}
-                                        onClick={() => handleClickDetail(item)}
-                                    />
+                                    <Link
+                                        to={`/dashboard/admin/campaign/${item.id}`}
+                                    >
+                                        <Button
+                                            type="button"
+                                            name={"Detail"}
+                                            onClick={() =>
+                                                handleClickDetail(item)
+                                            }
+                                        />
+                                    </Link>
                                 </td>
                             </tr>
                         )}

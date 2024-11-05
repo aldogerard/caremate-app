@@ -64,8 +64,6 @@ const LoginAdmin = () => {
                 password: "",
             });
 
-            console.log(auth);
-
             await dispatch(login(auth)).unwrap();
 
             Success("Successfully login");

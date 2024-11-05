@@ -13,11 +13,35 @@ export const createCampaign = createAsyncThunk(
     }
 );
 
+export const getCampaignDetailById = createAsyncThunk(
+    "campaign/getCampaignDetailById",
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get(`/campaign/${id}`);
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Failed to fetch");
+        }
+    }
+);
+
 export const getCampaignByPartnerId = createAsyncThunk(
     "campaign/getCampaignByPartnerId",
     async (id, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get(`/campaign/partner/${id}`);
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Failed to fetch");
+        }
+    }
+);
+
+export const getCampaignImageByName = createAsyncThunk(
+    "campaign/getCampaignImageByName",
+    async (name, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get(`/file/${name}`);
             return response.data;
         } catch (e) {
             return rejectWithValue(e.response?.data || "Failed to fetch");
@@ -84,6 +108,22 @@ const campaignSlice = createSlice({
                 state.status = "success";
             })
             .addCase(getCampaignByPartnerId.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(getCampaignImageByName.fulfilled, (state, action) => {
+                state.currentCampaignUrl = action.payload;
+                state.status = "success";
+            })
+            .addCase(getCampaignImageByName.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(getCampaignDetailById.fulfilled, (state, action) => {
+                state.currentCampaign = action.payload.data;
+                state.status = "success";
+            })
+            .addCase(getCampaignDetailById.rejected, (state) => {
                 state.status = "failed";
             })
 

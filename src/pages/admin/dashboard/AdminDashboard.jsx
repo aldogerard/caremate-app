@@ -55,7 +55,6 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
-        console.log(partners);
         if (partners === null) return;
         const updatedDatas = datas.map((item) => {
             switch (item.name) {

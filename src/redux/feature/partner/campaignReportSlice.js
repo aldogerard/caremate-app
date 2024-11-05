@@ -31,7 +31,9 @@ export const deleteCampaignReportById = createAsyncThunk(
     "campaignReport/deleteCampaignReportByPartnerId",
     async (id, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.get(`/campaign-report/${id}`);
+            const response = await axiosInstance.delete(
+                `/campaign-report/${id}`
+            );
             return response.data;
         } catch (e) {
             return rejectWithValue(e.response?.data || "Failed to delete");

@@ -44,8 +44,6 @@ export const updateDocumentPartner = createAsyncThunk(
     "partner/updateDocumentPartner",
     async ({ id, data }, { rejectWithValue }) => {
         try {
-            console.log(id);
-            console.log(data);
             const response = await axiosInstance.patch(
                 `/partner/document/update/${id}`,
                 data

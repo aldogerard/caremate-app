@@ -13,6 +13,18 @@ export const createWithdrawal = createAsyncThunk(
     }
 );
 
+export const updateWithdrawal = createAsyncThunk(
+    "withDrawal/updateWithdrawal",
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.patch(`/withdrawal/${id}`);
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Failed to create");
+        }
+    }
+);
+
 export const getWithdrawalByPartnerId = createAsyncThunk(
     "withDrawal/getWithdrawalByPartnerId",
     async (id, { rejectWithValue }) => {
@@ -54,6 +66,13 @@ const withdrawalSlice = createSlice({
                 state.status = "success";
             })
             .addCase(createWithdrawal.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(updateWithdrawal.fulfilled, (state) => {
+                state.status = "success";
+            })
+            .addCase(updateWithdrawal.rejected, (state) => {
                 state.status = "failed";
             })
 

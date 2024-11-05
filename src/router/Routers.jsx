@@ -19,13 +19,16 @@ import AdminPartner from "@/pages/admin/dashboard/AdminPartner";
 import Home from "@/pages/landing/Home";
 import AdminCampaign from "@/pages/admin/dashboard/AdminCampaign";
 import AdminWithdrawal from "@/pages/admin/dashboard/AdminWIthdrawal";
+import CampaignDetail from "@/pages/partner/dashboard/CampaignDetail";
+import AdminCampaignDetail from "@/pages/admin/dashboard/AdminCampaignDetail";
+import NotFound from "@/pages/NotFound";
 
 const Routers = () => {
     const router = createBrowserRouter([
         {
             path: "/",
             element: <BaseLayouts />,
-            errorElement: <h1>Not Found</h1>,
+            errorElement: <NotFound />,
             children: [
                 {
                     path: "/",
@@ -70,6 +73,10 @@ const Routers = () => {
                             element: <AdminCampaign />,
                         },
                         {
+                            path: "campaign/:slug",
+                            element: <AdminCampaignDetail />,
+                        },
+                        {
                             path: "withdrawal",
                             element: <AdminWithdrawal />,
                         },
@@ -100,6 +107,10 @@ const Routers = () => {
                         {
                             path: "campaign",
                             element: <Campaign />,
+                        },
+                        {
+                            path: `campaign/:slug`,
+                            element: <CampaignDetail />,
                         },
                         {
                             path: "withdrawal",

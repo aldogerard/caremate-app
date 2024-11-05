@@ -1,6 +1,5 @@
 import { capitalizeFirstLetter } from "@/utils/Utils";
 import React from "react";
-import { TbClock } from "react-icons/tb";
 import { Link } from "react-router-dom";
 
 const CardDashboard = ({ link, name, data, icon }) => {

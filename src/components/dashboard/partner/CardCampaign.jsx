@@ -1,25 +1,15 @@
 import axiosInstance from "@/api/axios";
-import Button from "@/components/Button";
 import CardCampaignSkleton from "@/components/Skleton/CardCampaignSkleton";
-import { setCurrentCampaign } from "@/redux/feature/partner/campaignSlice";
-import { Message } from "@/utils/AlertUtil";
 import { formatDate, limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 const CardCampaign = (props) => {
-    const { item, status, openModal } = props;
-
-    const dispatch = useDispatch();
+    const { item, status } = props;
 
     const [imageUrl, setImageUrl] = useState("");
     const percent = (item.currentAmount / item.goalAmount) * 100;
-
-    const handleClick = () => {
-        dispatch(setCurrentCampaign({ item, imageUrl }));
-        openModal();
-    };
 
     useEffect(() => {
         const fetchImageUrl = async () => {
@@ -37,8 +27,8 @@ const CardCampaign = (props) => {
     }, [item.campaignImageName]);
 
     return imageUrl !== "" ? (
-        <div
-            onClick={handleClick}
+        <Link
+            to={`/dashboard/partner/campaign/${item.id}`}
             className="flex flex-row border hover:border-primary transition-template shadow-sm cursor-pointer p-3 w-full sm:w-[400px] lg:w-[500px] rounded-xl gap-4"
         >
             <img
@@ -104,7 +94,7 @@ const CardCampaign = (props) => {
                     </div>
                 )}
             </div>
-        </div>
+        </Link>
     ) : (
         <CardCampaignSkleton />
     );

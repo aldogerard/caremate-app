@@ -158,6 +158,7 @@ const FormCampaign = (props) => {
                                     onInput={handleChange}
                                     autoComplete="off"
                                     name="title"
+                                    maxLength={100}
                                     placeholder="Enter the title of campaign"
                                     className={`px-5 py-4  outline-none rounded-md border focus:shadow-sm  bg-white`}
                                 />
@@ -305,7 +306,7 @@ const FormCampaign = (props) => {
                                     autoComplete="off"
                                     name="description"
                                     placeholder="Enter description for your foundation"
-                                    maxLength={300}
+                                    maxLength={255}
                                     className={`px-5 py-4 h-40 lg:h-40 text-dark outline-none rounded-md border focus:shadow-sm  bg-white resize-none `}
                                 />
                             </div>

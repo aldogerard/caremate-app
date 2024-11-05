@@ -20,26 +20,30 @@ const list = [
         name: "Dashboard",
         link: "/dashboard/partner",
         icon: <FaThLarge size={14} color="#eee" />,
+        slug: "",
     },
     {
         name: "Profile",
         link: "/dashboard/partner/profile",
         icon: <FaUser size={14} color="#eee" />,
+        slug: "profile",
     },
     {
         name: "Campaign",
         link: "/dashboard/partner/campaign",
         icon: <FaHeart size={14} color="#eee" />,
+        slug: "campaign",
     },
     {
         name: "Withdrawal",
         link: "/dashboard/partner/withdrawal",
         icon: <FaMoneyCheckDollar size={14} color="#eee" />,
+        slug: "withdrawal",
     },
 ];
 
 const PartnerDashboardLayout = () => {
-    const location = useLocation().pathname;
+    const location = useLocation().pathname.split("/")[3] || "";
 
     const dispatch = useDispatch();
 
@@ -119,7 +123,7 @@ const PartnerDashboardLayout = () => {
                                             ? "justify-start"
                                             : "justify-start"
                                     }  ${
-                                        location === item.link && "bg-primary"
+                                        location === item.slug && "bg-primary"
                                     }`}
                                 >
                                     <div className={`${!isOpen && "mx-auto"}`}>

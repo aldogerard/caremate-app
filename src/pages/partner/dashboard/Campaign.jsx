@@ -1,21 +1,16 @@
 import Button from "@/components/Button";
 import CardCampaign from "@/components/dashboard/partner/CardCampaign";
-import DetailCampaign from "@/components/dashboard/partner/DetailCampaign";
 import FormCampaign from "@/components/dashboard/partner/FormCampaign";
 import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
-import { Failed, Success } from "@/utils/AlertUtil";
+import { Failed } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-    getCampaignByPartnerId,
-    stopCampaignById,
-} from "@/redux/feature/partner/campaignSlice";
+import { getCampaignByPartnerId } from "@/redux/feature/partner/campaignSlice";
 import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
 import Loader from "@/components/Loader";
-import { createWithdrawal } from "@/redux/feature/partner/withdrawalSlice";
 
 const data = [
     {
@@ -37,12 +32,9 @@ const Campaign = () => {
 
     const { user } = useSelector((state) => state.auth);
     const { partner } = useSelector((state) => state.partner);
-    const { campaigns, currentCampaign } = useSelector(
-        (state) => state.campaign
-    );
+    const { campaigns } = useSelector((state) => state.campaign);
 
     const [filter, setFilter] = useState(data[0].name);
-    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [isFormModalOpen, setIsFormModalOpen] = useState(false);
 
     useEffect(() => {
@@ -65,40 +57,6 @@ const Campaign = () => {
             return Failed("Your foundation has not been verified");
         }
         setIsFormModalOpen((state) => !state);
-    };
-
-    const handleDetailModal = () => {
-        setIsDetailModalOpen((state) => !state);
-    };
-
-    const handleStopCampaign = async () => {
-        try {
-            await dispatch(stopCampaignById(currentCampaign.id)).unwrap();
-            Success("Successfully stop campaign");
-            await fetchData();
-        } catch (error) {
-            console.log(error);
-            Failed("Failed stop campaign");
-        }
-    };
-
-    const handleSubmitWithdrawal = async (cb) => {
-        try {
-            const totalTax = currentCampaign.currentAmount * (3 / 100);
-            const totalAmount = currentCampaign.currentAmount - totalTax;
-
-            const data = new FormData();
-            data.append("totalTax", totalTax);
-            data.append("totalAmount", totalAmount);
-            data.append("campaignId", currentCampaign.id);
-
-            await dispatch(createWithdrawal(data)).unwrap();
-            await fetchData();
-            cb();
-        } catch (error) {
-            console.log(error);
-            Failed("Failed request withdrawal");
-        }
     };
 
     return (
@@ -137,7 +95,6 @@ const Campaign = () => {
                                             <CardCampaign
                                                 item={item}
                                                 status={filter}
-                                                openModal={handleDetailModal}
                                             />
                                         )
                                     }
@@ -150,13 +107,6 @@ const Campaign = () => {
                                     </div>
                                 )}
                             </div>
-                            <DetailCampaign
-                                isOpen={isDetailModalOpen}
-                                closeModal={handleDetailModal}
-                                status={filter}
-                                handleStopCampaign={handleStopCampaign}
-                                handleSubmitWithdrawal={handleSubmitWithdrawal}
-                            />
                         </>
                     ) : (
                         <div className="flex text-black justify-center items-center h-[50vh]">
