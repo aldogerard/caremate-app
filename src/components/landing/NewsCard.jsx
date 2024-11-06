@@ -6,7 +6,7 @@ const NewsCard = ({articles, handleArticleClick}) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
           {articles.map((article) => (
-            <div
+            <button
               key={article.id}
               onClick={() => handleArticleClick(article)}
               className="flex flex-col p-4 relative aspect-square"
@@ -25,7 +25,7 @@ const NewsCard = ({articles, handleArticleClick}) => {
                   {article.date}
                 </span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
   )

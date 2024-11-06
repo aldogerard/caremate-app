@@ -45,7 +45,7 @@ const NewsPage = () => {
             </div>
           ))}
           <button
-            className="bg-[#0b826c] text-white rounded-2xl px-5 py-2 mx-auto text-lg mt-5 mr-32"
+            className="bg-[#0b826c] text-white rounded-2xl px-6 py-2 mx-auto textarea-md lg:text-lg mt-5 mr-44 lg:mr-32"
             onClick={() => navigate("/news")}
           >
             More News
