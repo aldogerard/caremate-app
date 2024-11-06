@@ -17,124 +17,147 @@ import AdminProtected from "./AdminProtected";
 import AdminDashboard from "@/pages/admin/dashboard/AdminDashboard";
 import AdminPartner from "@/pages/admin/dashboard/AdminPartner";
 import Home from "@/pages/landing/Home";
+import AboutUs from "@/pages/landing/AboutUs";
+import Faq from "@/pages/landing/Faq";
+import CampaignLanding from "@/pages/landing/campaign/CampaignLanding";
+import News from "@/pages/landing/News/News";
+import NewsPage from "@/pages/landing/News/NewsPage";
+import CampaignDetails from "@/pages/landing/campaign/CampaignDetails";
+import CampaignCategory from "@/pages/landing/campaign/CampaignCategory";
 
 const Routers = () => {
-    const router = createBrowserRouter([
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <BaseLayouts />,
+      errorElement: <h1>Not Found</h1>,
+      children: [
         {
-            path: "/",
-            element: <BaseLayouts />,
-            errorElement: <h1>Not Found</h1>,
-            children: [
-                {
-                    path: "/",
-                    element: <Home />,
-                },
-                {
-                    path: "/about",
-                    element: <></>,
-                },
-                {
-                    path: "/contact",
-                    element: <></>,
-                },
-                {
-                    path: "/faq",
-                    element: <></>,
-                },
-            ],
+          path: "/",
+          element: <Home />,
         },
         {
-            path: "/",
-            element: <AdminDashboardLayout />,
-            children: [
-                {
-                    path: "/dashboard/admin",
-                    element: (
-                        // <AdminProtected>
-                        <Outlet />
-                        // </AdminProtected>
-                    ),
-                    children: [
-                        {
-                            path: "",
-                            element: <AdminDashboard />,
-                        },
-                        {
-                            path: "partner",
-                            element: <AdminPartner />,
-                        },
-                        {
-                            path: "campaign",
-                            element: <Campaign />,
-                        },
-                        {
-                            path: "withdrawal",
-                            element: <Withdrawal />,
-                        },
-                    ],
-                },
-            ],
+          path: "/about",
+          element: <AboutUs />,
         },
         {
-            path: "/",
-            element: <PartnerDashboardLayout />,
-            children: [
-                {
-                    path: "/dashboard/partner",
-                    element: (
-                        // <PartnerProtected>
-                        <Outlet />
-                        // </PartnerProtected>
-                    ),
-                    children: [
-                        {
-                            path: "",
-                            element: <Dashboard />,
-                        },
-                        {
-                            path: "Profile",
-                            element: <Profile />,
-                        },
-                        {
-                            path: "campaign",
-                            element: <Campaign />,
-                        },
-                        {
-                            path: "withdrawal",
-                            element: <Withdrawal />,
-                        },
-                    ],
-                },
-                {
-                    path: "/dashboard/admin",
-                    element: <></>,
-                },
-            ],
+          path: "/campaign",
+          element: <CampaignLanding />,
         },
         {
-            path: "/",
-            element: (
-                <AuthProtected>
-                    <AuthLayout />
-                </AuthProtected>
-            ),
-            children: [
-                {
-                    path: "/partner/signin",
-                    element: <LoginPartner />,
-                },
-                {
-                    path: "/partner/signup",
-                    element: <RegisterPartner />,
-                },
-                {
-                    path: "/admin/signin",
-                    element: <LoginAdmin />,
-                },
-            ],
+          path: "/news",
+          element: <News />,
         },
-    ]);
+        {
+          path: "/faq",
+          element: <Faq />,
+        },
+        {
+          path: "/news/:id",
+          element: <NewsPage />,
+        },
+        {
+          path: "/campaign/category",
+          element: <CampaignCategory />,
+        },
+        {
+          path: "/campaign/details",
+          element: <CampaignDetails />,
+        },
+      ],
+    },
+    {
+      path: "/",
+      element: <AdminDashboardLayout />,
+      children: [
+        {
+          path: "/dashboard/admin",
+          element: (
+            // <AdminProtected>
+            <Outlet />
+            // </AdminProtected>
+          ),
+          children: [
+            {
+              path: "",
+              element: <AdminDashboard />,
+            },
+            {
+              path: "partner",
+              element: <AdminPartner />,
+            },
+            {
+              path: "campaign",
+              element: <Campaign />,
+            },
+            {
+              path: "withdrawal",
+              element: <Withdrawal />,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: "/",
+      element: <PartnerDashboardLayout />,
+      children: [
+        {
+          path: "/dashboard/partner",
+          element: (
+            // <PartnerProtected>
+            <Outlet />
+            // </PartnerProtected>
+          ),
+          children: [
+            {
+              path: "",
+              element: <Dashboard />,
+            },
+            {
+              path: "Profile",
+              element: <Profile />,
+            },
+            {
+              path: "campaign",
+              element: <Campaign />,
+            },
+            {
+              path: "withdrawal",
+              element: <Withdrawal />,
+            },
+          ],
+        },
+        {
+          path: "/dashboard/admin",
+          element: <></>,
+        },
+      ],
+    },
+    {
+      path: "/",
+      element: (
+        <AuthProtected>
+          <AuthLayout />
+        </AuthProtected>
+      ),
+      children: [
+        {
+          path: "/partner/signin",
+          element: <LoginPartner />,
+        },
+        {
+          path: "/partner/signup",
+          element: <RegisterPartner />,
+        },
+        {
+          path: "/admin/signin",
+          element: <LoginAdmin />,
+        },
+      ],
+    },
+  ]);
 
-    return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 };
 export default Routers;

@@ -52,12 +52,20 @@ const Header = () => {
 
     const link = [
         {
+            name: "Home",
+            link: "/",
+        },
+        {
             name: "About us",
             link: "/about",
         },
         {
-            name: "Contact",
-            link: "/contact",
+            name: "News",
+            link: "/news",
+        },
+        {
+            name: "Campaign",
+            link: "/campaign",
         },
         {
             name: "FAQ",
