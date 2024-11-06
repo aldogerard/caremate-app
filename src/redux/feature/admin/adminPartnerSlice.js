@@ -27,6 +27,18 @@ export const getAllPartner = createAsyncThunk(
     }
 );
 
+export const getDetailPartner = createAsyncThunk(
+    "partner/getDetailPartner",
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get(`/partner/${id}`);
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Fetch to failed");
+        }
+    }
+);
+
 export const approvePartner = createAsyncThunk(
     "partner/approvePartner",
     async (id, { rejectWithValue }) => {
@@ -90,6 +102,14 @@ const adminPartnerSlice = createSlice({
                 state.status = "success";
             })
             .addCase(getAllPartner.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(getDetailPartner.fulfilled, (state, action) => {
+                state.currentPartner = action.payload.data;
+                state.status = "success";
+            })
+            .addCase(getDetailPartner.rejected, (state) => {
                 state.status = "failed";
             })
 

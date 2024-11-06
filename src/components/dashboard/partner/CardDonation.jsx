@@ -7,7 +7,7 @@ const CardDonation = ({ item }) => {
         <div className="text-dark/85 w-full p-4 border rounded-md grid grid-cols-2 cursor-pointer transition-template hover:border-primary">
             <div>
                 <h1 className="font-medium">
-                    {item.isAnonymous ? "Good People" : item.name}
+                    {item.isAnonymous ? "Good People" : item.donorName}
                 </h1>
                 <h1 className="text-primary font-medium">
                     <FormatRupiah value={item.amount} />

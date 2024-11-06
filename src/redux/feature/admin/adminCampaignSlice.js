@@ -39,6 +39,32 @@ export const getAllCampaignByStatus = createAsyncThunk(
     }
 );
 
+export const getCampaignByPartnerId = createAsyncThunk(
+    "campaign/getCampaignByPartnerId",
+    async (data, { rejectWithValue }) => {
+        const id = data?.id;
+        const query = data?.query || "";
+        const status = data?.status || "";
+        const page = data?.page || 0;
+        const size = 6;
+
+        try {
+            if (query == "") {
+                const response = await axiosInstance.get(
+                    `/campaign/partner/${id}?status=${status}&page=${page}&size=${size}`
+                );
+                return response.data;
+            }
+            const response = await axiosInstance.get(
+                `/campaign/partner/${id}?name=${query}&status=${status}&page=${page}&size=${size}`
+            );
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Failed to fetch");
+        }
+    }
+);
+
 export const approveCampaign = createAsyncThunk(
     "campaign/approveCampaign",
     async (id, { rejectWithValue }) => {
@@ -111,6 +137,21 @@ const adminCampaignSlice = createSlice({
                 state.status = "success";
             })
             .addCase(getAllCampaignByStatus.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(getCampaignByPartnerId.fulfilled, (state, action) => {
+                const { data } = action.payload;
+                state.currentCampaign = data.content;
+                state.paging = {
+                    page: data.pageable.pageNumber,
+                    size: data.size,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                };
+                state.status = "success";
+            })
+            .addCase(getCampaignByPartnerId.rejected, (state) => {
                 state.status = "failed";
             })
 

@@ -3,6 +3,7 @@ import { setCurrentPartner } from "@/redux/feature/admin/adminPartnerSlice";
 import EachUtils from "@/utils/EachUtils";
 import { limitText } from "@/utils/Utils";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const TablePartner = (props) => {
     const { handleDetailModal, filter } = props;
@@ -60,11 +61,17 @@ const TablePartner = (props) => {
                                     {limitText(item?.description || "NaN", 30)}
                                 </td>
                                 <td>
-                                    <Button
-                                        type="button"
-                                        name={"Detail"}
-                                        onClick={() => handleClickDetail(item)}
-                                    />
+                                    <Link
+                                        to={`/dashboard/admin/partner/${item.id}`}
+                                    >
+                                        <Button
+                                            type="button"
+                                            name={"Detail"}
+                                            // onClick={() =>
+                                            //     handleClickDetail(item)
+                                            // }
+                                        />
+                                    </Link>
                                 </td>
                             </tr>
                         )}
