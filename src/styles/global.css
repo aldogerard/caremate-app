@@ -59,3 +59,19 @@ th,
 tr {
     @apply font-normal text-dark;
 }
+
+.pagination {
+    @apply mt-10 gap-2 p-0 flex justify-center list-none;
+}
+
+.pagination a {
+    @apply text-lg py-1 px-3 border border-accent rounded-md text-dark/80 hover:border-primary hover:text-primary transition-template;
+}
+
+.active a {
+    @apply border-primary text-primary;
+}
+
+.break-me {
+    @apply hidden;
+}

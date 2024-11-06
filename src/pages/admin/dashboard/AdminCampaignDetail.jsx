@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
@@ -9,31 +9,20 @@ import {
 import Title from "@/components/dashboard/Title";
 import Loader from "@/components/Loader";
 import Button from "@/components/Button";
-import {
-    Confirm,
-    Failed,
-    InputMessage,
-    Message,
-    Success,
-} from "@/utils/AlertUtil";
+import { Confirm, Failed, InputMessage, Success } from "@/utils/AlertUtil";
 import SectionDetailCampaign from "@/components/dashboard/partner/SectionDetailCampaign";
-import FormCampaignReports from "@/components/dashboard/partner/FormCampaignReports";
-import { getCampaignReportByCampaignId } from "@/redux/feature/partner/campaignReportSlice";
-import EachUtils from "@/utils/EachUtils";
-import CardCampaignReport from "@/components/dashboard/partner/CardCampaignReport";
 import {
     approveCampaign,
-    getAllCampaign,
     rejectCampaign,
 } from "@/redux/feature/admin/adminCampaignSlice";
+import AdminSectionCampaignReport from "@/components/dashboard/admin/AdminSectionCampaignReport";
+import SectionDonationCampaign from "@/components/dashboard/partner/SectionDonationCampaign";
 
 const AdminCampaignDetail = () => {
     const { slug } = useParams();
 
     const dispatch = useDispatch();
     const { currentCampaign } = useSelector((state) => state.campaign);
-
-    const { campaignReports } = useSelector((state) => state.campaignReport);
 
     useEffect(() => {
         fetchData();
@@ -46,9 +35,6 @@ const AdminCampaignDetail = () => {
                 await dispatch(
                     getCampaignImageByName(currentCampaign.campaignImageName)
                 ).unwrap();
-                await dispatch(
-                    getCampaignReportByCampaignId(currentCampaign.id)
-                ).unwrap();
             }
         } catch (error) {
             console.log("Erorr : ", error);
@@ -57,7 +43,6 @@ const AdminCampaignDetail = () => {
 
     const approve = () => {
         const { status } = currentCampaign;
-        console.log(status);
 
         if (status === "ACTIVE") {
             return Failed("Campaign is already approved");
@@ -84,7 +69,6 @@ const AdminCampaignDetail = () => {
 
     const reject = () => {
         const { status } = currentCampaign;
-        console.log(status);
 
         if (status === "ACTIVE") {
             return Failed("Campaign is already approved");
@@ -98,7 +82,7 @@ const AdminCampaignDetail = () => {
             return Failed("Campaign is already completed");
         }
 
-        Confirm("Rejected a partner", () => {
+        Confirm("Rejected a campaign", () => {
             InputMessage(async (message) => {
                 try {
                     const data = new FormData();
@@ -118,7 +102,7 @@ const AdminCampaignDetail = () => {
 
     return (
         <>
-            {campaignReports && (
+            {currentCampaign && (
                 <>
                     <Title name={"Detail Campaign"}>
                         {currentCampaign.status === "IN_REVIEW" && (
@@ -139,39 +123,17 @@ const AdminCampaignDetail = () => {
 
                     <>
                         <div className="flex flex-col gap-14 pb-10">
-                            {/* Section Detail */}
                             <SectionDetailCampaign />
 
                             {/* Section Report */}
-                            <div>
-                                <h1 className="text-dark/85 text-3xl mb-8">
-                                    Campaign Report
-                                </h1>
-                                <div className="flex gap-4">
-                                    <div className="px-4 py-6 rounded-xl border flex flex-wrap w-full gap-4 h-max">
-                                        <EachUtils
-                                            of={campaignReports}
-                                            render={(item) => (
-                                                <CardCampaignReport
-                                                    item={item}
-                                                />
-                                            )}
-                                        />
-                                        {campaignReports.length == 0 && (
-                                            <div className="flex justify-center items-center py-20 w-full">
-                                                <h1 className="text-xl">
-                                                    Campaign reports not found
-                                                </h1>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
+                            <AdminSectionCampaignReport />
+
+                            <SectionDonationCampaign />
                         </div>
                     </>
                 </>
             )}
-            {!campaignReports && <Loader />}
+            {!currentCampaign && <Loader />}
         </>
     );
 };

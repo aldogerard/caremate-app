@@ -10,15 +10,19 @@ import React, { useEffect, useState } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 
+import NOT_FOUND from "@/assets/images/NotFound.jpg";
+
 const CardCampaignReport = ({ item }) => {
     const dispatch = useDispatch();
     const { currentCampaign } = useSelector((state) => state.campaign);
     const { role } = useSelector((state) => state.auth);
 
     const [imageUrl, setImageUrl] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const fetchImageUrl = async () => {
+            setIsLoading(true);
             try {
                 const response = await axiosInstance.get(
                     `/file/${item?.imageName}`
@@ -26,11 +30,13 @@ const CardCampaignReport = ({ item }) => {
                 return setImageUrl(response.data);
             } catch (error) {
                 setImageUrl("");
+            } finally {
+                setIsLoading(false);
             }
         };
 
         fetchImageUrl();
-    }, [item?.reportImageName]);
+    }, [item?.imageName]);
 
     const onDelete = () => {
         try {
@@ -47,13 +53,14 @@ const CardCampaignReport = ({ item }) => {
         }
     };
 
-    return imageUrl !== "" ? (
-        <div className="w-72 relative rounded-xl h-max hover:border-primary transition-template shadow-sm border flex flex-col overflow-hidden">
+    return !isLoading ? (
+        <div className="w-full max-w-xs relative rounded-xl h-max hover:border-primary transition-template shadow-sm border flex flex-col overflow-hidden">
             <div className="w-full h-40">
                 <img
                     src={imageUrl}
                     alt="Image Campaign Report"
                     className="w-full h-full object-cover"
+                    onError={(e) => (e.target.src = NOT_FOUND)}
                 />
             </div>
             <div className="p-2 pb-3 h-[120px] overflow-y-scroll break-words">

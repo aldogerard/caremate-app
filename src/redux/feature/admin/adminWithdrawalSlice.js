@@ -13,6 +13,32 @@ export const getAllWithdrawal = createAsyncThunk(
     }
 );
 
+export const getAllWithdrawalByStatus = createAsyncThunk(
+    "campaign/getAllWithdrawalByStatus",
+    async (data, { rejectWithValue }) => {
+        const query = data?.query || "";
+        const status = data?.status || "";
+        const page = data?.page || 0;
+        const size = 7;
+
+        try {
+            if (query == "") {
+                const response = await axiosInstance.get(
+                    `/withdrawal/status?status=${status}&page=${page}&size=${size}`
+                );
+                return response.data;
+            }
+
+            const response = await axiosInstance.get(
+                `/withdrawal/status?name=${query}&status=${status}&page=${page}&size=${size}`
+            );
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Fetch to failed");
+        }
+    }
+);
+
 export const approveWithdrawal = createAsyncThunk(
     "withdrawal/approveWithdrawal",
     async ({ id, file }, { rejectWithValue }) => {
@@ -49,6 +75,12 @@ const adminWithdrawalSlice = createSlice({
         withdrawals: null,
         currentWithdrawal: null,
         currentWithdrawalUrl: null,
+        paging: {
+            page: 0,
+            size: 10,
+            totalPages: 0,
+            totalElements: 0,
+        },
         status: null,
     },
     reducers: {
@@ -64,6 +96,21 @@ const adminWithdrawalSlice = createSlice({
                 state.status = "success";
             })
             .addCase(getAllWithdrawal.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(getAllWithdrawalByStatus.fulfilled, (state, action) => {
+                const { data } = action.payload;
+                state.withdrawals = data.content;
+                state.paging = {
+                    page: data.pageable.pageNumber,
+                    size: data.size,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                };
+                state.status = "success";
+            })
+            .addCase(getAllWithdrawalByStatus.rejected, (state) => {
                 state.status = "failed";
             })
 

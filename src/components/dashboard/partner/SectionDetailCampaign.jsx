@@ -3,6 +3,8 @@ import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
 import { useSelector } from "react-redux";
 
+import NOT_FOUND from "@/assets/images/NotFound.jpg";
+
 const SectionDetailCampaign = () => {
     const { currentCampaign, currentCampaignUrl } = useSelector(
         (state) => state.campaign
@@ -16,6 +18,7 @@ const SectionDetailCampaign = () => {
                         src={currentCampaignUrl}
                         alt="Campaign Image"
                         className="w-full h-full object-cover"
+                        onError={(e) => (e.target.src = NOT_FOUND)}
                     />
                 </div>
             </div>

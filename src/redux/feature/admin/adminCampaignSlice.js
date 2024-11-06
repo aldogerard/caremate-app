@@ -13,6 +13,32 @@ export const getAllCampaign = createAsyncThunk(
     }
 );
 
+export const getAllCampaignByStatus = createAsyncThunk(
+    "campaign/getAllCampaignByStatus",
+    async (data, { rejectWithValue }) => {
+        const query = data?.query || "";
+        const status = data?.status || "";
+        const page = data?.page || 0;
+        const size = 7;
+
+        try {
+            if (query == "") {
+                const response = await axiosInstance.get(
+                    `/campaign/status?status=${status}&page=${page}&size=${size}`
+                );
+                return response.data;
+            }
+
+            const response = await axiosInstance.get(
+                `/campaign/status?name=${query}&status=${status}&page=${page}&size=${size}`
+            );
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Fetch to failed");
+        }
+    }
+);
+
 export const approveCampaign = createAsyncThunk(
     "campaign/approveCampaign",
     async (id, { rejectWithValue }) => {
@@ -48,6 +74,12 @@ const adminCampaignSlice = createSlice({
         campaigns: null,
         currentCampaign: null,
         currentCampaignUrl: null,
+        paging: {
+            page: 0,
+            size: 7,
+            totalPages: 0,
+            totalElements: 0,
+        },
         status: null,
     },
     reducers: {
@@ -59,10 +91,26 @@ const adminCampaignSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getAllCampaign.fulfilled, (state, action) => {
-                state.campaigns = action.payload.data;
+                const { data } = action.payload;
+                state.campaigns = data.content;
                 state.status = "success";
             })
             .addCase(getAllCampaign.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(getAllCampaignByStatus.fulfilled, (state, action) => {
+                const { data } = action.payload;
+                state.campaigns = data.content;
+                state.paging = {
+                    page: data.pageable.pageNumber,
+                    size: data.size,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                };
+                state.status = "success";
+            })
+            .addCase(getAllCampaignByStatus.rejected, (state) => {
                 state.status = "failed";
             })
 

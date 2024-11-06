@@ -2,17 +2,21 @@ import Button from "@/components/Button";
 import CustomModal from "@/components/CustomModal";
 import {
     getCampaignByPartnerId,
+    getCampaignDetailById,
+    getCampaignImageByName,
     updateCampaignByPartnerId,
 } from "@/redux/feature/partner/campaignSlice";
 import { Confirm, Failed, Success } from "@/utils/AlertUtil";
 import { validateFile } from "@/utils/Utils";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import NOT_FOUND from "@/assets/images/NotFound.jpg";
 
 const FormEditCampaign = (props) => {
+    const dispatch = useDispatch();
+
     const { closeModal, isOpen } = props;
 
-    const dispatch = useDispatch();
     const { currentCampaign, currentCampaignUrl } = useSelector(
         (state) => state.campaign
     );
@@ -39,56 +43,65 @@ const FormEditCampaign = (props) => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
-    const handleSubmitEdit = (e) => {
+    const handleEditCampaign = async (e) => {
         e.preventDefault();
-        Confirm("Update a campaign", () => {
-            handleEditCampaign(formData);
-            setFormData({
-                title: currentCampaign.title,
-                description: currentCampaign.description,
-                image: null,
-            });
-            closeModal();
-        });
-    };
-
-    const handleEditCampaign = async (formData) => {
-        const data = new FormData();
-
-        data.append("title", formData.title);
-        data.append("description", formData.description);
-        data.append("file", formData.image);
-        data.append("partnerId", user.id);
-
-        const startDate = new Date(currentCampaign.startDate);
-        const endDate = new Date(currentCampaign.endDate);
-
-        data.append("category", currentCampaign.category);
-        data.append("goalAmount", currentCampaign.goalAmount);
-        data.append("startDate", startDate);
-        data.append("endDate", endDate);
 
         try {
-            await dispatch(
-                updateCampaignByPartnerId({ id: currentCampaign.id, data })
-            ).unwrap();
-            Success("Successfully update campaign");
-            await dispatch(getCampaignByPartnerId(user.id)).unwrap();
+            Confirm("Update a campaign", async () => {
+                const data = new FormData();
+
+                data.append("title", formData.title);
+                data.append("description", formData.description);
+                data.append("file", formData.image);
+                data.append("partnerId", user.id);
+
+                const startDate = new Date(currentCampaign.startDate)
+                    .toISOString()
+                    .split("T")[0];
+                const endDate = new Date(currentCampaign.endDate)
+                    .toISOString()
+                    .split("T")[0];
+
+                data.append("category", currentCampaign.category);
+                data.append("goalAmount", currentCampaign.goalAmount);
+                data.append("startDate", startDate);
+                data.append("endDate", endDate);
+
+                await dispatch(
+                    updateCampaignByPartnerId({ id: currentCampaign.id, data })
+                ).unwrap();
+
+                closeModal();
+                Success("Successfully update campaign");
+
+                await dispatch(
+                    getCampaignDetailById(currentCampaign.id)
+                ).unwrap();
+            });
         } catch (error) {
-            console.log(error);
             Failed("Failed update campaign");
         }
     };
 
+    const handleModal = () => {
+        setFormData({
+            title: currentCampaign?.title,
+            description: currentCampaign?.description,
+            image: null,
+        });
+        closeModal();
+    };
+
     return (
         <CustomModal isOpen={isOpen}>
-            <form onSubmit={handleSubmitEdit}>
+            <form onSubmit={handleEditCampaign}>
                 <div className="flex flex-col gap-4 w-full lg:flex-row lg:flex-wrap lg:justify-between">
                     <div className="flex items-end gap-8 w-max mb-4">
                         <div className="w-80 h-[85%] rounded-xl overflow-hidden shadow-md">
                             <img
                                 src={currentCampaignUrl}
-                                alt=""
+                                alt="Campaign Image"
+                                onError={(e) => (e.target.src = NOT_FOUND)}
                                 className="w-full h-full object-cover"
                             />
                         </div>
@@ -169,7 +182,7 @@ const FormEditCampaign = (props) => {
                     <Button
                         type={"reset"}
                         name={"Cancel"}
-                        onClick={handleCancelEdit}
+                        onClick={handleModal}
                     />
                 </div>
             </form>

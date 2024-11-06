@@ -18,18 +18,18 @@ const option = [
         value: "Select Category",
     },
     {
-        value: "Educational Assistance",
+        value: "Educational Support",
     },
     {
-        value: "Infrastructure Development",
+        value: "Infrastructure Support",
     },
     {
-        value: "Operational Costs",
+        value: "Operational Needs",
     },
 ];
 
 const FormCampaign = (props) => {
-    const { isOpen, closeModal } = props;
+    const { isOpen, closeModal, filter } = props;
     const dispatch = useDispatch();
 
     const { user } = useSelector((state) => state.auth);
@@ -115,22 +115,34 @@ const FormCampaign = (props) => {
             const sanitizedString = formData.goalAmount.replace(/[^0-9]/g, "");
             const goalAmount = parseInt(sanitizedString, 10);
 
+            const startDate = new Date(formData.startDate)
+                .toISOString()
+                .split("T")[0];
+            const endDate = new Date(formData.endDate)
+                .toISOString()
+                .split("T")[0];
+
             data.append("category", formData.category);
             data.append("title", formData.title);
             data.append("description", formData.description);
-            data.append("startDate", formData.startDate);
-            data.append("endDate", formData.endDate);
+            data.append("startDate", startDate);
+            data.append("endDate", endDate);
             data.append("goalAmount", goalAmount);
             data.append("partnerId", user.id);
             data.append("file", formData.image);
 
             await dispatch(createCampaign(data)).unwrap();
             Success("Successfully add new campaign");
+            await dispatch(
+                getCampaignByPartnerId({
+                    id: user.id,
+                    status: filter,
+                })
+            ).unwrap();
         } catch (error) {
             console.log(error);
             Failed("Failed create campaign");
         }
-        await dispatch(getCampaignByPartnerId(user.id)).unwrap();
     };
 
     return (

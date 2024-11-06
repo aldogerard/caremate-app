@@ -4,15 +4,18 @@ import { formatDate, limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import NOT_FOUND from "@/assets/images/NotFound.jpg";
 
 const CardCampaign = (props) => {
     const { item, status } = props;
 
     const [imageUrl, setImageUrl] = useState("");
     const percent = (item.currentAmount / item.goalAmount) * 100;
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const fetchImageUrl = async () => {
+            setIsLoading(true);
             try {
                 const response = await axiosInstance.get(
                     `/file/${item.campaignImageName}`
@@ -20,20 +23,23 @@ const CardCampaign = (props) => {
                 return setImageUrl(response.data);
             } catch (error) {
                 setImageUrl("");
+            } finally {
+                setIsLoading(false);
             }
         };
 
         fetchImageUrl();
     }, [item.campaignImageName]);
 
-    return imageUrl !== "" ? (
+    return !isLoading ? (
         <Link
             to={`/dashboard/partner/campaign/${item.id}`}
-            className="flex flex-row border hover:border-primary transition-template shadow-sm cursor-pointer p-3 w-full sm:w-[400px] lg:w-[500px] rounded-xl gap-4"
+            className="flex flex-row border hover:border-primary transition-template shadow-sm cursor-pointer p-3 w-full max-w-[540px] rounded-xl gap-4"
         >
             <img
                 src={imageUrl}
                 alt="Image Campaign"
+                onError={(e) => (e.target.src = NOT_FOUND)}
                 className="h-24 lg:h-40 aspect-square object-cover rounded-lg"
             />
             <div className="flex flex-col w-full justify-between">

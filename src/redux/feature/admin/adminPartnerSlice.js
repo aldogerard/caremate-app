@@ -2,13 +2,27 @@ import axiosInstance from "@/api/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const getAllPartner = createAsyncThunk(
-    "partner/getAllPartner",
-    async (_, { rejectWithValue }) => {
+    "campaign/getAllPartner",
+    async (data, { rejectWithValue }) => {
+        const query = data?.query || "";
+        const status = data?.status || "";
+        const page = data?.page || 0;
+        const size = 7;
+
         try {
-            const response = await axiosInstance.get(`/partner`);
+            if (query == "") {
+                const response = await axiosInstance.get(
+                    `/partner?status=${status}&page=${page}&size=${size}`
+                );
+                return response.data;
+            }
+
+            const response = await axiosInstance.get(
+                `/partner?name=${query}&status=${status}&page=${page}&size=${size}`
+            );
             return response.data;
         } catch (e) {
-            return rejectWithValue(e.response?.data || "Failed to fetch");
+            return rejectWithValue(e.response?.data || "Fetch to failed");
         }
     }
 );
@@ -48,6 +62,12 @@ const adminPartnerSlice = createSlice({
         partners: null,
         currentPartner: null,
         currentPartnerUrl: null,
+        paging: {
+            page: 0,
+            size: 7,
+            totalPages: 0,
+            totalElements: 0,
+        },
         status: null,
     },
     reducers: {
@@ -59,7 +79,14 @@ const adminPartnerSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getAllPartner.fulfilled, (state, action) => {
-                state.partners = action.payload.data;
+                const { data } = action.payload;
+                state.partners = data.content;
+                state.paging = {
+                    page: data.pageable.pageNumber,
+                    size: data.size,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                };
                 state.status = "success";
             })
             .addCase(getAllPartner.rejected, (state) => {

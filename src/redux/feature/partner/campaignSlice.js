@@ -27,9 +27,23 @@ export const getCampaignDetailById = createAsyncThunk(
 
 export const getCampaignByPartnerId = createAsyncThunk(
     "campaign/getCampaignByPartnerId",
-    async (id, { rejectWithValue }) => {
+    async (data, { rejectWithValue }) => {
+        const id = data?.id;
+        const query = data?.query || "";
+        const status = data?.status || "";
+        const page = data?.page || 0;
+        const size = 6;
+
         try {
-            const response = await axiosInstance.get(`/campaign/partner/${id}`);
+            if (query == "") {
+                const response = await axiosInstance.get(
+                    `/campaign/partner/${id}?status=${status}&page=${page}&size=${size}`
+                );
+                return response.data;
+            }
+            const response = await axiosInstance.get(
+                `/campaign/partner/${id}?name=${query}&status=${status}&page=${page}&size=${size}`
+            );
             return response.data;
         } catch (e) {
             return rejectWithValue(e.response?.data || "Failed to fetch");
@@ -79,6 +93,12 @@ const campaignSlice = createSlice({
         campaigns: null,
         currentCampaign: null,
         currentCampaignUrl: null,
+        paging: {
+            page: 0,
+            size: 6,
+            totalPages: 0,
+            totalElements: 0,
+        },
         status: null,
     },
     reducers: {
@@ -104,7 +124,14 @@ const campaignSlice = createSlice({
             })
 
             .addCase(getCampaignByPartnerId.fulfilled, (state, action) => {
-                state.campaigns = action.payload.data;
+                const { data } = action.payload;
+                state.campaigns = data.content;
+                state.paging = {
+                    page: data.pageable.pageNumber,
+                    size: data.size,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                };
                 state.status = "success";
             })
             .addCase(getCampaignByPartnerId.rejected, (state) => {

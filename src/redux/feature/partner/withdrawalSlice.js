@@ -26,11 +26,23 @@ export const updateWithdrawal = createAsyncThunk(
 );
 
 export const getWithdrawalByPartnerId = createAsyncThunk(
-    "withDrawal/getWithdrawalByPartnerId",
-    async (id, { rejectWithValue }) => {
+    "withdrawal/getWithdrawalByPartnerId",
+    async (data, { rejectWithValue }) => {
+        const id = data?.id;
+        const query = data?.query || "";
+        const status = data?.status || "";
+        const page = data?.page || 0;
+        const size = 6;
+
         try {
+            if (query == "") {
+                const response = await axiosInstance.get(
+                    `/withdrawal/partner/${id}?status=${status}&page=${page}&size=${size}`
+                );
+                return response.data;
+            }
             const response = await axiosInstance.get(
-                `/withdrawal/partner/${id}`
+                `/withdrawal/partner/${id}?name=${query}&status=${status}&page=${page}&size=${size}`
             );
             return response.data;
         } catch (e) {
@@ -45,6 +57,12 @@ const withdrawalSlice = createSlice({
         withdrawals: null,
         currentWithdrawal: null,
         currentWithdrawalUrl: null,
+        paging: {
+            page: 0,
+            size: 6,
+            totalPages: 0,
+            totalElements: 0,
+        },
         status: null,
     },
     reducers: {
@@ -77,7 +95,14 @@ const withdrawalSlice = createSlice({
             })
 
             .addCase(getWithdrawalByPartnerId.fulfilled, (state, action) => {
-                state.withdrawals = action.payload.data;
+                const { data } = action.payload;
+                state.withdrawals = data.content;
+                state.paging = {
+                    page: data.pageable.pageNumber,
+                    size: data.size,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                };
                 state.status = "success";
             })
             .addCase(getWithdrawalByPartnerId.rejected, (state) => {

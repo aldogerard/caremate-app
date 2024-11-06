@@ -64,8 +64,12 @@ const Dashboard = () => {
         const fetchPartnerDetails = async () => {
             try {
                 await dispatch(getDetailPartner(user.id)).unwrap();
-                await dispatch(getCampaignByPartnerId(user.id)).unwrap();
-                await dispatch(getWithdrawalByPartnerId(user.id)).unwrap();
+                await dispatch(
+                    getCampaignByPartnerId({ id: user.id })
+                ).unwrap();
+                await dispatch(
+                    getWithdrawalByPartnerId({ id: user.id })
+                ).unwrap();
             } catch (error) {
                 console.error("Error fetching : ", error);
             }

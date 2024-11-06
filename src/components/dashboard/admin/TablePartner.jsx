@@ -2,17 +2,23 @@ import Button from "@/components/Button";
 import { setCurrentPartner } from "@/redux/feature/admin/adminPartnerSlice";
 import EachUtils from "@/utils/EachUtils";
 import { limitText } from "@/utils/Utils";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const TablePartner = (props) => {
-    const { partners, handleDetailModal, filter } = props;
+    const { handleDetailModal, filter } = props;
 
     const dispatch = useDispatch();
+
+    const { partners, paging } = useSelector((state) => state.adminPartner);
+    const { page, size } = paging;
 
     const handleClickDetail = (res) => {
         dispatch(setCurrentPartner({ item: res }));
         handleDetailModal();
+    };
+
+    const calculateRowNumber = (index) => {
+        return index + 1 + page * size;
     };
 
     return (
@@ -33,7 +39,7 @@ const TablePartner = (props) => {
                 </thead>
                 <tbody>
                     <EachUtils
-                        of={partners.filter((res) => filter === res.status)}
+                        of={partners}
                         render={(item, index) => (
                             <tr
                                 className={`${
@@ -41,7 +47,9 @@ const TablePartner = (props) => {
                                 }`}
                                 key={item.id}
                             >
-                                <td className="px-4 py-6">{index + 1}</td>
+                                <td className="px-4 py-6">
+                                    {calculateRowNumber(index)}
+                                </td>
                                 <td>{limitText(item?.name || "", 20)}</td>
                                 <td>{limitText(item?.email || "", 20)}</td>
                                 <td>

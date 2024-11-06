@@ -9,6 +9,8 @@ import { getWithdrawalByPartnerId } from "@/redux/feature/partner/withdrawalSlic
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "@/components/Loader";
 import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
+import InputSearch from "@/components/dashboard/InputSearch";
+import Pagination from "@/components/Pagination";
 
 const data = [
     {
@@ -27,22 +29,57 @@ const Withdrawal = () => {
 
     const { user } = useSelector((state) => state.auth);
     const { partner } = useSelector((state) => state.partner);
-    const { withdrawals } = useSelector((state) => state.withdrawal);
+    const { withdrawals, paging } = useSelector((state) => state.withdrawal);
 
     const [filter, setFilter] = useState(data[0].name);
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentQuery, setCurrentQuery] = useState("");
+
     useEffect(() => {
         if (user?.id) {
-            fetchCampaign();
+            fetch();
         }
-    }, [user]);
+    }, [user, filter, currentPage, currentQuery]);
 
-    const fetchCampaign = async () => {
+    const handlePageClick = (event) => {
+        setCurrentPage(event.selected);
+    };
+
+    const handleSearch = async (query) => {
+        setCurrentQuery(query);
+        setIsLoading(true);
+        try {
+            await dispatch(
+                getWithdrawalByPartnerId({
+                    id: user.id,
+                    status: filter,
+                    page: 0,
+                    query: query,
+                })
+            ).unwrap();
+            setCurrentPage(0);
+        } catch (error) {
+            console.error("Error fetching campaigns:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const fetch = async () => {
         try {
             await dispatch(getDetailPartner(user.id)).unwrap();
-            await dispatch(getWithdrawalByPartnerId(user.id)).unwrap();
+            await dispatch(
+                getWithdrawalByPartnerId({
+                    id: user.id,
+                    status: filter,
+                    page: currentPage,
+                    query: currentQuery,
+                })
+            ).unwrap();
         } catch (error) {
-            console.error("Error fetching partner details:", error);
+            console.error("Error fetching campaigns:", error);
         }
     };
 
@@ -51,39 +88,41 @@ const Withdrawal = () => {
             <Title name={"Withdrawal"} />
             {partner && (
                 <>
-                    {withdrawals?.length > 0 ? (
+                    <Filter data={data} setFilter={setFilter} filter={filter} />
+
+                    <InputSearch
+                        name="withdrawal"
+                        handleSearch={handleSearch}
+                        filter={filter}
+                    />
+                    {!isLoading && (
                         <>
-                            <Filter
-                                data={data}
-                                setFilter={setFilter}
-                                filter={filter}
-                            />
-                            <div className="flex flex-col gap-4 w-full mt-10 lg:flex-row lg:flex-wrap lg:justify-start">
-                                <EachUtils
-                                    of={withdrawals.filter(
-                                        (res) => filter === res.status
-                                    )}
-                                    render={(item) => (
-                                        <CardWithdrawal
-                                            withdrawal={item}
-                                            status={filter}
+                            {withdrawals?.length > 0 ? (
+                                <>
+                                    <div className="grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 grid-rows-subgrid gap-4">
+                                        <EachUtils
+                                            of={withdrawals}
+                                            render={(item) => (
+                                                <CardWithdrawal
+                                                    withdrawal={item}
+                                                    status={filter}
+                                                />
+                                            )}
                                         />
-                                    )}
-                                />
-                                {withdrawals.filter(
-                                    (res) => filter === res.status
-                                ).length === 0 && (
-                                    <div className="flex justify-center items-center w-full text-black h-[50vh]">
-                                        <h1>No withdrawal found</h1>
                                     </div>
-                                )}
-                            </div>
+                                    <Pagination
+                                        paging={paging}
+                                        handlePageClick={handlePageClick}
+                                    />
+                                </>
+                            ) : (
+                                <div className="flex text-black justify-center items-center h-[50vh]">
+                                    <h1>Withdrawal Not Found</h1>
+                                </div>
+                            )}
                         </>
-                    ) : (
-                        <div className="flex text-black justify-center items-center h-[50vh]">
-                            <h1>Withdrawal Not Found</h1>
-                        </div>
                     )}
+                    {isLoading && <Loader />}
                 </>
             )}
             {!partner && <Loader />}

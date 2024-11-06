@@ -11,13 +11,14 @@ import { Confirm, Failed, InputMessage, Success } from "@/utils/AlertUtil";
 import { formatDate, validateFile } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminDetailWithdrawal = (props) => {
-    const { isOpen, closeModal, status, currentWithdrawal } = props;
+    const { isOpen, closeModal, status } = props;
     const [isApprove, setIsApprove] = useState(false);
     const [invoice, setInvoice] = useState("");
     const dispatch = useDispatch();
+    const { currentWithdrawal } = useSelector((state) => state.adminWithdrawal);
 
     const handleChangeFile = (e) => {
         const { files } = e.target;

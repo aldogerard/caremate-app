@@ -14,11 +14,15 @@ export const createCampaignReport = createAsyncThunk(
 );
 
 export const getCampaignReportByCampaignId = createAsyncThunk(
-    "campaignReport/getCampaignReportByCampaignId",
-    async (id, { rejectWithValue }) => {
+    "campaign/getCampaignReportByCampaignId",
+    async (data, { rejectWithValue }) => {
+        const id = data?.id;
+        const page = data?.page || 0;
+        const size = data?.size || 4;
+
         try {
             const response = await axiosInstance.get(
-                `/campaign-report/campaign/${id}`
+                `/campaign-report/campaign/${id}?page=${page}&size=${size}`
             );
             return response.data;
         } catch (e) {
@@ -47,6 +51,12 @@ const campaignReportSlice = createSlice({
         campaignReports: null,
         currentCampaignReport: null,
         currentCampaignReportUrl: null,
+        paging: {
+            page: 0,
+            size: 6,
+            totalPages: 0,
+            totalElements: 0,
+        },
         status: null,
     },
     reducers: {
@@ -74,7 +84,14 @@ const campaignReportSlice = createSlice({
             .addCase(
                 getCampaignReportByCampaignId.fulfilled,
                 (state, action) => {
-                    state.campaignReports = action.payload.data;
+                    const { data } = action.payload;
+                    state.campaignReports = data.content;
+                    state.paging = {
+                        page: data.pageable.pageNumber,
+                        size: data.size,
+                        totalPages: data.totalPages,
+                        totalElements: data.totalElements,
+                    };
                     state.status = "success";
                 }
             )

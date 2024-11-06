@@ -12,10 +12,6 @@ import Loader from "@/components/Loader";
 import Button from "@/components/Button";
 import { Confirm, Failed, Message, Success } from "@/utils/AlertUtil";
 import SectionDetailCampaign from "@/components/dashboard/partner/SectionDetailCampaign";
-import FormCampaignReports from "@/components/dashboard/partner/FormCampaignReports";
-import { getCampaignReportByCampaignId } from "@/redux/feature/partner/campaignReportSlice";
-import EachUtils from "@/utils/EachUtils";
-import CardCampaignReport from "@/components/dashboard/partner/CardCampaignReport";
 import {
     createWithdrawal,
     updateWithdrawal,
@@ -23,13 +19,15 @@ import {
 import { pdf } from "@react-pdf/renderer";
 import Invoice from "@/components/PDF/Invoice";
 import FormEditCampaign from "@/components/dashboard/partner/FormEditCampaign";
+import { FaInfo } from "react-icons/fa6";
+import SectionDonationCampaign from "@/components/dashboard/partner/SectionDonationCampaign";
+import SectionCampaignReport from "@/components/dashboard/partner/SectionCampaignReport";
 
 const CampaignDetail = () => {
     const { slug } = useParams();
 
     const dispatch = useDispatch();
     const { currentCampaign } = useSelector((state) => state.campaign);
-    const { campaignReports } = useSelector((state) => state.campaignReport);
     const { partner } = useSelector((state) => state.partner);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,9 +42,6 @@ const CampaignDetail = () => {
             if (currentCampaign) {
                 await dispatch(
                     getCampaignImageByName(currentCampaign.campaignImageName)
-                ).unwrap();
-                await dispatch(
-                    getCampaignReportByCampaignId(currentCampaign.id)
                 ).unwrap();
             }
         } catch (error) {
@@ -65,9 +60,6 @@ const CampaignDetail = () => {
     const requestWithdrawal = () => {
         const { status, isWithdrawal } = currentCampaign;
 
-        console.log(status);
-        console.log(isWithdrawal);
-
         if (status !== "COMPLETED") {
             return Failed("Only campaigns that have been completed");
         }
@@ -79,8 +71,6 @@ const CampaignDetail = () => {
         if (status === "COMPLETED" && isWithdrawal === "APPROVED") {
             return Failed("Withdrawal campaign already approved");
         }
-
-        console.log(currentCampaign);
 
         Confirm("Request a withdrawal", async () => {
             try {
@@ -137,15 +127,16 @@ const CampaignDetail = () => {
 
     return (
         <>
-            {campaignReports && (
+            {currentCampaign && (
                 <>
                     <Title name={"Detail Campaign"}>
-                        <div className="flex gap-4 pb-2">
-                            <Button
-                                type="button"
-                                name={"Info Campaign"}
+                        <div className="flex gap-3 pb-2">
+                            <div
                                 onClick={showMessage}
-                            />
+                                className="flex justify-center items-center cursor-pointer shadow-sm bg-primary/20 aspect-square w-12 rounded-md"
+                            >
+                                <FaInfo className="text-xl text-emerald-600" />
+                            </div>
                             {currentCampaign.status === "COMPLETED" && (
                                 <Button
                                     type="submit"
@@ -156,14 +147,14 @@ const CampaignDetail = () => {
                             {currentCampaign.status === "ACTIVE" && (
                                 <>
                                     <Button
-                                        type="reset"
-                                        name={"Stop campaign"}
-                                        onClick={stopCampaign}
-                                    />
-                                    <Button
                                         type="button"
                                         name={"Edit campaign"}
                                         onClick={handleModalOpen}
+                                    />
+                                    <Button
+                                        type="reset"
+                                        name={"Stop campaign"}
+                                        onClick={stopCampaign}
                                     />
                                 </>
                             )}
@@ -176,37 +167,15 @@ const CampaignDetail = () => {
                     />
 
                     <div className="flex flex-col gap-14 pb-10">
-                        {/* Section Detail */}
                         <SectionDetailCampaign />
 
-                        {/* Section Report */}
-                        <div>
-                            <h1 className="text-dark/85 text-3xl mb-8">
-                                Campaign Report
-                            </h1>
-                            <div className="flex gap-4">
-                                <FormCampaignReports />
-                                <div className="px-4 py-6 rounded-xl border flex flex-wrap w-3/4 gap-4 h-max">
-                                    <EachUtils
-                                        of={campaignReports}
-                                        render={(item) => (
-                                            <CardCampaignReport item={item} />
-                                        )}
-                                    />
-                                    {campaignReports.length == 0 && (
-                                        <div className="flex justify-center items-center py-20 w-full">
-                                            <h1 className="text-xl">
-                                                Campaign reports not found
-                                            </h1>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                        <SectionCampaignReport />
+
+                        <SectionDonationCampaign />
                     </div>
                 </>
             )}
-            {!campaignReports && <Loader />}
+            {!currentCampaign && <Loader />}
         </>
     );
 };

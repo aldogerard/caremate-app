@@ -4,12 +4,13 @@ import EachUtils from "@/utils/EachUtils";
 import { limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const TableWithdrawal = (props) => {
-    const { withdrawals, handleDetailModal, filter } = props;
+    const { handleDetailModal, filter } = props;
 
     const dispatch = useDispatch();
+    const { withdrawals } = useSelector((state) => state.adminWithdrawal);
 
     const handleClickDetail = (res) => {
         dispatch(setCurrentWithdrawal({ item: res }));

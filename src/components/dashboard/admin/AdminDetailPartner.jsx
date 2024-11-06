@@ -8,11 +8,12 @@ import {
     rejectPartner,
 } from "@/redux/feature/admin/adminPartnerSlice";
 import { Confirm, Failed, InputMessage, Success } from "@/utils/AlertUtil";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminDetailPartner = (props) => {
-    const { currentPartner, isOpen, closeModal, status } = props;
+    const { isOpen, closeModal, status } = props;
+
+    const { currentPartner } = useSelector((state) => state.adminPartner);
     const dispatch = useDispatch();
 
     const handleApprove = () => {

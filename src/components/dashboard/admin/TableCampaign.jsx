@@ -1,24 +1,23 @@
 import Button from "@/components/Button";
-import { setCurrentCampaign } from "@/redux/feature/admin/adminCampaignSlice";
 import EachUtils from "@/utils/EachUtils";
 import { limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const TableCampaign = (props) => {
-    const { campaigns, handleDetailModal, filter } = props;
+    const { filter } = props;
 
-    const dispatch = useDispatch();
+    const { campaigns, paging } = useSelector((state) => state.adminCampaign);
+    const { page, size } = paging;
 
-    const handleClickDetail = (res) => {
-        dispatch(setCurrentCampaign({ item: res }));
-        handleDetailModal();
+    const calculateRowNumber = (index) => {
+        return index + 1 + page * size;
     };
 
     return (
-        <div className="relative overflow-x-auto border rounded-md shadow-sm">
+        <div className="relative overflow-x-auto border rounded-md shadow-sm mb-4">
             <table className="w-full text-sm lg:text-base text-left rtl:text-right text-gray-500">
                 <thead className="text-gray-700">
                     <tr className="border-b">
@@ -37,7 +36,7 @@ const TableCampaign = (props) => {
                 </thead>
                 <tbody>
                     <EachUtils
-                        of={campaigns.filter((res) => filter === res.status)}
+                        of={campaigns}
                         render={(item, index) => (
                             <tr
                                 className={`${
@@ -45,7 +44,9 @@ const TableCampaign = (props) => {
                                 } text-left `}
                                 key={item.id}
                             >
-                                <td className="px-4 py-6">{index + 1}</td>
+                                <td className="px-4 py-6">
+                                    {calculateRowNumber(index)}
+                                </td>
                                 <td>{limitText(item.partnerName, 20)}</td>
                                 <td>{limitText(item.title, 20)}</td>
                                 <td>{item.category}</td>
@@ -64,13 +65,7 @@ const TableCampaign = (props) => {
                                     <Link
                                         to={`/dashboard/admin/campaign/${item.id}`}
                                     >
-                                        <Button
-                                            type="button"
-                                            name={"Detail"}
-                                            onClick={() =>
-                                                handleClickDetail(item)
-                                            }
-                                        />
+                                        <Button type="button" name={"Detail"} />
                                     </Link>
                                 </td>
                             </tr>

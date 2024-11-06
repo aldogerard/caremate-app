@@ -7,6 +7,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPartner } from "@/redux/feature/admin/adminPartnerSlice";
 import Loader from "@/components/Loader";
+import InputSearch from "@/components/dashboard/InputSearch";
+import Pagination from "@/components/Pagination";
 
 const data = [
     {
@@ -27,23 +29,60 @@ const AdminPartner = () => {
     const dispatch = useDispatch();
 
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-    const [filter, setFilter] = useState(data[0].name);
 
-    const { partners, currentPartner } = useSelector(
-        (state) => state.adminPartner
-    );
+    const [filter, setFilter] = useState(data[0].name);
+    const [isLoading, setIsloading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentQuery, setCurrentQuery] = useState("");
+
+    const { partners, paging } = useSelector((state) => state.adminPartner);
 
     useEffect(() => {
         const fetchAllPartner = async () => {
             try {
-                await dispatch(getAllPartner()).unwrap();
+                await dispatch(
+                    getAllPartner({
+                        status: filter,
+                        page: currentPage,
+                        query: currentQuery,
+                    })
+                ).unwrap();
             } catch (error) {
                 console.error("Error fetching : ", error);
             }
         };
 
         fetchAllPartner();
-    }, [dispatch]);
+    }, [dispatch, currentPage]);
+
+    useEffect(() => {
+        if (partners) {
+            handleSearch("");
+        }
+    }, [filter]);
+
+    const handlePageClick = (event) => {
+        setCurrentPage(event.selected);
+    };
+
+    const handleSearch = async (query) => {
+        try {
+            setCurrentQuery(query);
+            setIsloading(true);
+            await dispatch(
+                getAllPartner({
+                    query: query,
+                    status: filter,
+                    page: 0,
+                })
+            ).unwrap();
+            setCurrentPage(0);
+        } catch (error) {
+            console.error("Error fetching : ", error);
+        } finally {
+            setIsloading(false);
+        }
+    };
 
     const handleDetailModal = () => {
         setIsDetailModalOpen((state) => !state);
@@ -55,16 +94,33 @@ const AdminPartner = () => {
             {partners !== null && (
                 <>
                     <Filter data={data} setFilter={setFilter} filter={filter} />
-                    <TablePartner
-                        partners={partners}
+
+                    <InputSearch
+                        name="partner"
+                        handleSearch={handleSearch}
                         filter={filter}
-                        handleDetailModal={handleDetailModal}
                     />
+                    {!isLoading && (
+                        <>
+                            <TablePartner
+                                filter={filter}
+                                handleDetailModal={handleDetailModal}
+                            />
+                            {partners.length > 0 && (
+                                <Pagination
+                                    paging={paging}
+                                    handlePageClick={handlePageClick}
+                                />
+                            )}
+                        </>
+                    )}
+
+                    {isLoading && <Loader />}
+
                     <AdminDetailPartner
                         isOpen={isDetailModalOpen}
                         closeModal={handleDetailModal}
                         status={filter}
-                        currentPartner={currentPartner}
                     />
                 </>
             )}

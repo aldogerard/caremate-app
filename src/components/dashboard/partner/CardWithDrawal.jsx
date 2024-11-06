@@ -6,13 +6,17 @@ import { Message } from "@/utils/AlertUtil";
 import { formatDate } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useEffect, useState } from "react";
+import NOT_FOUND from "@/assets/images/NotFound.jpg";
 
 const CardWithdrawal = (props) => {
     const { withdrawal, status } = props;
     const [imageUrl, setImageUrl] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const fetchImageUrl = async () => {
+            setIsLoading(true);
+
             try {
                 const response = await axiosInstance.get(
                     `/file/${withdrawal.campaignImageName}`
@@ -20,6 +24,8 @@ const CardWithdrawal = (props) => {
                 return setImageUrl(response.data);
             } catch (error) {
                 setImageUrl("");
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -30,11 +36,12 @@ const CardWithdrawal = (props) => {
         Message(withdrawal?.message || "Lorem  ipsum");
     };
 
-    return imageUrl !== "" ? (
-        <div className="flex flex-row border shadow-sm cursor-pointer p-3 w-full sm:w-[400px] lg:w-[500px] rounded-xl gap-4">
+    return !isLoading ? (
+        <div className="flex flex-row border shadow-sm cursor-pointer p-3 w-full max-w-[540px] rounded-xl gap-4">
             <img
                 src={imageUrl}
-                alt=""
+                alt="Withdrawal image"
+                onError={(e) => (e.target.src = NOT_FOUND)}
                 className="h-24 lg:h-40 aspect-square object-cover rounded-lg"
             />
             <div className="flex flex-col w-full justify-between">
