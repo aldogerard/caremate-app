@@ -96,7 +96,6 @@ const FormVerif = (props) => {
     };
 
     const handleSubmitVerification = async (type, data) => {
-        type;
         try {
             if (type === "upload") {
                 await dispatch(

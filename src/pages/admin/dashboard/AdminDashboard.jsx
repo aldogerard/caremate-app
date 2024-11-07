@@ -34,20 +34,28 @@ const data = [
 const AdminDashboard = () => {
     const dispatch = useDispatch();
 
-    const { partners } = useSelector((state) => state.adminPartner);
-    const { campaigns } = useSelector((state) => state.adminCampaign);
+    const { partners, paging: pagePartner } = useSelector(
+        (state) => state.adminPartner
+    );
+    const { campaigns, paging: pageCampaign } = useSelector(
+        (state) => state.adminCampaign
+    );
     const { withdrawals } = useSelector((state) => state.adminWithdrawal);
 
     const [datas, setDatas] = useState(data);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchPartnerDetails = async () => {
             try {
+                setIsLoading(true);
                 await dispatch(getAllCampaign()).unwrap();
                 await dispatch(getAllWithdrawal()).unwrap();
                 await dispatch(getAllPartner()).unwrap();
             } catch (error) {
                 console.error("Error fetching : ", error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -59,9 +67,9 @@ const AdminDashboard = () => {
         const updatedDatas = datas.map((item) => {
             switch (item.name) {
                 case "Partners":
-                    return { ...item, data: partners.length };
+                    return { ...item, data: pagePartner.totalElements };
                 case "Campaigns":
-                    return { ...item, data: campaigns?.length };
+                    return { ...item, data: pageCampaign.totalElements };
                 case "Withdrawals":
                     return { ...item, data: withdrawals?.length };
                 default:
@@ -74,27 +82,23 @@ const AdminDashboard = () => {
     return (
         <>
             <Title name={"Dashboard"} />
-            {partners !== null &&
-                campaigns !== null &&
-                withdrawals !== null && (
-                    <div className="flex justify-start gap-4 flex-wrap">
-                        <EachUtils
-                            of={datas}
-                            render={(item) => (
-                                <CardDashboard
-                                    link={item.link}
-                                    name={item.name}
-                                    data={item.data}
-                                    icon={item.icon}
-                                />
-                            )}
-                        />
-                    </div>
-                )}
+            {!isLoading && (
+                <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+                    <EachUtils
+                        of={datas}
+                        render={(item) => (
+                            <CardDashboard
+                                link={item.link}
+                                name={item.name}
+                                data={item.data}
+                                icon={item.icon}
+                            />
+                        )}
+                    />
+                </div>
+            )}
 
-            {(partners === null ||
-                campaigns === null ||
-                withdrawals === null) && <Loader />}
+            {isLoading && <Loader />}
         </>
     );
 };

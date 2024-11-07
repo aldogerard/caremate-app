@@ -26,8 +26,6 @@ const SectionListCampaign = () => {
         }
     };
 
-    console.log(currentCampaign);
-
     return (
         <div>
             <h1 className="text-dark/85 text-3xl mb-8 mt-10">List Campaign</h1>

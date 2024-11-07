@@ -29,6 +29,7 @@ const CampaignDetail = () => {
     const dispatch = useDispatch();
     const { currentCampaign } = useSelector((state) => state.campaign);
     const { partner } = useSelector((state) => state.partner);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -38,6 +39,7 @@ const CampaignDetail = () => {
 
     const fetchData = async () => {
         try {
+            setIsLoading(true);
             await dispatch(getCampaignDetailById(slug)).unwrap();
             if (currentCampaign) {
                 await dispatch(
@@ -46,6 +48,8 @@ const CampaignDetail = () => {
             }
         } catch (error) {
             console.log("Erorr : ", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -127,7 +131,7 @@ const CampaignDetail = () => {
 
     return (
         <>
-            {currentCampaign && (
+            {!isLoading && (
                 <>
                     <Title name={"Detail Campaign"}>
                         <div className="flex gap-3 pb-2">
@@ -175,7 +179,7 @@ const CampaignDetail = () => {
                     </div>
                 </>
             )}
-            {!currentCampaign && <Loader />}
+            {isLoading && <Loader />}
         </>
     );
 };

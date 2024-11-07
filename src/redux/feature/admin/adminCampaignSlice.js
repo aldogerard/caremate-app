@@ -118,6 +118,12 @@ const adminCampaignSlice = createSlice({
         builder
             .addCase(getAllCampaign.fulfilled, (state, action) => {
                 const { data } = action.payload;
+                state.paging = {
+                    page: data.pageable.pageNumber,
+                    size: data.size,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                };
                 state.campaigns = data.content;
                 state.status = "success";
             })

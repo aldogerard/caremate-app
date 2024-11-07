@@ -85,7 +85,7 @@ const Dashboard = () => {
             <Title name={"Dashboard"} />
             {partner && (
                 <>
-                    <div className="flex justify-start gap-4 flex-wrap">
+                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
                         <EachUtils
                             of={datas}
                             render={(item) => (

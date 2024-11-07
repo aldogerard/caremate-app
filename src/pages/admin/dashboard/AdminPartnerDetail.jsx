@@ -1,14 +1,17 @@
+import Button from "@/components/Button";
 import ButtonFile from "@/components/ButtonFile";
 import SectionListCampaign from "@/components/dashboard/admin/SectionListCampaign";
 import Title from "@/components/dashboard/Title";
-import { getDetailPartner } from "@/redux/feature/admin/adminPartnerSlice";
+import { getCampaignByPartnerId } from "@/redux/feature/admin/adminCampaignSlice";
 import {
-    capitalizeFirstLetter,
-    formatDate,
-    formatPhoneNumber,
-} from "@/utils/Utils";
-import { FormatRupiah } from "@arismun/format-rupiah";
-import React, { useEffect } from "react";
+    approvePartner,
+    getAllPartner,
+    getDetailPartner,
+    rejectPartner,
+} from "@/redux/feature/admin/adminPartnerSlice";
+import { Confirm, Failed, InputMessage, Success } from "@/utils/AlertUtil";
+import { capitalizeFirstLetter, formatPhoneNumber } from "@/utils/Utils";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -16,6 +19,7 @@ const AdminPartnerDetail = () => {
     const { slug } = useParams();
     const dispatch = useDispatch();
     const { currentPartner } = useSelector((state) => state.adminPartner);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         fetchData();
@@ -23,28 +27,69 @@ const AdminPartnerDetail = () => {
 
     const fetchData = async () => {
         try {
+            setIsLoading(true);
             await dispatch(getDetailPartner(slug)).unwrap();
+            await dispatch(getCampaignByPartnerId({ id: slug })).unwrap();
         } catch (error) {
             console.log("Erorr : ", error);
+        } finally {
+            setIsLoading(false);
         }
+    };
+
+    const handleApprove = () => {
+        Confirm("Approved a partner", async () => {
+            try {
+                await dispatch(approvePartner(currentPartner.id)).unwrap();
+                Success("Successfully approved a new partner");
+                await dispatch(getDetailPartner(slug)).unwrap();
+            } catch (error) {
+                console.log(error);
+                Failed("Failed approved a partner");
+            }
+        });
+    };
+
+    const handleReject = () => {
+        Confirm("Rejected a partner", () => {
+            InputMessage(async (message) => {
+                try {
+                    const data = new FormData();
+                    data.append("message", message);
+                    await dispatch(
+                        rejectPartner({ id: currentPartner.id, data })
+                    ).unwrap();
+                    Success("Successfully rejected a partner");
+                    await dispatch(getDetailPartner(slug)).unwrap();
+                } catch (error) {
+                    console.log(error);
+                    Failed("Failed rejected a partner");
+                }
+            });
+        });
     };
 
     return (
         <>
-            {currentPartner && (
+            {!isLoading && (
                 <>
                     <Title name={"Detail Partner"}>
                         {currentPartner.status === "IN_REVIEW" && (
                             <div className="flex gap-4 pb-2">
                                 <Button
                                     type="submit"
-                                    name={"Approve Campaign"}
+                                    name={"Approve Partner"}
+                                    onClick={handleApprove}
                                 />
-                                <Button type="reset" name={"Reject Campaign"} />
+                                <Button
+                                    type="reset"
+                                    name={"Reject Partner"}
+                                    onClick={handleReject}
+                                />
                             </div>
                         )}
                     </Title>
-                    <div className="flex flex-col w-full text-dark/85">
+                    <div className="flex flex-col w-full text-dark/85 mb-10">
                         <h1 className="text-4xl mb-8 capitalize">
                             {currentPartner.title}
                         </h1>
@@ -66,7 +111,7 @@ const AdminPartnerDetail = () => {
                             <div className="lg:w-1/2">
                                 <h1 className="font-light">Address</h1>
                                 <h1 className="text-lg font-medium">
-                                    {currentPartner.address}
+                                    {currentPartner.address || "-"}
                                 </h1>
                             </div>
                             <div>
@@ -87,11 +132,15 @@ const AdminPartnerDetail = () => {
                                     )}
                                 </h1>
                             </div>
+                            <div className="lg:w-1/2">
+                                <h1 className="font-light">Total Campaign</h1>
+                                <h1 className="text-lg font-medium">7</h1>
+                            </div>
                         </div>
                         <div className="flex flex-col">
                             <h1 className="font-light">Description</h1>
                             <h1 className="text-lg font-medium break-words">
-                                {currentPartner.description}
+                                {currentPartner.description || "-"}
                             </h1>
                         </div>
                     </div>
@@ -141,9 +190,9 @@ const AdminPartnerDetail = () => {
                             )}
                         </>
                     )}
+                    <SectionListCampaign />
                 </>
             )}
-            <SectionListCampaign />
         </>
     );
 };

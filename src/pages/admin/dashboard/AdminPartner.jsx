@@ -48,6 +48,7 @@ const AdminPartner = () => {
                     })
                 ).unwrap();
             } catch (error) {
+                console.log(error);
                 console.error("Error fetching : ", error);
             }
         };
@@ -94,12 +95,13 @@ const AdminPartner = () => {
             {partners !== null && (
                 <>
                     <Filter data={data} setFilter={setFilter} filter={filter} />
-
-                    <InputSearch
-                        name="partner"
-                        handleSearch={handleSearch}
-                        filter={filter}
-                    />
+                    {paging.totalElements > 0 && (
+                        <InputSearch
+                            name="partner"
+                            handleSearch={handleSearch}
+                            filter={filter}
+                        />
+                    )}
                     {!isLoading && (
                         <>
                             <TablePartner

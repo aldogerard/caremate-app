@@ -8,6 +8,8 @@ import {
     FaChevronLeft,
     FaHeart,
     FaMoneyCheckDollar,
+    FaPeopleRoof,
+    FaUser,
 } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
@@ -24,7 +26,7 @@ const list = [
     {
         name: "Partner",
         link: "/dashboard/admin/partner",
-        icon: <FaUserFriends size={14} color="#eee" />,
+        icon: <FaPeopleRoof size={14} color="#eee" />,
         slug: "partner",
     },
     {
@@ -38,6 +40,12 @@ const list = [
         link: "/dashboard/admin/withdrawal",
         icon: <FaMoneyCheckDollar size={14} color="#eee" />,
         slug: "withdrawal",
+    },
+    {
+        name: "Donor",
+        link: "/dashboard/admin/donor",
+        icon: <FaUser size={14} color="#eee" />,
+        slug: "donor",
     },
 ];
 

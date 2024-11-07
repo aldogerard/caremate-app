@@ -6,7 +6,7 @@ const CardDashboard = ({ link, name, data, icon }) => {
     return (
         <Link
             to={link}
-            className={`flex flex-row items-starts gap-4 w-full lg:w-[32%] overflow-hidden rounded-2xl transition-template hover:border hover:border-primary bg-white px-5 py-6 shadow-md border`}
+            className={`flex flex-row items-starts max-w-lg gap-4 w-full overflow-hidden rounded-2xl transition-template hover:border hover:border-primary bg-white px-5 py-6 shadow-md border`}
         >
             <div
                 className={`flex justify-center items-center rounded-2xl bg-primary/15 p-3`}
