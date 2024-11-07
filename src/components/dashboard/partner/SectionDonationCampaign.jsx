@@ -48,7 +48,7 @@ const SectionDonationCampaign = () => {
             {donations && (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 grid-rows-1 gap-4">
-                        {donations.length > 0 && (
+                        {donations.length == 0 && (
                             <EachUtils
                                 of={dummy}
                                 render={(item) => <CardDonation item={item} />}

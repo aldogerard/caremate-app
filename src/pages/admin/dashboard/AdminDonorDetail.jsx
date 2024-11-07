@@ -55,6 +55,12 @@ const AdminDonorDetail = () => {
                     </div>
                 </>
             )}
+
+            {!currentDonor && (
+                <div className="flex text-dark/80 justify-center items-center h-[80vh]">
+                    <h1 className="text-lg font-medium">Donor not found</h1>
+                </div>
+            )}
         </>
     );
 };
