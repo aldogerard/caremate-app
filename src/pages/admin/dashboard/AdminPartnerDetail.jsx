@@ -5,7 +5,6 @@ import Title from "@/components/dashboard/Title";
 import { getCampaignByPartnerId } from "@/redux/feature/admin/adminCampaignSlice";
 import {
     approvePartner,
-    getAllPartner,
     getDetailPartner,
     rejectPartner,
 } from "@/redux/feature/admin/adminPartnerSlice";
@@ -19,6 +18,8 @@ const AdminPartnerDetail = () => {
     const { slug } = useParams();
     const dispatch = useDispatch();
     const { currentPartner } = useSelector((state) => state.adminPartner);
+    const { paging } = useSelector((state) => state.adminCampaign);
+
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -134,7 +135,9 @@ const AdminPartnerDetail = () => {
                             </div>
                             <div className="lg:w-1/2">
                                 <h1 className="font-light">Total Campaign</h1>
-                                <h1 className="text-lg font-medium">7</h1>
+                                <h1 className="text-lg font-medium">
+                                    {paging.totalElements}
+                                </h1>
                             </div>
                         </div>
                         <div className="flex flex-col">
@@ -174,20 +177,6 @@ const AdminPartnerDetail = () => {
                                     />
                                 </div>
                             </div>
-                            {status === "IN_REVIEW" && (
-                                <div className="flex flex-row gap-2 flex-wrap justify-end items-center">
-                                    <Button
-                                        type="submit"
-                                        name={"Approve"}
-                                        onClick={handleApprove}
-                                    />
-                                    <Button
-                                        type="reset"
-                                        name={"Reject"}
-                                        onClick={handleReject}
-                                    />
-                                </div>
-                            )}
                         </>
                     )}
                     <SectionListCampaign />

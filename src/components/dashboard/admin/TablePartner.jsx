@@ -61,7 +61,7 @@ const TablePartner = () => {
                             </div>
                             <div className="col-start-6">
                                 <Link
-                                    to={`/dashboard/admin/campaign/${item.id}`}
+                                    to={`/dashboard/admin/partner/${item.id}`}
                                 >
                                     <IconDetail />
                                 </Link>

@@ -1,25 +1,55 @@
 import { capitalizeFirstLetter, formatDate } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import NOT_FOUND from "@/assets/images/NotFound.jpg";
+import {
+    clearCurrentCampaignUrl,
+    getCampaignImageByName,
+} from "@/redux/feature/partner/campaignSlice";
+import Loader from "@/components/Loader";
 
 const SectionDetailCampaign = () => {
+    const dispatch = useDispatch();
+
     const { currentCampaign, currentCampaignUrl } = useSelector(
         (state) => state.campaign
     );
 
+    useEffect(() => {
+        fetchData();
+    }, [dispatch, currentCampaign]);
+
+    const fetchData = async () => {
+        try {
+            await dispatch(clearCurrentCampaignUrl()).unwrap();
+            if (currentCampaign) {
+                await dispatch(
+                    getCampaignImageByName(currentCampaign.campaignImageName)
+                ).unwrap();
+            }
+        } catch (error) {
+            console.log("Erorr : ", error);
+        }
+    };
+
     return (
         <div className="flex flex-wrap h-max gap-4 text-dark/85">
             <div className="w-[44%]">
-                <div className="w-full aspect-video h-full max-h-[500px] rounded-md overflow-hidden shadow-md">
-                    <img
-                        src={currentCampaignUrl}
-                        alt="Campaign Image"
-                        className="w-full h-full object-cover"
-                        onError={(e) => (e.target.src = NOT_FOUND)}
-                    />
+                <div className="w-full aspect-video border h-full max-h-[500px] rounded-md overflow-hidden shadow-sm">
+                    {currentCampaignUrl === null ? (
+                        <div className="w-full h-full bg-light flex justify-center items-center">
+                            <Loader />
+                        </div>
+                    ) : (
+                        <img
+                            src={currentCampaignUrl}
+                            alt="Campaign Image"
+                            className="w-full h-full object-cover"
+                            onError={(e) => (e.target.src = NOT_FOUND)}
+                        />
+                    )}
                 </div>
             </div>
 

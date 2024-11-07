@@ -109,6 +109,9 @@ const campaignSlice = createSlice({
             state.currentCampaign = null;
             state.currentCampaignUrl = null;
         },
+        clearCurrentCampaignUrl: (state) => {
+            state.currentCampaignUrl = null;
+        },
         setCurrentCampaign: (state, action) => {
             state.currentCampaign = action.payload.item;
             state.currentCampaignUrl = action.payload.imageUrl;
@@ -177,7 +180,11 @@ const campaignSlice = createSlice({
     },
 });
 
-export const { clearCampaignStatus, clearCurrentCampaign, setCurrentCampaign } =
-    campaignSlice.actions;
+export const {
+    clearCampaignStatus,
+    clearCurrentCampaign,
+    setCurrentCampaign,
+    clearCurrentCampaignUrl,
+} = campaignSlice.actions;
 
 export default campaignSlice.reducer;

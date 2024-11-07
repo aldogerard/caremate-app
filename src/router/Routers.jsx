@@ -24,6 +24,7 @@ import AdminCampaignDetail from "@/pages/admin/dashboard/AdminCampaignDetail";
 import NotFound from "@/pages/NotFound";
 import AdminPartnerDetail from "@/pages/admin/dashboard/AdminPartnerDetail";
 import AdminDonor from "@/pages/admin/dashboard/AdminDonor";
+import AdminDonorDetail from "@/pages/admin/dashboard/AdminDonorDetail";
 
 const Routers = () => {
     const router = createBrowserRouter([
@@ -92,7 +93,7 @@ const Routers = () => {
                         },
                         {
                             path: "donor/:id",
-                            element: <AdminDonor />,
+                            element: <AdminDonorDetail />,
                         },
                     ],
                 },

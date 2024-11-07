@@ -54,12 +54,12 @@ const CardCampaignReport = ({ item }) => {
     };
 
     return !isLoading ? (
-        <div className="w-full max-w-xs relative rounded-xl h-max hover:border-primary transition-template shadow-sm border flex flex-col overflow-hidden">
+        <div className="w-full max-w-xs relative rounded-xl bg-light h-max hover:border-primary transition-template shadow-sm border flex flex-col overflow-hidden">
             <div className="w-full h-40">
                 <img
                     src={imageUrl}
                     alt="Image Campaign Report"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-covers"
                     onError={(e) => (e.target.src = NOT_FOUND)}
                 />
             </div>

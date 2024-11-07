@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import data from "@/data/dataDashboard.json";
 import { IoPersonOutline, IoWalletOutline } from "react-icons/io5";
 import { FormatRupiah } from "@arismun/format-rupiah";
+import { Link } from "react-router-dom";
+import CardBasic from "@/components/dashboard/admin/CardBasic";
 
 const AdminDashboard = () => {
     const dispatch = useDispatch();
@@ -150,36 +152,28 @@ const AdminDashboard = () => {
             <Title name={"Dashboard"} />
             {!isLoading && (
                 <div className="flex flex-wrap gap-3">
-                    <div className="flex flex-col w-max text-dark/80 h-max border rounded-2xl px-5 py-8 bg-light shadow-md hover:shadow-lg">
-                        <div
-                            className={`flex w-max justify-center items-center rounded-2xl bg-primary/15 p-3`}
-                        >
-                            <IoWalletOutline className="text-5xl font-light text-primary" />
-                        </div>
-                        <h1 className="font-semibold text-accent mt-4">
-                            Total Income
-                        </h1>
-                        <h1 className="text-3xl font-bold">
-                            <FormatRupiah value={4300000} />
-                        </h1>
-                    </div>
-                    <div className="flex flex-col w-60 text-dark/80 h-max border rounded-2xl px-5 py-8 bg-light shadow-md hover:shadow-lg">
-                        <div
-                            className={`flex w-max justify-center items-center rounded-2xl bg-yellow-500/15 p-3`}
-                        >
-                            <IoPersonOutline className="text-5xl font-light text-yellow-500" />
-                        </div>
-                        <h1 className="font-semibold text-accent mt-4">
-                            Donors
-                        </h1>
-                        <h1 className="text-3xl font-bold">
-                            {report.totalDonor}
-                        </h1>
-                    </div>
-                    <EachUtils
-                        of={datas}
-                        render={(item) => <CardWithChart item={item} />}
+                    <CardBasic
+                        link={"withdrawal"}
+                        data={report.totalIncome}
+                        name={"Total Income"}
+                        icon={
+                            <IoWalletOutline className="text-5xl font-light text-emerald-500" />
+                        }
                     />
+                    <CardBasic
+                        link={"donor"}
+                        data={report.totalDonor}
+                        name={"Donors"}
+                        icon={
+                            <IoPersonOutline className="text-5xl font-light text-fuchsia-500" />
+                        }
+                    />
+                    <div className="w-max flex gap-3">
+                        <EachUtils
+                            of={datas}
+                            render={(item) => <CardWithChart item={item} />}
+                        />
+                    </div>
                 </div>
             )}
 

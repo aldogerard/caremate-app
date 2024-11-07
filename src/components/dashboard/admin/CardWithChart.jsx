@@ -48,7 +48,7 @@ const CardWithChart = ({ item }) => {
                         )}
                     />
                 </div>
-                <div className="w-32 aspect-square">
+                <div className="w-40 aspect-square">
                     <Doughnut data={item.dataChart} options={options} />
                 </div>
             </div>
