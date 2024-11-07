@@ -1,8 +1,10 @@
 import Button from "@/components/Button";
+import IconDetail from "@/components/IconDetail";
 import EachUtils from "@/utils/EachUtils";
 import { limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
+import { FaInfo, FaMagnifyingGlass } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -17,70 +19,77 @@ const TableCampaign = (props) => {
     };
 
     return (
-        <div className="relative overflow-x-auto border rounded-md shadow-sm mb-4">
-            <table className="w-full text-sm lg:text-base text-left rtl:text-right text-gray-500">
-                <thead className="text-gray-700">
-                    <tr className="border-b">
-                        <th scope="col" className="p-4">
-                            No
-                        </th>
-                        <th scope="col">Foundation Name</th>
-                        <th scope="col">Campaign Title</th>
-                        <th scope="col">Category</th>
-                        {(filter === "ACTIVE" || filter === "COMPLETED") && (
-                            <th scope="col">Raise Ammount</th>
-                        )}
-                        <th scope="col">Goal Ammount</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <EachUtils
-                        of={campaigns}
-                        render={(item, index) => (
-                            <tr
-                                className={`${
-                                    index % 2 === 0 && "bg-accent/5"
-                                } text-left `}
-                                key={item.id}
-                            >
-                                <td className="px-4 py-6">
-                                    {calculateRowNumber(index)}
-                                </td>
-                                <td>{limitText(item.partnerName, 20)}</td>
-                                <td>{limitText(item.title, 20)}</td>
-                                <td>{item.category}</td>
-                                {(filter === "ACTIVE" ||
-                                    filter === "COMPLETED") && (
-                                    <td>
-                                        <FormatRupiah
-                                            value={item.currentAmount}
-                                        />
-                                    </td>
+        <div className="overflow-scroll text-dark">
+            <div className="w-[1280px] xl:w-full border rounded-md">
+                <div className="grid grid-cols-[.7fr,4fr,3fr,3fr,2fr,2fr,1fr] px-6 py-4 border-b gap-x-2">
+                    <div className="col-start-1">
+                        <h1>No</h1>
+                    </div>
+                    <div className="col-start-2">
+                        <h1>Foundation Name</h1>
+                    </div>
+                    <div className="col-start-3">
+                        <h1>Campaign Title</h1>
+                    </div>
+                    <div className="col-start-4">
+                        <h1>Category</h1>
+                    </div>
+                    <div className="col-start-5">
+                        <h1>Raise Amount</h1>
+                    </div>
+                    <div className="col-start-6">
+                        <h1>Goal Amount</h1>
+                    </div>
+                    <div className="col-start-7">
+                        <h1>Action</h1>
+                    </div>
+                </div>
+                <EachUtils
+                    of={campaigns}
+                    render={(item, index) => (
+                        <div
+                            className={`
+                                ${index % 2 == 0 && "bg-stone-50"} 
+                                ${index + 1 != campaigns.length && "border-b"}
+                                grid grid-cols-[.7fr,4fr,3fr,3fr,2fr,2fr,1fr] px-6 py-3 items-center gap-x-2`}
+                        >
+                            <div className="col-start-1">
+                                <h1>{index + 1}</h1>
+                            </div>
+                            <div className="col-start-2">
+                                <h1>{item.partnerName}</h1>
+                            </div>
+                            <div className="col-start-3">
+                                <h1>{item.title}</h1>
+                            </div>
+                            <div className="col-start-4">
+                                <h1>{item.category}</h1>
+                            </div>
+                            <div className="col-start-5">
+                                {item.status !== "REJECTED" &&
+                                item.status !== "IN_REVIEW" ? (
+                                    <FormatRupiah value={item.currentAmount} />
+                                ) : (
+                                    "-"
                                 )}
-                                <td>
-                                    <FormatRupiah value={item.goalAmount} />
-                                </td>
-                                <td>
-                                    <Link
-                                        to={`/dashboard/admin/campaign/${item.id}`}
-                                    >
-                                        <Button type="button" name={"Detail"} />
-                                    </Link>
-                                </td>
-                            </tr>
-                        )}
-                    />
-                    {campaigns.filter((res) => filter === res.status).length ===
-                        0 && (
-                        <tr>
-                            <td colSpan="7" className="p-5 text-center">
-                                No campaign found
-                            </td>
-                        </tr>
+                            </div>
+                            <div className="col-start-6">
+                                <FormatRupiah value={item.goalAmount} />
+                            </div>
+                            <div className="col-start-7">
+                                <Link
+                                    to={`/dashboard/admin/campaign/${item.id}`}
+                                >
+                                    <IconDetail />
+                                </Link>
+                            </div>
+                        </div>
                     )}
-                </tbody>
-            </table>
+                />
+                {campaigns.length == 0 && (
+                    <h1 className="text-center py-6">Campaign Not Found</h1>
+                )}
+            </div>
         </div>
     );
 };
