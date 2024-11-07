@@ -65,7 +65,7 @@ tr {
 }
 
 .pagination a {
-    @apply text-lg py-1 px-3 border border-accent rounded-md text-dark/80 hover:border-primary hover:text-primary transition-template;
+    @apply text-lg py-1 px-3 border bg-light border-accent rounded-md text-dark/80 hover:border-primary hover:text-primary transition-template;
 }
 
 .active a {

@@ -1,57 +1,25 @@
-import CardDashboard from "@/components/dashboard/CardDashboard";
+import CardWithChart from "@/components/dashboard/admin/CardWithChart";
 import Title from "@/components/dashboard/Title";
 import Loader from "@/components/Loader";
-import { getAllCampaign } from "@/redux/feature/admin/adminCampaignSlice";
-import { getAllPartner } from "@/redux/feature/admin/adminPartnerSlice";
-import { getAllWithdrawal } from "@/redux/feature/admin/adminWithdrawalSlice";
+import { getAdminReport } from "@/redux/feature/admin/adminReportSlice";
 import EachUtils from "@/utils/EachUtils";
 import { useEffect, useState } from "react";
-import { FaUserFriends } from "react-icons/fa";
-import { FaMoneyCheck, FaSchool } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-
-const data = [
-    {
-        link: "/dashboard/admin/partner",
-        name: "Partners",
-        data: 0,
-        icon: <FaUserFriends className="text-primary lg:text-7xl text-5xl" />,
-    },
-    {
-        link: "/dashboard/admin/campaign",
-        name: "Campaigns",
-        data: 0,
-        icon: <FaSchool className="text-primary lg:text-7xl text-5xl" />,
-    },
-    {
-        link: "/dashboard/admin/withdrawal",
-        name: "Withdrawals",
-        data: 0,
-        icon: <FaMoneyCheck className="text-primary lg:text-7xl text-5xl" />,
-    },
-];
+import data from "@/data/dataDashboard.json";
+import { IoPersonOutline, IoWalletOutline } from "react-icons/io5";
+import { FormatRupiah } from "@arismun/format-rupiah";
 
 const AdminDashboard = () => {
     const dispatch = useDispatch();
-
-    const { partners, paging: pagePartner } = useSelector(
-        (state) => state.adminPartner
-    );
-    const { campaigns, paging: pageCampaign } = useSelector(
-        (state) => state.adminCampaign
-    );
-    const { withdrawals } = useSelector((state) => state.adminWithdrawal);
-
+    const { report } = useSelector((state) => state.adminReport);
     const [datas, setDatas] = useState(data);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchPartnerDetails = async () => {
+        const fetch = async () => {
             try {
                 setIsLoading(true);
-                await dispatch(getAllCampaign()).unwrap();
-                await dispatch(getAllWithdrawal()).unwrap();
-                await dispatch(getAllPartner()).unwrap();
+                await dispatch(getAdminReport()).unwrap();
             } catch (error) {
                 console.error("Error fetching : ", error);
             } finally {
@@ -59,41 +27,158 @@ const AdminDashboard = () => {
             }
         };
 
-        fetchPartnerDetails();
+        fetch();
     }, []);
 
     useEffect(() => {
-        if (partners === null) return;
+        if (report === null) return;
         const updatedDatas = datas.map((item) => {
+            const {
+                totalCampaignActive,
+                totalCampaignCompleted,
+                totalCampaignInReview,
+                totalCampaignRejected,
+                totalPartnerInReview,
+                totalPartnerRejected,
+                totalPartnerUnverified,
+                totalPartnerVerified,
+                totalWithdrawalApproved,
+                totalWithdrawalPending,
+                totalWithdrawalReject,
+            } = report;
             switch (item.name) {
                 case "Partners":
-                    return { ...item, data: pagePartner.totalElements };
+                    return {
+                        ...item,
+                        data:
+                            totalPartnerUnverified +
+                            totalPartnerInReview +
+                            totalPartnerVerified +
+                            totalPartnerRejected,
+                        dataChart: {
+                            labels: [
+                                "Unverified",
+                                "In Review",
+                                "Verified",
+                                "Rejected",
+                            ],
+                            datasets: [
+                                {
+                                    data: [
+                                        totalPartnerUnverified,
+                                        totalPartnerInReview,
+                                        totalPartnerVerified,
+                                        totalPartnerRejected,
+                                    ],
+                                    backgroundColor: [
+                                        "#F43F5E",
+                                        "#FB7185",
+                                        "#FDA4AF",
+                                        "#FECDD3",
+                                    ],
+                                },
+                            ],
+                        },
+                    };
                 case "Campaigns":
-                    return { ...item, data: pageCampaign.totalElements };
+                    return {
+                        ...item,
+                        data:
+                            totalCampaignInReview +
+                            totalCampaignActive +
+                            totalCampaignCompleted +
+                            totalCampaignRejected,
+                        dataChart: {
+                            labels: [
+                                "In Review",
+                                "Active",
+                                "Completed",
+                                "Rejected",
+                            ],
+                            datasets: [
+                                {
+                                    data: [
+                                        totalCampaignInReview,
+                                        totalCampaignActive,
+                                        totalCampaignCompleted,
+                                        totalCampaignRejected,
+                                    ],
+                                    backgroundColor: [
+                                        "#3B82F6",
+                                        "#60A5FA",
+                                        "#7DD3FC",
+                                        "#BAE6FD",
+                                    ],
+                                },
+                            ],
+                        },
+                    };
                 case "Withdrawals":
-                    return { ...item, data: withdrawals?.length };
+                    return {
+                        ...item,
+                        data:
+                            totalWithdrawalPending +
+                            totalWithdrawalApproved +
+                            totalWithdrawalReject,
+                        dataChart: {
+                            labels: ["Pending", "Aproved", "Rejected"],
+                            datasets: [
+                                {
+                                    data: [
+                                        totalWithdrawalPending,
+                                        totalWithdrawalApproved,
+                                        totalWithdrawalReject,
+                                    ],
+                                    backgroundColor: [
+                                        "#F59E0B",
+                                        "#FBBF24",
+                                        "#FCD34D",
+                                    ],
+                                },
+                            ],
+                        },
+                    };
                 default:
                     return item;
             }
         });
         setDatas(updatedDatas);
-    }, [partners]);
+    }, [report]);
 
     return (
         <>
             <Title name={"Dashboard"} />
             {!isLoading && (
-                <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+                <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-col w-max text-dark/80 h-max border rounded-2xl px-5 py-8 bg-light shadow-md hover:shadow-lg">
+                        <div
+                            className={`flex w-max justify-center items-center rounded-2xl bg-primary/15 p-3`}
+                        >
+                            <IoWalletOutline className="text-5xl font-light text-primary" />
+                        </div>
+                        <h1 className="font-semibold text-accent mt-4">
+                            Total Income
+                        </h1>
+                        <h1 className="text-3xl font-bold">
+                            <FormatRupiah value={4300000} />
+                        </h1>
+                    </div>
+                    <div className="flex flex-col w-60 text-dark/80 h-max border rounded-2xl px-5 py-8 bg-light shadow-md hover:shadow-lg">
+                        <div
+                            className={`flex w-max justify-center items-center rounded-2xl bg-yellow-500/15 p-3`}
+                        >
+                            <IoPersonOutline className="text-5xl font-light text-yellow-500" />
+                        </div>
+                        <h1 className="font-semibold text-accent mt-4">
+                            Donors
+                        </h1>
+                        <h1 className="text-3xl font-bold">
+                            {report.totalDonor}
+                        </h1>
+                    </div>
                     <EachUtils
                         of={datas}
-                        render={(item) => (
-                            <CardDashboard
-                                link={item.link}
-                                name={item.name}
-                                data={item.data}
-                                icon={item.icon}
-                            />
-                        )}
+                        render={(item) => <CardWithChart item={item} />}
                     />
                 </div>
             )}

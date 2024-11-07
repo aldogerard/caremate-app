@@ -15,8 +15,8 @@ const TableDonor = () => {
     };
 
     return (
-        <div className="overflow-scroll text-dark">
-            <div className="w-[1280px] xl:w-full border rounded-md">
+        <div className="overflow-scroll text-dark/80">
+            <div className="w-[1280px] xl:w-full border bg-light rounded-lg">
                 <div className="grid grid-cols-[1fr,4fr,4fr,4fr,2fr] px-6 py-4 border-b gap-x-4">
                     <div className="col-start-1">
                         <h1>No</h1>

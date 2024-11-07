@@ -97,7 +97,7 @@ const AdminCampaign = () => {
 
                     {!isLoading && (
                         <>
-                            <TableCampaign filter={filter} />
+                            <TableCampaign />
                             {campaigns.length > 0 && (
                                 <Pagination
                                     paging={paging}

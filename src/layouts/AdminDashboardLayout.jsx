@@ -124,7 +124,7 @@ const AdminDashboardLayout = () => {
                             render={(item) => (
                                 <Link
                                     to={item.link}
-                                    className={`flex gap-4 p-4 rounded-md hover:bg-primary duration-300 items-center ${
+                                    className={`flex gap-4 p-4 py-5 rounded-md hover:bg-primary duration-300 items-center ${
                                         isOpen
                                             ? "justify-start"
                                             : "justify-start"
@@ -167,7 +167,7 @@ const AdminDashboardLayout = () => {
                 </nav>
 
                 <main
-                    className={`bg-white overflow-x-hidden transition-all duration-300 w-full rounded-s-xl py-10 px-6 sm:px-8 md:px-16 relative ${
+                    className={`bg-gray-100 overflow-x-hidden transition-all duration-300 w-full py-10 px-6 sm:px-8 md:px-16 relative ${
                         isOpen ? "ml-56" : "ml-16"
                     } min-h-screen`}
                 >

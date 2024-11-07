@@ -28,8 +28,6 @@ const data = [
 const AdminPartner = () => {
     const dispatch = useDispatch();
 
-    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-
     const [filter, setFilter] = useState(data[0].name);
     const [isLoading, setIsloading] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
@@ -85,10 +83,6 @@ const AdminPartner = () => {
         }
     };
 
-    const handleDetailModal = () => {
-        setIsDetailModalOpen((state) => !state);
-    };
-
     return (
         <>
             <Title name={"Partner"} />
@@ -104,10 +98,7 @@ const AdminPartner = () => {
                     )}
                     {!isLoading && (
                         <>
-                            <TablePartner
-                                filter={filter}
-                                handleDetailModal={handleDetailModal}
-                            />
+                            <TablePartner />
                             {partners.length > 0 && (
                                 <Pagination
                                     paging={paging}
@@ -118,12 +109,6 @@ const AdminPartner = () => {
                     )}
 
                     {isLoading && <Loader />}
-
-                    <AdminDetailPartner
-                        isOpen={isDetailModalOpen}
-                        closeModal={handleDetailModal}
-                        status={filter}
-                    />
                 </>
             )}
             {partners === null && <Loader />}

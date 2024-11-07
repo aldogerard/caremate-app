@@ -1,16 +1,11 @@
-import Button from "@/components/Button";
 import IconDetail from "@/components/IconDetail";
 import EachUtils from "@/utils/EachUtils";
-import { limitText } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
-import { FaInfo, FaMagnifyingGlass } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const TableCampaign = (props) => {
-    const { filter } = props;
-
     const { campaigns, paging } = useSelector((state) => state.adminCampaign);
     const { page, size } = paging;
 
@@ -19,8 +14,8 @@ const TableCampaign = (props) => {
     };
 
     return (
-        <div className="overflow-scroll text-dark">
-            <div className="w-[1280px] xl:w-full border rounded-md">
+        <div className="overflow-scroll text-dark/80">
+            <div className="w-[1280px] xl:w-full border bg-light rounded-lg">
                 <div className="grid grid-cols-[.7fr,4fr,3fr,3fr,2fr,2fr,1fr] px-6 py-4 border-b gap-x-2">
                     <div className="col-start-1">
                         <h1>No</h1>

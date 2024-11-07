@@ -104,7 +104,6 @@ const AdminWithdrawal = () => {
                     {!isLoading && (
                         <>
                             <TableWithdrawal
-                                filter={filter}
                                 handleDetailModal={handleDetailModal}
                             />
                             {withdrawals.length > 0 && (
