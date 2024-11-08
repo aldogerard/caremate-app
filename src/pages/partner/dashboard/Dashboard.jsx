@@ -1,107 +1,160 @@
-import { useEffect, useState } from "react";
-import { FaMoneyCheck, FaSchool } from "react-icons/fa6";
-import { TbClock } from "react-icons/tb";
-import { useDispatch, useSelector } from "react-redux";
-
-import CardDashboard from "@/components/dashboard/CardDashboard";
+import CardWithChart from "@/components/dashboard/admin/CardWithChart";
 import Title from "@/components/dashboard/Title";
-import EachUtils from "@/utils/EachUtils";
-import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
-import { getCampaignByPartnerId } from "@/redux/feature/partner/campaignSlice";
-import { getWithdrawalByPartnerId } from "@/redux/feature/partner/withdrawalSlice";
 import Loader from "@/components/Loader";
-
-const data = [
-    {
-        link: "/dashboard/partner/profile",
-        name: "Status Fondation",
-        data: "Unverified",
-        icon: <TbClock className="text-primary lg:text-7xl text-5xl" />,
-    },
-    {
-        link: "/dashboard/partner/campaign",
-        name: "Total Campaigns",
-        data: 0,
-        icon: <FaSchool className="text-primary lg:text-7xl text-5xl" />,
-    },
-    {
-        link: "/dashboard/partner/withdrawal",
-        name: "Total Withdrawals",
-        data: 0,
-        icon: <FaMoneyCheck className="text-primary lg:text-7xl text-5xl" />,
-    },
-];
+import { getPartnerReport } from "@/redux/feature/partner/partnerReportSlice";
+import EachUtils from "@/utils/EachUtils";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import data from "@/data/dataDashboard.json";
+import { IoPersonOutline, IoWalletOutline } from "react-icons/io5";
+import CardBasic from "@/components/dashboard/admin/CardBasic";
 
 const Dashboard = () => {
     const dispatch = useDispatch();
-
+    const { report } = useSelector((state) => state.partnerReport);
     const { user } = useSelector((state) => state.auth);
-    const { partner } = useSelector((state) => state.partner);
-    const { campaigns } = useSelector((state) => state.campaign);
-    const { withdrawals } = useSelector((state) => state.withdrawal);
 
     const [datas, setDatas] = useState(data);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!partner) return;
+        const fetch = async () => {
+            try {
+                setIsLoading(true);
+                await dispatch(getPartnerReport(user.id)).unwrap();
+            } catch (error) {
+                console.error("Error fetching : ", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
+        fetch();
+    }, []);
+
+    useEffect(() => {
+        if (report === null) return;
         const updatedDatas = datas.map((item) => {
+            const {
+                totalCampaignInReview,
+                totalCampaignActive,
+                totalCampaignCompleted,
+                totalCampaignRejected,
+                totalWithdrawalApproved,
+                totalWithdrawalPending,
+                totalWithdrawalReject,
+            } = report;
             switch (item.name) {
-                case "Status Fondation":
-                    return { ...item, data: partner?.status };
-                case "Total Campaigns":
-                    return { ...item, data: campaigns?.length || 0 };
-                case "Total Withdrawals":
-                    return { ...item, data: withdrawals?.length || 0 };
+                case "Campaigns":
+                    return {
+                        ...item,
+                        data:
+                            totalCampaignInReview +
+                            totalCampaignActive +
+                            totalCampaignCompleted +
+                            totalCampaignRejected,
+                        dataChart: {
+                            labels: [
+                                "In Review",
+                                "Active",
+                                "Completed",
+                                "Rejected",
+                            ],
+                            datasets: [
+                                {
+                                    data: [
+                                        totalCampaignInReview,
+                                        totalCampaignActive,
+                                        totalCampaignCompleted,
+                                        totalCampaignRejected,
+                                    ],
+                                    backgroundColor: [
+                                        "#F43F5E",
+                                        "#FB7185",
+                                        "#FDA4AF",
+                                        "#FECDD3",
+                                    ],
+                                },
+                            ],
+                        },
+                    };
+                case "Withdrawals":
+                    return {
+                        ...item,
+                        data:
+                            totalWithdrawalPending +
+                            totalWithdrawalApproved +
+                            totalWithdrawalReject,
+                        dataChart: {
+                            labels: ["Pending", "Aproved", "Rejected"],
+                            datasets: [
+                                {
+                                    data: [
+                                        totalWithdrawalPending,
+                                        totalWithdrawalApproved,
+                                        totalWithdrawalReject,
+                                    ],
+                                    backgroundColor: [
+                                        "#F59E0B",
+                                        "#FBBF24",
+                                        "#FCD34D",
+                                    ],
+                                },
+                            ],
+                        },
+                    };
                 default:
                     return item;
             }
         });
         setDatas(updatedDatas);
-    }, [partner, campaigns, withdrawals]);
-
-    useEffect(() => {
-        const fetchPartnerDetails = async () => {
-            try {
-                await dispatch(getDetailPartner(user.id)).unwrap();
-                await dispatch(
-                    getCampaignByPartnerId({ id: user.id })
-                ).unwrap();
-                await dispatch(
-                    getWithdrawalByPartnerId({ id: user.id })
-                ).unwrap();
-            } catch (error) {
-                console.error("Error fetching : ", error);
-            }
-        };
-
-        if (user?.id) {
-            fetchPartnerDetails();
-        }
-    }, [user]);
+    }, [report]);
 
     return (
         <>
             <Title name={"Dashboard"} />
-            {partner && (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
-                        <EachUtils
-                            of={datas}
-                            render={(item) => (
-                                <CardDashboard
-                                    link={item.link}
-                                    name={item.name}
-                                    data={item.data}
-                                    icon={item.icon}
+            {!isLoading && (
+                <div className="flex flex-wrap gap-3">
+                    {report ? (
+                        <>
+                            <CardBasic
+                                link={"profile"}
+                                data={report.statusPartner}
+                                name={"Status Fondation"}
+                                icon={
+                                    <IoPersonOutline className="text-5xl font-light text-blue-500" />
+                                }
+                                style={"bg-blue-500/15"}
+                            />
+                            <CardBasic
+                                link={"withdrawal"}
+                                data={report.totalFund}
+                                name={"Total Fund"}
+                                icon={
+                                    <IoWalletOutline className="text-5xl font-light text-emerald-500" />
+                                }
+                                style={"bg-emerald-500/15"}
+                            />
+                            <div className="w-max flex gap-3">
+                                <EachUtils
+                                    of={datas}
+                                    render={(item) => (
+                                        <CardWithChart item={item} />
+                                    )}
                                 />
-                            )}
-                        />
-                    </div>
-                </>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="flex w-full justify-center items-center h-[70vh]">
+                            <h1 className="text-dark/80 text-lg">
+                                Server not responding
+                            </h1>
+                        </div>
+                    )}
+                </div>
             )}
 
-            {!partner && <Loader />}
+            {isLoading && <Loader />}
         </>
     );
 };

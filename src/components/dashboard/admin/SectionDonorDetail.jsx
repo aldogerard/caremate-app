@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import NOT_FOUND from "@/assets/images/NotFound.jpg";
 import { formatPhoneNumber } from "@/utils/Utils";
 import { getDonationByDonorId } from "@/redux/feature/admin/adminDonationSlice";
+import {
+    clearCurrentDonorUrl,
+    getDonorImageByName,
+} from "@/redux/feature/admin/adminDonorSlice";
 
 const SectionDonorDetail = () => {
     const { currentDonor, currentDonorUrl } = useSelector(
@@ -20,8 +24,14 @@ const SectionDonorDetail = () => {
 
     const fetchData = async () => {
         try {
+            dispatch(clearCurrentDonorUrl());
+
             await dispatch(
                 getDonationByDonorId({ id: currentDonor.id })
+            ).unwrap();
+
+            await dispatch(
+                getDonorImageByName(currentDonor.imageName)
             ).unwrap();
         } catch (error) {
             console.log("Erorr : ", error);
@@ -31,7 +41,7 @@ const SectionDonorDetail = () => {
     return (
         <>
             <div className="mb-6">
-                <div className="w-40 aspect-square border rounded-full overflow-hidden shadow-sm">
+                <div className="w-52 aspect-square border rounded-full overflow-hidden shadow-sm">
                     <img
                         src={currentDonorUrl || ""}
                         alt="Campaign Image"
@@ -50,9 +60,23 @@ const SectionDonorDetail = () => {
                         </h1>
                     </div>
                     <div>
+                        <h1 className="font-light">Email</h1>
+                        <h1 className="text-lg font-medium">
+                            {currentDonor.email}
+                        </h1>
+                    </div>
+                </div>
+                <div className="flex mb-8 items-center">
+                    <div className="lg:w-2/5">
                         <h1 className="font-light">Phone Number</h1>
                         <h1 className="text-lg font-medium">
                             {formatPhoneNumber(currentDonor.phone)}
+                        </h1>
+                    </div>
+                    <div className="lg:w-2/5">
+                        <h1 className="font-light">Total Donation</h1>
+                        <h1 className="text-lg font-medium">
+                            {currentDonation?.length}
                         </h1>
                     </div>
                 </div>
@@ -61,12 +85,6 @@ const SectionDonorDetail = () => {
                         <h1 className="font-light">Total Point</h1>
                         <h1 className="text-lg font-medium">
                             {currentDonor.totalPoints}
-                        </h1>
-                    </div>
-                    <div className="lg:w-2/5">
-                        <h1 className="font-light">Total Donation</h1>
-                        <h1 className="text-lg font-medium">
-                            {currentDonation?.length}
                         </h1>
                     </div>
                 </div>

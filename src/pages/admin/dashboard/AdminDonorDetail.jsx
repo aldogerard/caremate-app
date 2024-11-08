@@ -25,13 +25,7 @@ const AdminDonorDetail = () => {
 
     const fetchData = async () => {
         try {
-            dispatch(clearCurrentDonorUrl());
             await dispatch(getDonorById(id)).unwrap();
-            if (currentDonor) {
-                await dispatch(
-                    getDonorImageByName(currentDonor.imageName)
-                ).unwrap();
-            }
         } catch (error) {
             console.log("Erorr : ", error);
         }

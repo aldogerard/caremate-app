@@ -6,7 +6,7 @@ export const getAllDonor = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         const query = data?.query || "";
         const page = data?.page || 0;
-        const size = data?.size || 7;
+        const size = data?.size || 8;
 
         try {
             if (query == "") {
@@ -95,7 +95,7 @@ const adminDonorSlice = createSlice({
             })
 
             .addCase(getDonorImageByName.fulfilled, (state, action) => {
-                state.currentCampaignUrl = action.payload;
+                state.currentDonorUrl = action.payload;
                 state.status = "success";
             })
             .addCase(getDonorImageByName.rejected, (state, action) => {

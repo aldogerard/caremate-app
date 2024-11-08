@@ -5,7 +5,7 @@ import { getAdminReport } from "@/redux/feature/admin/adminReportSlice";
 import EachUtils from "@/utils/EachUtils";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import data from "@/data/dataDashboard.json";
+import data from "@/data/adminDataDashboard.json";
 import { IoPersonOutline, IoWalletOutline } from "react-icons/io5";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import { Link } from "react-router-dom";
@@ -161,6 +161,7 @@ const AdminDashboard = () => {
                                 icon={
                                     <IoWalletOutline className="text-5xl font-light text-emerald-500" />
                                 }
+                                style={"bg-emerald-500/15"}
                             />
                             <CardBasic
                                 link={"donor"}
@@ -169,6 +170,7 @@ const AdminDashboard = () => {
                                 icon={
                                     <IoPersonOutline className="text-5xl font-light text-fuchsia-500" />
                                 }
+                                style={"bg-fuchsia-500/15"}
                             />
                             <div className="w-max flex gap-3">
                                 <EachUtils

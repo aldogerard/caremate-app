@@ -40,8 +40,8 @@ const CardWithdrawal = (props) => {
     };
 
     return !isLoading ? (
-        <Link
-            to={`/dashboard/partner/campaign/${withdrawal.campaignId}`}
+        <div
+            // to={`/dashboard/partner/campaign/${withdrawal.campaignId}`}
             className="flex flex-row border shadow-sm cursor-pointer bg-light p-3 w-full max-w-[540px] rounded-xl gap-4"
         >
             <img
@@ -82,9 +82,9 @@ const CardWithdrawal = (props) => {
                         </h1>
                     </div>
                     {status === "APPROVED" && (
-                        <ButtonFile
+                        <IconMessage
                             fileName={withdrawal?.invoiceFileName}
-                            name={"Invoice"}
+                            type={"invoice"}
                         />
                     )}
                     {status === "REJECTED" && (
@@ -94,7 +94,7 @@ const CardWithdrawal = (props) => {
                     )}
                 </div>
             </div>
-        </Link>
+        </div>
     ) : (
         <CardCampaignSkleton />
     );
