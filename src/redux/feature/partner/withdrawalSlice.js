@@ -32,7 +32,7 @@ export const getWithdrawalByPartnerId = createAsyncThunk(
         const query = data?.query || "";
         const status = data?.status || "";
         const page = data?.page || 0;
-        const size = 6;
+        const size = data?.size || 6;
 
         try {
             if (query == "") {
@@ -96,6 +96,7 @@ const withdrawalSlice = createSlice({
 
             .addCase(getWithdrawalByPartnerId.fulfilled, (state, action) => {
                 const { data } = action.payload;
+                console.log(data);
                 state.withdrawals = data.content;
                 state.paging = {
                     page: data.pageable.pageNumber,
