@@ -167,7 +167,7 @@ const AdminDashboardLayout = () => {
                 </nav>
 
                 <main
-                    className={`bg-gray-100 overflow-x-hidden transition-all duration-300 w-full py-10 px-6 sm:px-8 md:px-16 relative ${
+                    className={`bg-gray-50 overflow-x-hidden transition-all duration-300 w-full py-10 px-6 sm:px-8 md:px-16 relative ${
                         isOpen ? "ml-56" : "ml-16"
                     } min-h-screen`}
                 >

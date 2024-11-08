@@ -44,7 +44,7 @@ const TableDonor = () => {
                                 grid grid-cols-[1fr,4fr,4fr,4fr,2fr] px-6 py-3 items-center gap-x-4 break-words`}
                         >
                             <div className="col-start-1">
-                                <h1>{index + 1}</h1>
+                                <h1>{calculateRowNumber(index)}</h1>
                             </div>
                             <div className="col-start-2">
                                 <h1>{capitalizeFirstLetter(item.name)}</h1>

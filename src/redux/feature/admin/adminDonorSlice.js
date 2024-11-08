@@ -38,6 +38,18 @@ export const getDonorById = createAsyncThunk(
     }
 );
 
+export const getDonorImageByName = createAsyncThunk(
+    "donor/getDonorImageByName",
+    async (name, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get(`/file/${name}`);
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Failed to fetch");
+        }
+    }
+);
+
 const adminDonorSlice = createSlice({
     name: "adminDonor",
     initialState: {
@@ -52,18 +64,22 @@ const adminDonorSlice = createSlice({
         },
         status: null,
     },
+    reducers: {
+        clearCurrentDonorUrl: (state) => {
+            state.currentDonorUrl = null;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getAllDonor.fulfilled, (state, action) => {
-                state.donors = action.payload.data;
-                // const { data } = action.payload;
-                // state.paging = {
-                //     page: data.pageable.pageNumber,
-                //     size: data.size,
-                //     totalPages: data.totalPages,
-                //     totalElements: data.totalElements,
-                // };
-                // state.donors = data.content;
+                const { data } = action.payload;
+                state.paging = {
+                    page: data.pageable.pageNumber,
+                    size: data.size,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                };
+                state.donors = data.content;
                 state.status = "success";
             })
             .addCase(getAllDonor.rejected, (state) => {
@@ -78,6 +94,14 @@ const adminDonorSlice = createSlice({
                 state.status = "failed";
             })
 
+            .addCase(getDonorImageByName.fulfilled, (state, action) => {
+                state.currentCampaignUrl = action.payload;
+                state.status = "success";
+            })
+            .addCase(getDonorImageByName.rejected, (state, action) => {
+                state.status = "failed";
+            })
+
             .addMatcher(
                 (action) => action.type.endsWith("/rejected"),
                 (state) => {
@@ -87,4 +111,5 @@ const adminDonorSlice = createSlice({
     },
 });
 
+export const { clearCurrentDonorUrl } = adminDonorSlice.actions;
 export default adminDonorSlice.reducer;

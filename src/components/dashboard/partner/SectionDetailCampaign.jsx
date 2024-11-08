@@ -23,7 +23,7 @@ const SectionDetailCampaign = () => {
 
     const fetchData = async () => {
         try {
-            await dispatch(clearCurrentCampaignUrl()).unwrap();
+            dispatch(clearCurrentCampaignUrl());
             if (currentCampaign) {
                 await dispatch(
                     getCampaignImageByName(currentCampaign.campaignImageName)

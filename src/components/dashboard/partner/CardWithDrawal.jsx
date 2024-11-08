@@ -7,6 +7,9 @@ import { formatDate } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useEffect, useState } from "react";
 import NOT_FOUND from "@/assets/images/NotFound.jpg";
+import IconDetail from "@/components/IconDetail";
+import IconMessage from "@/components/IconMessage";
+import { Link } from "react-router-dom";
 
 const CardWithdrawal = (props) => {
     const { withdrawal, status } = props;
@@ -37,7 +40,10 @@ const CardWithdrawal = (props) => {
     };
 
     return !isLoading ? (
-        <div className="flex flex-row border shadow-sm cursor-pointer p-3 w-full max-w-[540px] rounded-xl gap-4">
+        <Link
+            to={`/dashboard/partner/campaign/${withdrawal.campaignId}`}
+            className="flex flex-row border shadow-sm cursor-pointer bg-light p-3 w-full max-w-[540px] rounded-xl gap-4"
+        >
             <img
                 src={imageUrl}
                 alt="Withdrawal image"
@@ -82,15 +88,13 @@ const CardWithdrawal = (props) => {
                         />
                     )}
                     {status === "REJECTED" && (
-                        <Button
-                            type={"reset"}
-                            name={">"}
-                            onClick={handleClickMessage}
-                        />
+                        <div className="w-max" onClick={handleClickMessage}>
+                            <IconMessage />
+                        </div>
                     )}
                 </div>
             </div>
-        </div>
+        </Link>
     ) : (
         <CardCampaignSkleton />
     );

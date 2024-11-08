@@ -152,28 +152,40 @@ const AdminDashboard = () => {
             <Title name={"Dashboard"} />
             {!isLoading && (
                 <div className="flex flex-wrap gap-3">
-                    <CardBasic
-                        link={"withdrawal"}
-                        data={report.totalIncome}
-                        name={"Total Income"}
-                        icon={
-                            <IoWalletOutline className="text-5xl font-light text-emerald-500" />
-                        }
-                    />
-                    <CardBasic
-                        link={"donor"}
-                        data={report.totalDonor}
-                        name={"Donors"}
-                        icon={
-                            <IoPersonOutline className="text-5xl font-light text-fuchsia-500" />
-                        }
-                    />
-                    <div className="w-max flex gap-3">
-                        <EachUtils
-                            of={datas}
-                            render={(item) => <CardWithChart item={item} />}
-                        />
-                    </div>
+                    {report ? (
+                        <>
+                            <CardBasic
+                                link={"withdrawal"}
+                                data={report.totalIncome}
+                                name={"Total Income"}
+                                icon={
+                                    <IoWalletOutline className="text-5xl font-light text-emerald-500" />
+                                }
+                            />
+                            <CardBasic
+                                link={"donor"}
+                                data={report.totalDonor}
+                                name={"Donors"}
+                                icon={
+                                    <IoPersonOutline className="text-5xl font-light text-fuchsia-500" />
+                                }
+                            />
+                            <div className="w-max flex gap-3">
+                                <EachUtils
+                                    of={datas}
+                                    render={(item) => (
+                                        <CardWithChart item={item} />
+                                    )}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <div className="flex w-full justify-center items-center h-[70vh]">
+                            <h1 className="text-dark/80 text-lg">
+                                Server not responding
+                            </h1>
+                        </div>
+                    )}
                 </div>
             )}
 

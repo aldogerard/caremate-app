@@ -90,13 +90,12 @@ const Withdrawal = () => {
                 <>
                     <Filter data={data} setFilter={setFilter} filter={filter} />
 
-                    {paging.totalElements > 0 && (
-                        <InputSearch
-                            name="withdrawal"
-                            handleSearch={handleSearch}
-                            filter={filter}
-                        />
-                    )}
+                    <InputSearch
+                        name="withdrawal"
+                        handleSearch={handleSearch}
+                        filter={filter}
+                    />
+
                     {!isLoading && (
                         <>
                             {withdrawals?.length > 0 ? (

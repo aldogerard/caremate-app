@@ -7,7 +7,7 @@ const CardDonation = ({ item }) => {
     return (
         <Link
             to={`/dashboard/admin/donor/${item.id}`}
-            className="text-dark/85 w-full bg-light p-4 border rounded-md grid grid-cols-2 cursor-pointer transition-template hover:border-primary"
+            className="text-dark/85 w-full bg-light p-4 border rounded-md grid grid-cols-2 cursor-pointer transition-template shadow-sm"
         >
             <div>
                 <h1 className="font-medium">

@@ -118,13 +118,11 @@ const Campaign = () => {
                 <>
                     <Filter data={data} setFilter={setFilter} filter={filter} />
 
-                    {paging.totalElements > 0 && (
-                        <InputSearch
-                            name="campaign"
-                            handleSearch={handleSearch}
-                            filter={filter}
-                        />
-                    )}
+                    <InputSearch
+                        name="campaign"
+                        handleSearch={handleSearch}
+                        filter={filter}
+                    />
 
                     {!isLoading && (
                         <>

@@ -10,6 +10,7 @@ import donationSlice from "./feature/partner/donationSlice";
 import adminDonorSlice from "./feature/admin/adminDonorSlice";
 import adminWithdrawalSlice from "./feature/admin/adminWithdrawalSlice";
 import adminReportSlice from "./feature/admin/adminReportSlice";
+import adminDonationSlice from "./feature/admin/adminDonationSlice";
 
 const store = configureStore({
     reducer: {
@@ -25,6 +26,7 @@ const store = configureStore({
         adminWithdrawal: adminWithdrawalSlice,
         adminDonor: adminDonorSlice,
         adminReport: adminReportSlice,
+        adminDonation: adminDonationSlice,
     },
 });
 

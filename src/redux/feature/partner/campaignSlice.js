@@ -32,7 +32,7 @@ export const getCampaignByPartnerId = createAsyncThunk(
         const query = data?.query || "";
         const status = data?.status || "";
         const page = data?.page || 0;
-        const size = 6;
+        const size = data?.size || 6;
 
         try {
             if (query == "") {

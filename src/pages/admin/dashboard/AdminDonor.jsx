@@ -1,6 +1,7 @@
 import TableDonor from "@/components/dashboard/admin/TableDonor";
 import InputSearch from "@/components/dashboard/InputSearch";
 import Title from "@/components/dashboard/Title";
+import Loader from "@/components/Loader";
 import Pagination from "@/components/Pagination";
 import { getAllDonor } from "@/redux/feature/admin/adminDonorSlice";
 import React, { useEffect, useState } from "react";
@@ -72,8 +73,10 @@ const AdminDonor = () => {
                             )}
                         </>
                     )}
+                    {isLoading && <Loader />}
                 </>
             )}
+            {donors === null && <Loader />}
         </>
     );
 };

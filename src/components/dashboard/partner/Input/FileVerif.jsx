@@ -10,7 +10,7 @@ const FileVerif = (props) => {
             <div
                 className={`${
                     document[name]?.name && "border-primary"
-                } border-dashed overflow-hidden px-2 border flex relative justify-center items-center border-accent rounded-md h-28`}
+                } border-dashed overflow-hidden px-2 border bg-light flex relative justify-center items-center border-accent rounded-md h-28`}
             >
                 <h1
                     className={`text-sm lg:text-base font-medium text-accent ${

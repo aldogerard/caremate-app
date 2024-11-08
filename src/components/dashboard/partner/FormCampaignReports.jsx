@@ -76,7 +76,7 @@ const FormCampaignReports = () => {
     return (
         <form
             onSubmit={handleSaveCampaignReport}
-            className="px-4 py-6 border rounded-xl h-max w-full xl:w-1/4 flex flex-col gap-4"
+            className="px-4 py-6 border rounded-xl h-max w-full xl:w-1/4 flex flex-col gap-4 bg-light"
         >
             <div className="flex flex-col">
                 <label htmlFor="phoneNumber" className="text-black/80">

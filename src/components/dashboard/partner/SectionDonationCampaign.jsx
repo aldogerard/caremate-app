@@ -5,8 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CardDonation from "./CardDonation";
 
-import dummy from "@/data/dummyDonation.json";
-
 const SectionDonationCampaign = () => {
     const dispatch = useDispatch();
     const { currentCampaign } = useSelector((state) => state.campaign);
@@ -48,17 +46,17 @@ const SectionDonationCampaign = () => {
             {donations && (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 grid-rows-1 gap-4">
-                        {donations.length == 0 && (
+                        {donations.length > 0 && (
                             <EachUtils
-                                of={dummy}
+                                of={donations}
                                 render={(item) => <CardDonation item={item} />}
                             />
                         )}
                     </div>
                     {donations.length > 0 ? (
                         <Pagination
-                            paging={{ totalPages: dummy.length }}
-                            // handlePageClick={handlePageClick}
+                            paging={paging}
+                            handlePageClick={handlePageClick}
                         />
                     ) : (
                         <div className="flex justify-center items-center py-20 w-full">

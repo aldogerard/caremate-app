@@ -5,6 +5,7 @@ import CustomModal from "@/components/CustomModal";
 import {
     approveWithdrawal,
     getAllWithdrawal,
+    getAllWithdrawalByStatus,
     rejectWithdrawal,
 } from "@/redux/feature/admin/adminWithdrawalSlice";
 import { Confirm, Failed, InputMessage, Success } from "@/utils/AlertUtil";
@@ -47,7 +48,12 @@ const AdminDetailWithdrawal = (props) => {
                 await dispatch(
                     approveWithdrawal({ id: currentWithdrawal.id, file: data })
                 ).unwrap();
-                await dispatch(getAllWithdrawal()).unwrap();
+                await dispatch(
+                    getAllWithdrawalByStatus({
+                        status: "PENDING",
+                        page: 0,
+                    })
+                ).unwrap();
                 Success("Successfully approved a new campaign");
                 closeModal();
             } catch (error) {
@@ -66,8 +72,15 @@ const AdminDetailWithdrawal = (props) => {
                     await dispatch(
                         rejectWithdrawal({ id: currentWithdrawal.id, data })
                     ).unwrap();
-                    await dispatch(getAllWithdrawal()).unwrap();
+                    await dispatch(
+                        getAllWithdrawalByStatus({
+                            status: "PENDING",
+                            page: 0,
+                        })
+                    ).unwrap();
+
                     Success("Successfully rejected a campaign");
+                    setInvoice("");
                     closeModal();
                 } catch (error) {
                     console.log(error);

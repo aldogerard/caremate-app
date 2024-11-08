@@ -15,9 +15,9 @@ const ButtonFile = (props) => {
     return (
         <div
             onClick={handleClick}
-            className="px-8 py-3 border bg-light rounded-lg border-primary/40 cursor-pointer hover:shadow-md transition-template"
+            className="px-8 py-3 border bg-light rounded-lg shadow-md cursor-pointer transition-template"
         >
-            <h1 className="text-base text-dark">{name}</h1>
+            <h1 className="text-base text-dark/85">{name}</h1>
         </div>
     );
 };

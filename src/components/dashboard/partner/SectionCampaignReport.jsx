@@ -48,7 +48,7 @@ const SectionCampaignReport = () => {
                     </h1>
                     <div className="flex flex-col xl:flex-row gap-4">
                         <FormCampaignReports />
-                        <div className="px-4 py-6 rounded-xl border flex flex-col w-full xl:w-3/4 gap-4 h-max">
+                        <div className="bg-light px-4 py-6 rounded-xl border flex flex-col w-full xl:w-3/4 gap-4 h-max">
                             <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                                 <EachUtils
                                     of={campaignReports}

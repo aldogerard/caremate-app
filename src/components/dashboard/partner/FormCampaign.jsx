@@ -172,7 +172,7 @@ const FormCampaign = (props) => {
                                     name="title"
                                     maxLength={100}
                                     placeholder="Enter the title of campaign"
-                                    className={`px-5 py-4  outline-none rounded-md border focus:shadow-sm  bg-white`}
+                                    className={`px-5 py-4  outline-none rounded-md border focus:shadow-sm  bg-light`}
                                 />
                             </div>
 
@@ -314,6 +314,7 @@ const FormCampaign = (props) => {
                                 <textarea
                                     type="text"
                                     id="description"
+                                    required
                                     onInput={handleChange}
                                     autoComplete="off"
                                     name="description"
