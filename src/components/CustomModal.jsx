@@ -12,8 +12,17 @@ const CustomModal = ({ children, isOpen }) => {
             marginRight: "-50%",
             borderRadius: "12px",
             transform: "translate(-40%, -50%)",
+            transition: "width 0.3s ease",
+            overflowY: "auto",
+            maxHeight: "80vh",
+            padding: "20px",
         },
     };
+
+    if (typeof window !== "undefined" && window.innerWidth <= 768) {
+        customStyles.content.width = "90%";
+        customStyles.content.maxHeight = "90vh";
+    }
 
     return (
         <Modal

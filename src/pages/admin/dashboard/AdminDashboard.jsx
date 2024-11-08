@@ -10,6 +10,8 @@ import { IoPersonOutline, IoWalletOutline } from "react-icons/io5";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import { Link } from "react-router-dom";
 import CardBasic from "@/components/dashboard/admin/CardBasic";
+import { BsTree } from "react-icons/bs";
+import { MdBroadcastOnHome } from "react-icons/md";
 
 const AdminDashboard = () => {
     const dispatch = useDispatch();
@@ -151,28 +153,49 @@ const AdminDashboard = () => {
         <>
             <Title name={"Dashboard"} />
             {!isLoading && (
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-4">
                     {report ? (
                         <>
                             <CardBasic
+                                link={"donor"}
+                                data={report.totalDonor}
+                                name={"Registered Donors"}
+                                icon={
+                                    <IoPersonOutline className="text-5xl font-light text-yellow-500" />
+                                }
+                                style={"bg-yellow-500/15"}
+                            />
+                            <CardBasic
                                 link={"withdrawal"}
+                                type={"money"}
                                 data={report.totalIncome}
                                 name={"Total Income"}
                                 icon={
-                                    <IoWalletOutline className="text-5xl font-light text-emerald-500" />
+                                    <IoWalletOutline className="text-5xl font-light text-red-500" />
+                                }
+                                style={"bg-red-500/15"}
+                            />
+                            <CardBasic
+                                link={null}
+                                data={report.totalDonationTree}
+                                type={"money"}
+                                name={"Tree Donation"}
+                                icon={
+                                    <BsTree className="text-5xl font-light text-emerald-500" />
                                 }
                                 style={"bg-emerald-500/15"}
                             />
                             <CardBasic
-                                link={"donor"}
-                                data={report.totalDonor}
-                                name={"Donors"}
+                                link={null}
+                                data={report.totalDonationOperation}
+                                type={"money"}
+                                name={"Operational Donation"}
                                 icon={
-                                    <IoPersonOutline className="text-5xl font-light text-fuchsia-500" />
+                                    <MdBroadcastOnHome className="text-5xl font-light text-indigo-500" />
                                 }
-                                style={"bg-fuchsia-500/15"}
+                                style={"bg-indigo-500/15"}
                             />
-                            <div className="w-max flex gap-3">
+                            <div className="w-max flex flex-wrap gap-4">
                                 <EachUtils
                                     of={datas}
                                     render={(item) => (

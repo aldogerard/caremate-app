@@ -28,6 +28,21 @@ export const register = createAsyncThunk(
     }
 );
 
+export const changePassword = createAsyncThunk(
+    "auth/changePassword",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.put(
+                `/auth/change-password`,
+                data
+            );
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Registration failed");
+        }
+    }
+);
+
 const authSLice = createSlice({
     name: "auth",
     initialState: {
@@ -80,6 +95,13 @@ const authSLice = createSlice({
                 state.status = "success";
             })
             .addCase(register.rejected, (state, action) => {
+                state.status = action.payload.message;
+            })
+
+            .addCase(changePassword.fulfilled, (state, action) => {
+                state.status = "success";
+            })
+            .addCase(changePassword.rejected, (state, action) => {
                 state.status = action.payload.message;
             })
 

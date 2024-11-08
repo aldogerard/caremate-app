@@ -26,7 +26,7 @@ const InputProfile = (props) => {
     return (
         <div
             className={`flex flex-col gap-1 w-full  ${
-                name !== "description" && "lg:w-[49%]"
+                name !== "description" && "2xl:w-[48%]"
             }`}
         >
             <div className="flex justify-between items-center">

@@ -40,9 +40,9 @@ const CardCampaign = (props) => {
                 src={imageUrl}
                 alt="Image Campaign"
                 onError={(e) => (e.target.src = NOT_FOUND)}
-                className="h-24 lg:h-40 aspect-square object-cover rounded-lg"
+                className="h-24 hidden lg:flex lg:h-40 aspect-square object-cover rounded-lg"
             />
-            <div className="flex flex-col w-full justify-between">
+            <div className="flex flex-col w-full justify-between gap-4 lg:gap-0">
                 <h1 className="text-sm lg:text-lg  text-dark">
                     {limitText(item.title, 50)}
                 </h1>
@@ -62,7 +62,7 @@ const CardCampaign = (props) => {
                 </div>
 
                 {status === "ACTIVE" && (
-                    <div>
+                    <div className="hidden lg:block">
                         <div className="flex justify-between items-end text-xs text-dark/80">
                             <h1>
                                 <FormatRupiah value={item.currentAmount} />
@@ -81,7 +81,7 @@ const CardCampaign = (props) => {
                 )}
 
                 {(status === "IN_REVIEW" || status === "REJECTED") && (
-                    <div className="flex justify-between items-end">
+                    <div className="lg:block justify-between items-end hidden">
                         <div>
                             <h1 className="text-xs text-dark">Goal amount</h1>
                             <h1 className="text-primary text-xs font-medium">
@@ -92,7 +92,7 @@ const CardCampaign = (props) => {
                 )}
 
                 {status === "COMPLETED" && (
-                    <div>
+                    <div className="lg:block justify-between items-end hidden">
                         <h1 className="text-xs text-dark">Raise amount</h1>
                         <h1 className="text-primary text-xs font-medium">
                             <FormatRupiah value={item.currentAmount} />

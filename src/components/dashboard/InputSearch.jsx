@@ -25,14 +25,14 @@ const InputSearch = (props) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className="flex justify-end mb-8 gap-1">
+            <div className="flex justify-end mb-2 gap-1">
                 <input
                     value={query}
                     onChange={handleChange}
-                    className={`px-5 py-3 w-full max-w-md outline-none rounded-md border focus:shadow-sm bg-white`}
+                    className={`lg:px-5 lg:py-3 px-3 py-2 text-sm lg:text-base w-full max-w-md outline-none rounded-md border focus:shadow-sm bg-white`}
                     placeholder={`Search the ${name}`}
                 />
-                <button className="px-7 py-3 font-medium outline-none bg-primary hover:bg-emerald-600 rounded-md text-light text-lg">
+                <button className="lg:px-7 lg:py-3 px-3 py-1 text-sm font-medium outline-none bg-primary hover:bg-emerald-600 rounded-md text-light lg:text-lg">
                     Search
                 </button>
             </div>

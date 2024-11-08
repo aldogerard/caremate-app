@@ -7,17 +7,19 @@ const CardDonation = ({ item }) => {
     return (
         <Link
             to={`/dashboard/admin/donor/${item.id}`}
-            className="text-dark/85 w-full bg-light p-4 border rounded-md grid grid-cols-2 cursor-pointer transition-template shadow-sm"
+            className="text-dark/85 w-full bg-light p-4 border rounded-md  cursor-pointer flex flex-col gap-2 transition-template shadow-sm"
         >
             <div>
                 <h1 className="font-medium">
                     {item.isAnonymous ? "Good People" : item.donorName}
                 </h1>
-                <h1 className="text-primary font-medium">
+            </div>
+            <div className="flex justify-between items-center text-sm font-medium">
+                <h1 className="text-primary">
                     <FormatRupiah value={item.amount} />
                 </h1>
+                <h1 className="text-right">{formatDate(item.donationDate)}</h1>
             </div>
-            <h1 className="text-right">{formatDate(item.donationDate)}</h1>
         </Link>
     );
 };

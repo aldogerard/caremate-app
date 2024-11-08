@@ -25,11 +25,11 @@ const CardWithChart = ({ item }) => {
     return (
         <Link
             to={item.link}
-            className="text-dark/85 flex flex-col rounded-2xl shadow-md h-max w-max px-5 py-8 transition-template hover:shadow-lg bg-light"
+            className="text-dark/85 flex flex-col rounded-2xl border shadow-sm h-max w-max min-w-72 px-5 py-8 transition-template hover:shadow-md bg-light"
         >
             <h1 className="font-semibold mb-1">{item.name}</h1>
             <h2 className="text-7xl font-bold">{item.data}</h2>
-            <div className="flex gap-2 items-end">
+            <div className="flex gap-2 items-end justify-between">
                 <div className="h-max flex flex-col text-[10px]">
                     <EachUtils
                         of={item.legend}

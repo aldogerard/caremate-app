@@ -1,12 +1,24 @@
 import axiosInstance from "@/api/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+export const getDonationById = createAsyncThunk(
+    "donation/getDonationById",
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get(`/donation/${id}`);
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Failed to fetch");
+        }
+    }
+);
+
 export const getDonationByDonorId = createAsyncThunk(
     "donation/getDonationByDonorId",
     async (data, { rejectWithValue }) => {
         const id = data?.id;
         const page = data?.page || 0;
-        const size = 12;
+        const size = data?.size || 8;
 
         try {
             const response = await axiosInstance.get(
@@ -48,7 +60,7 @@ const adminDonationSlice = createSlice({
 
             .addCase(getDonationByDonorId.fulfilled, (state, action) => {
                 const { data } = action.payload;
-                state.currentDonation = data.content;
+                state.donations = data.content;
                 state.paging = {
                     page: data.pageable.pageNumber,
                     size: data.size,
@@ -58,6 +70,14 @@ const adminDonationSlice = createSlice({
                 state.status = "success";
             })
             .addCase(getDonationByDonorId.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(getDonationById.fulfilled, (state, action) => {
+                state.currentDonation = action.payload.data;
+                state.status = "success";
+            })
+            .addCase(getDonationById.rejected, (state) => {
                 state.status = "failed";
             })
 

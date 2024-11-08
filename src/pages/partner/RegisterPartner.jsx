@@ -35,10 +35,6 @@ const RegisterPartner = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!isMount) {
-            setIsMount(true);
-            return;
-        }
         const { email, password, confirmPassword } = auth;
 
         setIsEmailInvalid(

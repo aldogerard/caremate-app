@@ -14,7 +14,7 @@ const SectionDonorDetail = () => {
     );
 
     const dispatch = useDispatch();
-    const { currentDonation } = useSelector((state) => state.adminDonation);
+    const { donations, paging } = useSelector((state) => state.adminDonation);
 
     useEffect(() => {
         if (currentDonor) {
@@ -76,7 +76,7 @@ const SectionDonorDetail = () => {
                     <div className="lg:w-2/5">
                         <h1 className="font-light">Total Donation</h1>
                         <h1 className="text-lg font-medium">
-                            {currentDonation?.length}
+                            {paging.totalElements}
                         </h1>
                     </div>
                 </div>

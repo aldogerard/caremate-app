@@ -5,14 +5,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AdminCardDonation from "./AdminCardDonation";
 import dummy from "@/data/dummyDonation.json";
+import CustomModal from "@/components/CustomModal";
 
 const SectionListDonation = () => {
     const dispatch = useDispatch();
 
     const { currentDonor } = useSelector((state) => state.adminDonor);
-    const { currentDonation, paging } = useSelector(
-        (state) => state.adminDonation
-    );
+    const { donations, paging } = useSelector((state) => state.adminDonation);
 
     const [currentPage, setCurrentPage] = useState(0);
 
@@ -25,7 +24,7 @@ const SectionListDonation = () => {
     const fetchData = async () => {
         try {
             await dispatch(
-                getDonationByDonorId({ id: currentDonor.id })
+                getDonationByDonorId({ id: currentDonor.id, page: currentPage })
             ).unwrap();
         } catch (error) {
             console.log("Erorr : ", error);
@@ -39,13 +38,13 @@ const SectionListDonation = () => {
     return (
         <>
             <h1 className="text-dark/85 text-3xl mb-8 mt-10">List Donation</h1>
-            {currentDonation && (
+            {donations && (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 grid-rows-1 gap-4">
-                        {currentDonation.length == 0 && (
+                        {donations.length > 0 && (
                             <>
                                 <EachUtils
-                                    of={currentDonation}
+                                    of={donations}
                                     render={(item) => (
                                         <AdminCardDonation item={item} />
                                     )}
@@ -53,7 +52,7 @@ const SectionListDonation = () => {
                             </>
                         )}
                     </div>
-                    {currentDonation.length > 0 ? (
+                    {donations.length > 0 ? (
                         <Pagination
                             paging={paging}
                             handlePageClick={handlePageClick}

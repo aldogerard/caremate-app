@@ -48,13 +48,13 @@ const CardWithdrawal = (props) => {
                 src={imageUrl}
                 alt="Withdrawal image"
                 onError={(e) => (e.target.src = NOT_FOUND)}
-                className="h-24 lg:h-40 aspect-square object-cover rounded-lg"
+                className="hidden lg:block h-24 lg:h-40 aspect-square object-cover rounded-lg"
             />
-            <div className="flex flex-col w-full justify-between">
+            <div className="flex flex-col w-full justify-between gap-4">
                 <h1 className="text-sm lg:text-lg  text-dark">
                     {withdrawal.title}
                 </h1>
-                <div className="flex justify-between">
+                <div className="hidden lg:flex justify-between">
                     <div>
                         <h1 className="text-xs text-dark">Start date</h1>
                         <h1 className="text-primary text-xs font-medium">
@@ -75,7 +75,7 @@ const CardWithdrawal = (props) => {
                             <FormatRupiah value={withdrawal.totalAmount} />
                         </h1>
                     </div>
-                    <div>
+                    <div className="hidden lg:block">
                         <h1 className="text-xs text-dark">Tax</h1>
                         <h1 className="text-primary text-xs font-medium">
                             <FormatRupiah value={withdrawal.totalTax} />

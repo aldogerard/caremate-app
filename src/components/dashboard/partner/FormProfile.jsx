@@ -93,7 +93,11 @@ const FormProfile = (props) => {
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <form
+                onSubmit={handleSubmit}
+                className=" w-max 2xl:w-2/3 max-w-3xl 2xl:max-w-full border p-4 text-dark/85 rounded-lg bg-light"
+            >
+                <h1 className="font-medium mb-6">Change Profile</h1>
                 <div className="flex flex-col gap-4 w-full lg:flex-row lg:flex-wrap lg:justify-between">
                     <EachUtils
                         of={data}

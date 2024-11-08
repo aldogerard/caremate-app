@@ -6,7 +6,7 @@ export const getDonationByCampaignId = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         const id = data?.id;
         const page = data?.page || 0;
-        const size = 12;
+        const size = data?.size || 8;
 
         try {
             const response = await axiosInstance.get(

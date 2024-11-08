@@ -4,15 +4,15 @@ import React from "react";
 
 const Filter = ({ data, filter, setFilter }) => {
     return (
-        <div className="flex py-2 mb-6 gap-8 justify-start">
+        <div className="flex py-2 mb-6 gap-14 justify-start overflow-scroll">
             <EachUtils
                 of={data}
                 render={(item) => (
                     <h1
                         onClick={() => setFilter(item.name)}
-                        className={`font-normal text-center w-24 cursor-pointer ${
+                        className={`font-normal text-center lg:min-w-24 min-w-20 cursor-pointer text-xs lg:text-base ${
                             filter === item.name &&
-                            "text-black border-primary border-b transition-template"
+                            "text-black border-primary  border-b transition-template"
                         } `}
                     >
                         {capitalizeFirstLetter(item.name)}

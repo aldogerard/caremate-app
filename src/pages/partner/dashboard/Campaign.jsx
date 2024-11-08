@@ -102,7 +102,7 @@ const Campaign = () => {
                 <div className="pb-2">
                     <Button
                         type={"button"}
-                        name={"Add Campaign"}
+                        name={"Add"}
                         onClick={handleFromModal}
                     />
                 </div>

@@ -11,6 +11,7 @@ import Loader from "@/components/Loader";
 import Button from "@/components/Button";
 import StatusMessage from "@/components/dashboard/partner/StatusMessage";
 import DocumentButtons from "@/components/dashboard/partner/DocumentButtons";
+import FormPassword from "@/components/dashboard/partner/FormPassword";
 
 const data = [
     {
@@ -61,11 +62,14 @@ const Profile = () => {
                     <Filter data={data} setFilter={setFilter} filter={filter} />
 
                     {filter === "Edit Profile" && (
-                        <FormProfile
-                            isEdit={isEdit}
-                            partner={partner}
-                            handleClickEditProfile={handleClickEditProfile}
-                        />
+                        <div className="flex flex-col 2xl:flex-row gap-4">
+                            <FormProfile
+                                isEdit={isEdit}
+                                partner={partner}
+                                handleClickEditProfile={handleClickEditProfile}
+                            />
+                            <FormPassword />
+                        </div>
                     )}
 
                     {filter === "Verification" &&
