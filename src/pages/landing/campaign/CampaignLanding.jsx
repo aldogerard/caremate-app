@@ -1,6 +1,7 @@
 import CampaignDonateCard from "@/components/landing/CampaignDonateCard";
 import React from "react";
 import { GoArrowRight, GoChevronRight } from "react-icons/go";
+import { Link } from "react-router-dom";
 
 const CampaignLanding = () => {
   const campaigns = [
@@ -107,12 +108,12 @@ const CampaignLanding = () => {
         <h2 className="text-black text-3xl font-semibold">
           Want to make your own campaign?
         </h2>
-        <a
-          href="#"
+        <Link
+          to="/partner/signup"
           className="bg-[#e17153] text-white text-base font-normal px-16 py-4 mt-5 inline-block rounded-full"
         >
           Register Now
-        </a>
+        </Link>
         <p className="text-black text-base font-medium mt-5">
           Register now as a partner, and give many children new hope
         </p>

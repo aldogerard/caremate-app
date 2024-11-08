@@ -1,26 +1,27 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const AboutUs = () => {
-  const navigate = useNavigate();
   return (
-    <div className="bg-white">
+    <div className="">
       {/* Section 1 */}
-      <section className="min-h-screen flex flex-col px-4 md:px-0 py-8 mt-24">
+      <section className="h-screen flex flex-col px-4 md:px-0 py-8 mt-24">
         <div className="text-center md:text-left mx-4 md:mx-0">
           <h1 className="text-3xl md:text-3xl lg:text-8xl text-black leading-tight font-bold">
             Helping People
             <br />
             Help Each Other
           </h1>
-          <button className="mt-6 md:mt-12 bg-[#e17153] text-white rounded-3xl px-6 py-3 text-xl" onClick={() => navigate("/partner/signup")}>
-            Register Now
-          </button>
+          <Link to="/partner/signup">
+            <button className="mt-6 md:mt-12 bg-[#e17153] text-white rounded-3xl px-6 py-3 text-xl">
+              Register Now
+            </button>
+          </Link>
         </div>
       </section>
 
       {/* Section 2 */}
-      <section className="min-h-screen flex flex-col lg:flex-row items-center gap-8 px-4 lg:px-0 py-8">
+      <section className="flex flex-col lg:flex-row items-center gap-8 px-4 lg:px-0 py-8">
         <div className="text-xl md:text-3xl font-mono leading-relaxed text-black mx-4 lg:mx-0 lg:w-1/2">
           <h2 className="text-black font-bold mb-4">Welcome to CareMate!</h2>
           <p className="text-base md:text-lg text-justify lg:text-left">
@@ -55,7 +56,7 @@ const AboutUs = () => {
       </section>
 
       {/* Section 3 */}
-      <section className="min-h-screen flex flex-col lg:flex-row-reverse items-center gap-8 px-4 md:px-0 py-8">
+      <section className="flex flex-col lg:flex-row-reverse items-center gap-8 px-4 md:px-0 py-8">
         <div className="text-xl md:text-3xl leading-relaxed text-left lg:text-right text-black mx-4 lg:mx-0 lg:w-1/2">
           <h2 className="text-black font-bold">How We’re Different</h2>
           <p className="text-base md:text-lg text-justify lg:text-right">

@@ -1,14 +1,17 @@
 import React from 'react'
 import { PiCalendarDotsThin } from "react-icons/pi";
+import { Link } from 'react-router-dom';
 
 
-const NewsCard = ({articles, handleArticleClick}) => {
+const NewsCard = ({articles}) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
+    <div 
+    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
           {articles.map((article) => (
-            <button
-              key={article.id}
-              onClick={() => handleArticleClick(article)}
+            <Link
+              to={`/news/${article.documentId}`}
+          
+              key={article.documentId}
               className="flex flex-col p-4 relative aspect-square"
             >
               <img
@@ -22,10 +25,10 @@ const NewsCard = ({articles, handleArticleClick}) => {
               <div className="flex items-center mt-1">
                 <PiCalendarDotsThin style={{ color: "#3d3d3d" }} />
                 <span className="opacity-60 text-[#3d3d3d] text-xs font-normal">
-                  {article.date}
+                  {article.createdAt.slice(0, 10)}
                 </span>
               </div>
-            </button>
+            </Link>
           ))}
         </div>
   )

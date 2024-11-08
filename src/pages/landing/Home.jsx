@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { GoPeople, GoArrowRight } from "react-icons/go";
 import { PiHandsClappingLight } from "react-icons/pi";
 import { SlEmotsmile } from "react-icons/sl";
 import HomeDonateCard from "@/components/landing/HomeDonateCard";
 import HomeNewsCard from "@/components/landing/HomeNewsCard";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 import Campaign from "../partner/dashboard/Campaign";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchNews } from "@/redux/landing/newsSlice";
 
 const Home = () => {
-  const navigate = useNavigate();
-  const handleArticleClick = (article) => {
-    navigate(`/news/${article.id}`, { state: { article } });
-  };
+  const dispatch = useDispatch();
+  const { newsItems, status, error } = useSelector((state) => state.news);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchNews());
+    }
+  }, [status, dispatch]);
 
   const campaigns = [
     {
@@ -80,26 +86,7 @@ const Home = () => {
         "https://mi.polinela.ac.id/wp-content/uploads/2021/12/bursa_kerja_it_bootcamp_enigmacamp_d3_mi_polinela.jpg",
     },
   ];
-  const newsArticles = [
-    {
-      id: 1,
-      title: "News Article 1",
-      date: "10 November 2024",
-      description:
-        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,",
-      imageUrl:
-        "https://mi.polinela.ac.id/wp-content/uploads/2021/12/bursa_kerja_it_bootcamp_enigmacamp_d3_mi_polinela.jpg",
-    },
-    {
-      id: 2,
-      title: "News Article 2",
-      date: "10 November 2024",
-      description:
-        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,",
-      imageUrl:
-        "https://mi.polinela.ac.id/wp-content/uploads/2021/12/bursa_kerja_it_bootcamp_enigmacamp_d3_mi_polinela.jpg",
-    },
-  ];
+
   return (
     <div>
       <div className="flex flex-col lg:flex-row justify-center h-screen md:px-0 relative">
@@ -178,9 +165,11 @@ const Home = () => {
                     style={{ width: "40%" }}
                   ></div>
                 </div>
-                <button className="bg-[#e17153] text-white rounded-3xl py-1 px-1 mt-6 text-sm w-full" onClick={() => navigate('/download')}>
-                  Donate Now
-                </button>
+                <Link to={"/download"}>
+                  <button className="bg-[#e17153] text-white rounded-3xl py-1 px-1 mt-6 text-sm w-full">
+                    Donate Now
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -217,9 +206,11 @@ const Home = () => {
                     style={{ width: "40%" }}
                   ></div>
                 </div>
-                <button className="bg-[#e17153] text-white rounded-3xl py-1  mt-3 text-xs w-full" onClick={() => navigate('/download')}>
-                  Donate Now
-                </button>
+                <Link to={"/download"}>
+                  <button className="bg-[#e17153] text-white rounded-3xl py-1  mt-3 text-xs w-full">
+                    Donate Now
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -259,9 +250,12 @@ const Home = () => {
                 ></div>
               </div>
               <div className="flex justify-center lg:justify-start mt-6">
-                <button className="bg-[#e17153] text-white rounded-3xl px-6 py-2 text-lg lg:px-24" onClick={() => navigate('/download')}>
+                <Link
+                  className="bg-[#e17153] text-white rounded-3xl px-6 py-2 text-lg lg:px-24"
+                  to={"/download"}
+                >
                   Donate Now
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -318,32 +312,35 @@ const Home = () => {
             Let's Give Help To Those In Need
           </h2>
           {campaigns.length > 6 && (
-            <button className="lg:bg-[#e17153] flex items-center text-[#e17153] lg:text-white rounded-3xl text-sm lg:text-lg px-5 py-2" onClick={() => navigate("/campaign")}>
+            <Link to={"/campaign"}
+              className="lg:bg-[#e17153] flex items-center text-[#e17153] lg:text-white rounded-3xl text-sm lg:text-lg px-5 py-2"
+            >
               <span>See More Campaign</span>
               <GoArrowRight />
-            </button>
+            </Link>
           )}
         </div>
         <div className="">
           <HomeDonateCard campaigns={campaigns} />
         </div>
-
       </div>
 
       <div className="mb-16">
         <div className="flex justify-between mx-5 mt-32">
           <h2 className="text-xl lg:text-3xl font-bold">News and Articles</h2>
-          {newsArticles.length > 6 && (
-            <button
+          {newsItems.length > 4 && (
+            <Link to={"/news"}
               className="lg:bg-[#e17153] flex items-center text-[#e17153] lg:text-white rounded-3xl text-sm lg:text-lg lg:px-5 lg:py-2"
-              onClick={() => navigate("/news")}
             >
               <span>See More</span>
               <GoArrowRight />
-            </button>
+            </Link>
           )}
         </div>
-        <HomeNewsCard articles={newsArticles} handleArticleClick={handleArticleClick} />
+        <HomeNewsCard
+          articles={newsItems}
+          
+        />
       </div>
     </div>
   );

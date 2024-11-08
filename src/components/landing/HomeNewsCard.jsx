@@ -2,8 +2,9 @@ import React from "react";
 import { GoArrowRight } from "react-icons/go";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { Link } from "react-router-dom";
 
-const HomeNewsCard = ({ articles, handleArticleClick }) => {
+const HomeNewsCard = ({ articles }) => {
   return (
     <div className="mt-6">
       {/* Swiper for mobile screens */}
@@ -22,16 +23,16 @@ const HomeNewsCard = ({ articles, handleArticleClick }) => {
                     {article.title}
                   </h3>
                   <p className="text-[#8e8e93] text-xs font-normal">
-                    {article.description.slice(0, 70)}
+                    {article.contentnews.slice(0, 70)}
                   </p>
                   <button
                     className="text-[#e17153] mt-5"
                     onClick={() => handleArticleClick(article)}
                   >
-                    <div className="flex items-center text-sm font-bold">
+                    <Link className="flex items-center text-sm font-bold" to={`/news/${article.documentId}`}>
                       <span>Read Post</span>
                       <GoArrowRight style={{ fontWeight: "bold" }} />
-                    </div>
+                    </Link>
                   </button>
                 </div>
               </div>
@@ -57,16 +58,16 @@ const HomeNewsCard = ({ articles, handleArticleClick }) => {
                 {article.title}
               </h3>
               <p className="text-[#8e8e93] text-xs font-normal mt-6">
-                {article.description.slice(0, 70)}
+                {article.contentnews.slice(0, 70)}
               </p>
               <button
                 className="text-[#e17153]"
                 onClick={() => handleArticleClick(article)}
               >
-                <div className="flex items-center text-sm font-bold">
+                <Link className="flex items-center text-sm font-bold" to={`/news/${article.documentId}`}>
                   <span>Read Post</span>
                   <GoArrowRight style={{ fontWeight: "bold" }} />
-                </div>
+                </Link>
               </button>
             </div>
           </div>
