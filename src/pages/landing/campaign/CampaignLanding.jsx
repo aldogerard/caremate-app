@@ -45,7 +45,7 @@ const CampaignLanding = () => {
             className="bg-[#e17153] text-white text-xl font-bold px-4 py-2 rounded-full flex flex-col items-center justify-center space-y-1 mx-28"
           >
             <span className="text-base lg:text-xl">Check Our Campaigns</span>
-            <GoArrowRight className="hidden text-2xl md:block" />
+            <GoArrowRight className="hidden text-2xl lg:block" />
           </a>
         </div>
         <img
@@ -61,7 +61,7 @@ const CampaignLanding = () => {
             Our Partner Campaigns
           </h2>
           <div className="hidden lg:flex items-center w-96 h-16 bg-white/30 rounded border border-black overflow-hidden">
-            <div className="w-16 h-full flex items-center justify-center bg-[#e17153] rounded-l">
+            <button className="w-16 h-full flex items-center justify-center bg-[#e17153] rounded-l">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -74,7 +74,7 @@ const CampaignLanding = () => {
                   d="M11 4a7 7 0 015.467 11.746l4.193 4.194a1 1 0 01-1.414 1.414l-4.194-4.193A7 7 0 1111 4zm-5 7a5 5 0 1010 0 5 5 0 00-10 0z"
                 />
               </svg>
-            </div>
+            </button>
 
             <input
               type="text"
@@ -92,7 +92,7 @@ const CampaignLanding = () => {
           <div key={index} className="mt-5 lg:mt-12">
             <div className="flex items-center justify-between text-xl">
               <h3 className="font-semibold">{category}</h3>
-              <button className="flex items-center">
+              <button className="flex items-center text-lg">
                 <span>See More</span>
                 <GoChevronRight />
                 <GoChevronRight style={{ marginLeft: "-10px" }} />

@@ -13,6 +13,7 @@ const Header = () => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
+    const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
 
     const handleIsOpen = () => {
         setIsOpen((state) => !state);
@@ -21,6 +22,10 @@ const Header = () => {
 
     const handleIsDetail = () => {
         setIsDetailOpen((state) => !state);
+    };
+
+    const handleAboutDropdown = () => {
+        setIsAboutDropdownOpen((state) => !state);
     };
 
     const handleLogout = () => {
@@ -57,7 +62,10 @@ const Header = () => {
         },
         {
             name: "About us",
-            link: "/about",
+            sublinks: [
+                { name: "About us", link: "/about" },
+                { name: "FAQ", link: "/faq" },
+            ],
         },
         {
             name: "News",
@@ -66,10 +74,6 @@ const Header = () => {
         {
             name: "Campaign",
             link: "/campaign",
-        },
-        {
-            name: "FAQ",
-            link: "/faq",
         },
     ];
 
@@ -123,35 +127,63 @@ const Header = () => {
                     </div>
                 </header>
                 <nav
-                    className={`padding  w-full transition-template  bg-light lg:h-max lg:static lg:w-max lg:py-5 lg:overflow-visible ${
+                    className={`padding w-full transition-template bg-light lg:h-max lg:static lg:w-max lg:py-5 lg:overflow-visible ${
                         isOpen ? "pt-4 pb-6 h-max" : "h-0 overflow-hidden"
                     }`}
                 >
                     <ul
-                        className={`relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between lg:w-[440px]`}
+                        className="relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between lg:w-[440px]"
                     >
                         <EachUtils
                             of={link}
-                            render={(item) => (
-                                <Link to={item.link}>
+                            render={(item) =>
+                                item.sublinks ? (
                                     <li
-                                        className={` transition-template ${
-                                            item.link === location &&
-                                            "lg:text-primary"
-                                        }`}
+                                        className="relative flex items-center gap-1 cursor-pointer"
+                                        onClick={handleAboutDropdown}
                                     >
-                                        {item.name}
+                                        <span>{item.name}</span>
+                                        <FaAngleDown
+                                            className={`transition-transform ${
+                                                isAboutDropdownOpen
+                                                    ? "rotate-180"
+                                                    : ""
+                                            }`}
+                                        />
+                                        {isAboutDropdownOpen && (
+                                            <ul className="absolute top-full left-0 mt-2 bg-white border rounded-md">
+                                                {item.sublinks.map(
+                                                    (sublink) => (
+                                                        <Link
+                                                            to={sublink.link}
+                                                            key={sublink.link}
+                                                            className="block px-2 py-2 hover:bg-accent/10"
+                                                        >
+                                                            {sublink.name}
+                                                        </Link>
+                                                    )
+                                                )}
+                                            </ul>
+                                        )}
                                     </li>
-                                </Link>
-                            )}
+                                ) : (
+                                    <Link to={item.link}>
+                                        <li
+                                            className={`transition-template ${
+                                                item.link === location &&
+                                                "lg:text-primary"
+                                            }`}
+                                        >
+                                            {item.name}
+                                        </li>
+                                    </Link>
+                                )
+                            }
                         />
-                        <div
-                            onClick={handleIsDetail}
-                            className="cursor-pointer"
-                        >
-                            {isLogin && (
+                        <div onClick={handleIsDetail} className="cursor-pointer">
+                            {isLogin ? (
                                 <div
-                                    className={` border-accent flex gap-2 items-center transition-template ${
+                                    className={`border-accent flex gap-2 items-center transition-template ${
                                         isDetailOpen && "border-primary"
                                     }`}
                                 >
@@ -166,8 +198,9 @@ const Header = () => {
                                         }`}
                                     />
                                 </div>
+                            ) : (
+                                <h1>Login</h1>
                             )}
-                            {!isLogin && <h1>Login</h1>}
                         </div>
                         <div
                             className={`${

@@ -24,6 +24,7 @@ import News from "@/pages/landing/News/News";
 import NewsPage from "@/pages/landing/News/NewsPage";
 import CampaignDetails from "@/pages/landing/campaign/CampaignDetails";
 import CampaignCategory from "@/pages/landing/campaign/CampaignCategory";
+import DownloadApps from "@/pages/landing/DownloadApps";
 
 const Routers = () => {
   const router = createBrowserRouter([
@@ -63,6 +64,10 @@ const Routers = () => {
         {
           path: "/campaign/details",
           element: <CampaignDetails />,
+        },
+        {
+          path: "/download",
+          element: <DownloadApps />,
         },
       ],
     },

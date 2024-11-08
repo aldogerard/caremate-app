@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const AboutUs = () => {
+  const navigate = useNavigate();
   return (
     <div className="bg-white">
       {/* Section 1 */}
@@ -11,7 +13,7 @@ const AboutUs = () => {
             <br />
             Help Each Other
           </h1>
-          <button className="mt-6 md:mt-12 bg-[#e17153] text-white rounded-3xl px-6 py-3 text-xl">
+          <button className="mt-6 md:mt-12 bg-[#e17153] text-white rounded-3xl px-6 py-3 text-xl" onClick={() => navigate("/partner/signup")}>
             Register Now
           </button>
         </div>

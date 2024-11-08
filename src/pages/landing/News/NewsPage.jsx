@@ -17,7 +17,7 @@ const NewsPage = () => {
         <PiCalendarDotsThin style={{ color: "#3d3d3d" }} />
         <h3 className="text-sm md:text-base">{article.date}</h3>
       </div>
-      <div className="flex flex-col md:flex-row md:space-x-5 mt-10">
+      <div className="flex flex-col lg:flex-row md:space-x-5 mt-10">
         <div className="flex-1">
           <img
             src={article.imageUrl}
@@ -26,8 +26,8 @@ const NewsPage = () => {
           />
           <p className="mt-5 lg:text-lg text-justify">{article.description}</p>
         </div>
-        <div className="flex flex-col w-full md:w-1/3 px-4 md:px-10">
-          <div className="text-black mt-6 lg:mt-0 text-2xl md:text-3xl font-semibold whitespace-nowrap">
+        <div className="flex flex-col w-full lg:w-1/3 px-4 lg:px-10">
+          <div className="text-black mt-6 lg:mt-0 text-2xl lg:text-3xl font-semibold whitespace-nowrap">
             Latest News
           </div>
           {[1, 2, 3].map((item, index) => (
@@ -45,7 +45,7 @@ const NewsPage = () => {
             </div>
           ))}
           <button
-            className="bg-[#0b826c] text-white rounded-2xl px-6 py-2 mx-auto textarea-md lg:text-lg mt-5 mr-44 lg:mr-32"
+            className="bg-[#0b826c] text-white rounded-2xl px-6 py-2 self-start textarea-md lg:text-lg mt-5"
             onClick={() => navigate("/news")}
           >
             More News
