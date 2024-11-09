@@ -7,7 +7,7 @@ const TableDisplay = (props) => {
     const { link, name, header, data } = props;
 
     return (
-        <div className="overflow-scroll text-dark/80 font-medium w-full lg:w-[49%]">
+        <div className="overflow-scroll text-dark/80 font-medium w-full lg:w-[49%] scrollbar-hide">
             <div className="w-full border bg-light rounded-2xl text-sm">
                 <div className="gap-x-4 px-6 py-4  flex justify-between items-center">
                     <h1 className="text-lg">{name} Status</h1>

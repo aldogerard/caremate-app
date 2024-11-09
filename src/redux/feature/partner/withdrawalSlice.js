@@ -96,7 +96,6 @@ const withdrawalSlice = createSlice({
 
             .addCase(getWithdrawalByPartnerId.fulfilled, (state, action) => {
                 const { data } = action.payload;
-                console.log(data);
                 state.withdrawals = data.content;
                 state.paging = {
                     page: data.pageable.pageNumber,

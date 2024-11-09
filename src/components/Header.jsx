@@ -128,13 +128,11 @@ const Header = () => {
                     </div>
                 </header>
                 <nav
-                    className={`padding w-full transition-template bg-light lg:h-max lg:static lg:w-max lg:py-5 lg:overflow-visible ${
+                    className={`padding w-full transition-template bg-light lg:h-max lg:static lg:w-max lg:py-6 lg:overflow-visible ${
                         isOpen ? "pt-4 pb-6 h-max" : "h-0 overflow-hidden"
                     }`}
                 >
-                    <ul
-                        className="relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between lg:w-[440px]"
-                    >
+                    <ul className="relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between lg:w-[540px]">
                         <EachUtils
                             of={link}
                             render={(item) =>
@@ -181,7 +179,10 @@ const Header = () => {
                                 )
                             }
                         />
-                        <div onClick={handleIsDetail} className="cursor-pointer">
+                        <div
+                            onClick={handleIsDetail}
+                            className="cursor-pointer"
+                        >
                             {isLogin ? (
                                 <div
                                     className={`border-accent flex gap-2 items-center transition-template ${

@@ -12,16 +12,16 @@ body {
     @apply bg-light overflow-x-hidden;
 }
 
-* {
+/* * {
     scrollbar-width: none;
-}
+} */
 
 .padding {
     @apply px-3 lg:px-0;
 }
 
 .container {
-    @apply w-[460px] lg:w-[1120px];
+    @apply w-[460px] lg:w-[1280px];
 }
 
 .auth-container {
@@ -78,5 +78,4 @@ tr {
 
 html {
     scroll-behavior: smooth;
-  }
-  
+}

@@ -33,13 +33,9 @@ export const fetchNews = createAsyncThunk("news/fetchNews", async () => {
 export const fetchNewsById = createAsyncThunk(
   "news/fetchNewsById",
   async (id) => {
-    console.log(id);
-
     const response = await axios.get(
       `${BASE_URL}/articles/${id}?populate=imagecontent`
     );
-
-    console.log(response.data);
 
     const item = response.data.data;
 

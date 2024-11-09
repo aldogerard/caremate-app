@@ -4,7 +4,7 @@ import React from "react";
 
 const Filter = ({ data, filter, setFilter }) => {
     return (
-        <div className="flex py-2 mb-6 gap-14 justify-start overflow-scroll">
+        <div className="flex py-2 mb-6 gap-14 justify-start overflow-scroll scrollbar-hide">
             <EachUtils
                 of={data}
                 render={(item) => (

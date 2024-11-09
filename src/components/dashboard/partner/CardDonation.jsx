@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const CardDonation = ({ item }) => {
     return (
         <Link
-            to={`/dashboard/admin/donor/${item.id}`}
+            to={`/dashboard/admin/donor/${item.donorId}`}
             className="text-dark/85 w-full bg-light p-4 border rounded-md  cursor-pointer flex flex-col gap-2 transition-template shadow-sm"
         >
             <div>

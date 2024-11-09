@@ -13,7 +13,7 @@ const TablePartner = () => {
     };
 
     return (
-        <div className="overflow-scroll text-dark/80 font-medium">
+        <div className="overflow-scroll text-dark/80 font-medium scrollbar-hide">
             <div className="w-[1280px] xl:w-full border bg-light rounded-lg">
                 <div className="grid grid-cols-[.6fr,4fr,3fr,2.5fr,4fr,1fr] px-6 py-4 border-b gap-x-2">
                     <div className="col-start-1">

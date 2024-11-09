@@ -85,7 +85,7 @@ const AdminDashboardLayout = () => {
 
     return (
         <>
-            <section className="flex  bg-dark relative ">
+            <section className="flex  bg-dark relative no-scroll">
                 <nav
                     className={`${
                         isOpen ? "w-72 md:w-56" : "w-16 "

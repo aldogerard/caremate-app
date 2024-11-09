@@ -1,12 +1,11 @@
-import { capitalizeFirstLetter, formatDate, limitText } from "@/utils/Utils";
-import { FormatRupiah } from "@arismun/format-rupiah";
+import { capitalizeFirstLetter, limitText } from "@/utils/Utils";
 import React from "react";
 import { Link } from "react-router-dom";
 
 const AdminCardCampaign = ({ item }) => {
     return (
         <Link
-            to={`/dashboard/admin/campaign/${item.id}`}
+            to={`/dashboard/admin/campaign/${item.campaignId}`}
             className="text-dark/85 bg-light shadow-md outline-none w-full p-4 border rounded-md flex gap-3 flex-col cursor-pointer transition-templates"
         >
             <div className="flex justify-between">

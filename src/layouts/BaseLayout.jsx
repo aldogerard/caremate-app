@@ -13,12 +13,11 @@ const BaseLayouts = () => {
         <>
             <Header />
             <section className="flex justify-center">
-                <main className="container py-20 min-h-screen padding">
+                <main className="container py-16 min-h-screen padding">
                     <Outlet />
                 </main>
             </section>
             <Footer />
-
         </>
     );
 };
