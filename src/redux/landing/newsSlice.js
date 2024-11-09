@@ -43,7 +43,6 @@ export const fetchNewsById = createAsyncThunk(
 
     const item = response.data.data;
 
-    // Check for image formats and fallback to alternative sizes if necessary
     const imageUrl = item.imagecontent[0]?.formats?.large?.url
       ? `http://10.10.102.91:1337${item.imagecontent[0].formats.large.url}` // large format
       : item.imagecontent[0]?.formats?.medium?.url
