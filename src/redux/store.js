@@ -12,8 +12,6 @@ import adminWithdrawalSlice from "./feature/admin/adminWithdrawalSlice";
 import adminReportSlice from "./feature/admin/adminReportSlice";
 import adminDonationSlice from "./feature/admin/adminDonationSlice";
 import partnerReportSlice from "./feature/partner/partnerReportSlice";
-import PartnerSlice from "./feature/PartnerSlice";
-import PartnerDocSlice from "./feature/PartnerDocSlice";
 import faqSlice from "./landing/faqSlice";
 import newsSlice from "./landing/newsSlice";
 
@@ -33,8 +31,7 @@ const store = configureStore({
         adminDonor: adminDonorSlice,
         adminReport: adminReportSlice,
         adminDonation: adminDonationSlice,
-        partner: PartnerSlice,
-        partnerDoc: PartnerDocSlice,
+        
         faq: faqSlice,
         news:newsSlice
     },
