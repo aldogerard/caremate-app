@@ -3,9 +3,16 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const getAllCampaign = createAsyncThunk(
     "campaign/getAllCampaign",
-    async (_, { rejectWithValue }) => {
+    async (data, { rejectWithValue }) => {
+        const page = data?.page || 0;
+        const size = data?.size || 7;
+
         try {
-            const response = await axiosInstance.get(`/campaign`);
+            console.log("first");
+            const response = await axiosInstance.get(
+                `/campaign?size=${size}&page=${page}`
+            );
+            console.log(response.data);
             return response.data;
         } catch (e) {
             return rejectWithValue(e.response?.data || "Fetch to failed");

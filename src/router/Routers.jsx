@@ -33,6 +33,7 @@ import NotFound from "@/pages/NotFound";
 import AdminPartnerDetail from "@/pages/admin/dashboard/AdminPartnerDetail";
 import AdminDonor from "@/pages/admin/dashboard/AdminDonor";
 import AdminDonorDetail from "@/pages/admin/dashboard/AdminDonorDetail";
+import HomePage from "@/pages/landing/HomePage";
 
 const Routers = () => {
     const router = createBrowserRouter([
@@ -41,42 +42,42 @@ const Routers = () => {
             element: <BaseLayouts />,
             errorElement: <NotFound />,
             children: [
-              {
-                path: "/",
-                element: <Home />,
-              },
-              {
-                path: "/about",
-                element: <AboutUs />,
-              },
-              {
-                path: "/campaign",
-                element: <CampaignLanding />,
-              },
-              {
-                path: "/news",
-                element: <News />,
-              },
-              {
-                path: "/faq",
-                element: <Faq />,
-              },
-              {
-                path: "/news/:id",
-                element: <NewsPage />,
-              },
-              {
-                path: "/campaign/category",
-                element: <CampaignCategory />,
-              },
-              {
-                path: "/campaign/details",
-                element: <CampaignDetails />,
-              },
-              {
-                path: "/download",
-                element: <DownloadApps />,
-              },
+                {
+                    path: "/",
+                    element: <HomePage />,
+                },
+                {
+                    path: "/about",
+                    element: <AboutUs />,
+                },
+                {
+                    path: "/campaign",
+                    element: <CampaignLanding />,
+                },
+                {
+                    path: "/news",
+                    element: <News />,
+                },
+                {
+                    path: "/faq",
+                    element: <Faq />,
+                },
+                {
+                    path: "/news/:id",
+                    element: <NewsPage />,
+                },
+                {
+                    path: "/campaign/category",
+                    element: <CampaignCategory />,
+                },
+                {
+                    path: "/campaign/details",
+                    element: <CampaignDetails />,
+                },
+                {
+                    path: "/download",
+                    element: <DownloadApps />,
+                },
             ],
         },
         {
@@ -191,7 +192,7 @@ const Routers = () => {
         },
     ]);
 
-  return <RouterProvider router={router} />;
+    return <RouterProvider router={router} />;
 };
 
 export default Routers;

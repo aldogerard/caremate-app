@@ -1,48 +1,80 @@
+import { formatPhoneNumber } from "@/utils/Utils";
 import React from "react";
+import {
+    FaGooglePlay,
+    FaLocationDot,
+    FaPhone,
+    FaRegEnvelope,
+} from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-  return (
-    <div className="bg-[#0b826c] flex flex-col items-center p-7 space-y-8 md:space-y-12 lg:space-y-32 overflow-hidden">
-      <div className="relative w-full flex flex-col md:flex-row items-center md:items-start justify-between space-y-8 md:space-y-0 z-10">
-        <img
-          src="../src/assets/footer.png"
-          className="absolute top-0 left-1/2 transform -translate-x-1/2 h-[200px] md:h-[300px] object-cover z-0 opacity-20 md:opacity-100"
-          alt="Footer Background"
-        />
-
-        <div className="bg-[#F9F5E8] flex items-center p-2 z-10">
-          <img src="../src/assets/logo.webp" className="w-10 h-10" alt="Logo" />
-          <h3 className="text-[#10b981] ml-2 text-lg font-semibold">
-            CareMate
-          </h3>
-        </div>
-
-        <div className="flex flex-col text-white z-10 space-y-2">
-          <Link to={"/campaign"}>Donations</Link>
-          <Link to={"/about"}>About Us</Link>
-          <Link to={"/news"}>Latest News</Link>
-        </div>
-
-        <div className="flex flex-col text-white z-10 space-y-2">
-          <button>Help</button>
-          <button>Privacy</button>
-        </div>
-
-        <button className="z-10">
-          <img
-            src="../src/assets/google play.png"
-            className="w-auto h-11"
-            alt="Google Play"
-          />
-        </button>
-      </div>
-
-      <div className="text-center text-white text-sm md:text-base z-10">
-        © 2024 CareMate. All rights reserved.
-      </div>
-    </div>
-  );
+    return (
+        <main className="bg-primary flex justify-center text-light">
+            <section className="container flex justify-between flex-wrap gap-4 py-8 px-4 md:px-0">
+                <div className="w-full md:w-[47%] lg:w-[27%] flex flex-col items-start">
+                    <h1 className="text-2xl font-semibold pb-4">CareMate</h1>
+                    <p className="font-medium">
+                        We connect generous donors with foundations supporting
+                        underprivileged children and communities, focusing on
+                        education, essential needs, and environmental impact for
+                        lasting change.
+                    </p>
+                </div>
+                <div className="w-full md:w-[47%] lg:w-[23%] ">
+                    <h1 className="text-2xl font-semibold pb-4 h-max">
+                        Information
+                    </h1>
+                    <div className="flex flex-col gap-2 w-max font-medium">
+                        <Link to="/faq">
+                            <h1>About Us</h1>
+                        </Link>
+                        <Link to="/faq">
+                            <h1>Frequently Asked Question</h1>
+                        </Link>
+                        <Link to="/faq">
+                            <h1>User Policy</h1>
+                        </Link>
+                    </div>
+                </div>
+                <div className="w-full md:w-[47%] lg:w-[23%]">
+                    <h1 className="text-2xl font-semibold pb-4">Contact Us</h1>
+                    <div className="flex flex-col gap-3 font-medium">
+                        <div className="flex gap-4 items-center">
+                            <FaLocationDot size={18} />
+                            <p>Topaz Street Number 7, Malang</p>
+                        </div>
+                        <div className="flex gap-4 items-center">
+                            <FaRegEnvelope size={18} />
+                            <p>services@caremate.com</p>
+                        </div>
+                        <div className="flex gap-4 items-center">
+                            <FaPhone size={18} />
+                            {formatPhoneNumber("08123456789")}
+                        </div>
+                    </div>
+                </div>
+                <div className="w-full md:w-[47%] lg:w-[17%]">
+                    <div className="flex justify-center items-center cursor-pointer text-light w-max gap-4 px-4 py-2 h-max rounded-xl bg-dark">
+                        <div className="w-14 aspect-square flex justify-center items-center">
+                            <img
+                                src="../../src/assets/icon-gp.png"
+                                alt=""
+                                className="w-full h-full object-contain"
+                            />
+                        </div>
+                        <div className="text-lg">
+                            <h1>GET IT ON</h1>
+                            <h1>Google Play</h1>
+                        </div>
+                    </div>
+                </div>
+                <div className="border-t border-black/20 flex w-full justify-center mt-4 pt-6">
+                    Copyright &copy; 2024 CareMate
+                </div>
+            </section>
+        </main>
+    );
 };
 
 export default Footer;

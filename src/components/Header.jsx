@@ -64,11 +64,8 @@ const Header = () => {
             link: "/",
         },
         {
-            name: "About us",
-            sublinks: [
-                { name: "About us", link: "/about" },
-                { name: "FAQ", link: "/faq" },
-            ],
+            name: "About",
+            link: "/about",
         },
         {
             name: "News",
@@ -98,21 +95,21 @@ const Header = () => {
     ];
 
     return (
-        <section className="flex justify-center w-full bg-light fixed z-50 border-b">
+        <section className="flex justify-center w-full bg-third/80 backdrop-blur-xl fixed z-50 border-b">
             <main className="container relative lg:flex lg:items-center lg:justify-between">
                 <header className="py-4 flex justify-between items-center padding">
                     <Link
                         to={"/"}
                         className="flex justify-center items-center w-max gap-2 cursor-pointer"
                     >
-                        <div className="w-7 h-7">
+                        <div className="w-10 aspect-square">
                             <img
                                 src={logo}
                                 alt="Logo"
                                 className="w-full h-full object-contain"
                             />
                         </div>
-                        <h1 className="text-xl font-semibold text-primary">
+                        <h1 className="text-2xl font-semibold text-primary">
                             CareMate
                         </h1>
                     </Link>
@@ -128,56 +125,25 @@ const Header = () => {
                     </div>
                 </header>
                 <nav
-                    className={`padding w-full transition-template bg-light lg:h-max lg:static lg:w-max lg:py-6 lg:overflow-visible ${
+                    className={`padding w-full transition-template lg:h-max lg:static lg:w-max lg:py-5 lg:overflow-visible ${
                         isOpen ? "pt-4 pb-6 h-max" : "h-0 overflow-hidden"
                     }`}
                 >
-                    <ul className="relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between lg:w-[540px]">
+                    <ul className="relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between lg:w-[520px]">
                         <EachUtils
                             of={link}
-                            render={(item) =>
-                                item.sublinks ? (
+                            render={(item) => (
+                                <Link to={item.link}>
                                     <li
-                                        className="relative flex items-center gap-1 cursor-pointer"
-                                        onClick={handleAboutDropdown}
+                                        className={`transition-template font-medium ${
+                                            item.link === location &&
+                                            "lg:text-primary"
+                                        }`}
                                     >
-                                        <span>{item.name}</span>
-                                        <FaAngleDown
-                                            className={`transition-transform ${
-                                                isAboutDropdownOpen
-                                                    ? "rotate-180"
-                                                    : ""
-                                            }`}
-                                        />
-                                        {isAboutDropdownOpen && (
-                                            <ul className="absolute top-full left-0 mt-2 bg-white border rounded-md">
-                                                {item.sublinks.map(
-                                                    (sublink) => (
-                                                        <Link
-                                                            to={sublink.link}
-                                                            key={sublink.link}
-                                                            className="block px-2 py-2 hover:bg-accent/10"
-                                                        >
-                                                            {sublink.name}
-                                                        </Link>
-                                                    )
-                                                )}
-                                            </ul>
-                                        )}
+                                        {item.name}
                                     </li>
-                                ) : (
-                                    <Link to={item.link}>
-                                        <li
-                                            className={`transition-template ${
-                                                item.link === location &&
-                                                "lg:text-primary"
-                                            }`}
-                                        >
-                                            {item.name}
-                                        </li>
-                                    </Link>
-                                )
-                            }
+                                </Link>
+                            )}
                         />
                         <div
                             onClick={handleIsDetail}
@@ -201,13 +167,19 @@ const Header = () => {
                                     />
                                 </div>
                             ) : (
-                                <h1>Login</h1>
+                                <div className="flex justify-center items-center w-max px-5 rounded-full py-2 bg-primary/20">
+                                    <h1
+                                        className={`transition-template font-semibold text-primary`}
+                                    >
+                                        Login
+                                    </h1>
+                                </div>
                             )}
                         </div>
                         <div
                             className={`${
                                 isDetailOpen ? "flex absolute" : "hidden"
-                            } flex-col top-[152px] w-52 bg-light border gap-1 p-2 rounded-md lg:top-8 lg:right-0`}
+                            } flex-col top-[152px] w-44 bg-third border gap-1 p-2 rounded-md lg:top-12 lg:right-0`}
                         >
                             <EachUtils
                                 of={!isLogin ? loginList : dashboardList}

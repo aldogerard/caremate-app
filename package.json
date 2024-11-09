@@ -38,6 +38,7 @@
         "react-tailwindcss-datepicker": "^1.7.2",
         "react-tailwindcss-select": "^1.8.5",
         "redux": "^5.0.1",
+        "rehype-raw": "^7.0.0",
         "remark-gfm": "^4.0.0",
         "sweetalert2": "^11.14.4",
         "swiper": "^11.1.14",

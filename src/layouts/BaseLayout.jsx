@@ -12,8 +12,8 @@ const BaseLayouts = () => {
     return (
         <>
             <Header />
-            <section className="flex justify-center">
-                <main className="container py-16 min-h-screen padding">
+            <section className="flex justify-center bg-third">
+                <main className="container py-16 min-h-screen padding overflow-hidden scrollbar-hide">
                     <Outlet />
                 </main>
             </section>

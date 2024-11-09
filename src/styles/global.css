@@ -21,7 +21,7 @@ body {
 }
 
 .container {
-    @apply w-[460px] lg:w-[1280px];
+    @apply w-[460px] xl:w-[1080px] 2xl:w-[1360px];
 }
 
 .auth-container {
@@ -78,4 +78,10 @@ tr {
 
 html {
     scroll-behavior: smooth;
+    @apply scrollbar-hide lg:scrollbar-default;
+}
+
+.paragraph {
+    margin-bottom: 12px;
+    text-indent: 40px;
 }
