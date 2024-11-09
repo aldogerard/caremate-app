@@ -1,72 +1,220 @@
-import { FaUserFriends } from "react-icons/fa";
-import { FaMoneyCheck, FaSchool } from "react-icons/fa6";
-import { TbClock } from "react-icons/tb";
+import CardWithChart from "@/components/dashboard/admin/CardWithChart";
+import Title from "@/components/dashboard/Title";
+import Loader from "@/components/Loader";
+import { getAdminReport } from "@/redux/feature/admin/adminReportSlice";
+import EachUtils from "@/utils/EachUtils";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import data from "@/data/adminDataDashboard.json";
+import { IoPersonOutline, IoWalletOutline } from "react-icons/io5";
+import { FormatRupiah } from "@arismun/format-rupiah";
 import { Link } from "react-router-dom";
+import CardBasic from "@/components/dashboard/admin/CardBasic";
+import { BsTree } from "react-icons/bs";
+import { MdBroadcastOnHome } from "react-icons/md";
 
 const AdminDashboard = () => {
-    const capitalizeFirstLetter = (string) => {
-        return string
-            .toLowerCase()
-            .split(" ")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
-    };
+    const dispatch = useDispatch();
+    const { report } = useSelector((state) => state.adminReport);
+    const [datas, setDatas] = useState(data);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetch = async () => {
+            try {
+                setIsLoading(true);
+                await dispatch(getAdminReport()).unwrap();
+            } catch (error) {
+                console.error("Error fetching : ", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetch();
+    }, []);
+
+    useEffect(() => {
+        if (report === null) return;
+        const updatedDatas = datas.map((item) => {
+            const {
+                totalCampaignActive,
+                totalCampaignCompleted,
+                totalCampaignInReview,
+                totalCampaignRejected,
+                totalPartnerInReview,
+                totalPartnerRejected,
+                totalPartnerUnverified,
+                totalPartnerVerified,
+                totalWithdrawalApproved,
+                totalWithdrawalPending,
+                totalWithdrawalReject,
+            } = report;
+            switch (item.name) {
+                case "Partners":
+                    return {
+                        ...item,
+                        data:
+                            totalPartnerUnverified +
+                            totalPartnerInReview +
+                            totalPartnerVerified +
+                            totalPartnerRejected,
+                        dataChart: {
+                            labels: [
+                                "Unverified",
+                                "In Review",
+                                "Verified",
+                                "Rejected",
+                            ],
+                            datasets: [
+                                {
+                                    data: [
+                                        totalPartnerUnverified,
+                                        totalPartnerInReview,
+                                        totalPartnerVerified,
+                                        totalPartnerRejected,
+                                    ],
+                                    backgroundColor: [
+                                        "#F43F5E",
+                                        "#FB7185",
+                                        "#FDA4AF",
+                                        "#FECDD3",
+                                    ],
+                                },
+                            ],
+                        },
+                    };
+                case "Campaigns":
+                    return {
+                        ...item,
+                        data:
+                            totalCampaignInReview +
+                            totalCampaignActive +
+                            totalCampaignCompleted +
+                            totalCampaignRejected,
+                        dataChart: {
+                            labels: [
+                                "In Review",
+                                "Active",
+                                "Completed",
+                                "Rejected",
+                            ],
+                            datasets: [
+                                {
+                                    data: [
+                                        totalCampaignInReview,
+                                        totalCampaignActive,
+                                        totalCampaignCompleted,
+                                        totalCampaignRejected,
+                                    ],
+                                    backgroundColor: [
+                                        "#3B82F6",
+                                        "#60A5FA",
+                                        "#7DD3FC",
+                                        "#BAE6FD",
+                                    ],
+                                },
+                            ],
+                        },
+                    };
+                case "Withdrawals":
+                    return {
+                        ...item,
+                        data:
+                            totalWithdrawalPending +
+                            totalWithdrawalApproved +
+                            totalWithdrawalReject,
+                        dataChart: {
+                            labels: ["Pending", "Aproved", "Rejected"],
+                            datasets: [
+                                {
+                                    data: [
+                                        totalWithdrawalPending,
+                                        totalWithdrawalApproved,
+                                        totalWithdrawalReject,
+                                    ],
+                                    backgroundColor: [
+                                        "#F59E0B",
+                                        "#FBBF24",
+                                        "#FCD34D",
+                                    ],
+                                },
+                            ],
+                        },
+                    };
+                default:
+                    return item;
+            }
+        });
+        setDatas(updatedDatas);
+    }, [report]);
 
     return (
         <>
-            <div className="w-full py-2 mb-10 border-b border-black/70">
-                <h1 className="text-xl md:text-4xl font-medium text-black">
-                    Dashboard
-                </h1>
-            </div>
-            <div className="flex justify-start gap-4">
-                <Link
-                    to={"/dashboard/admin/partner"}
-                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
-                >
-                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
-                        <FaUserFriends size={52} className="text-primary" />
-                    </div>
-                    <h1 className="font-light mt-8 mb-2 text-black">Partner</h1>
-                    <div className="flex items-end gap-2">
-                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
-                            32
-                        </h2>
-                    </div>
-                </Link>
-                <Link
-                    to={"/dashboard/admin/campaign"}
-                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
-                >
-                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
-                        <FaSchool size={52} className="text-primary" />
-                    </div>
-                    <h1 className="font-light mt-8 mb-2 text-black">
-                        Campaign
-                    </h1>
-                    <div className="flex items-end gap-2">
-                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
-                            7
-                        </h2>
-                    </div>
-                </Link>
-                <Link
-                    to={"/dashboard/admin/withdrawal"}
-                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
-                >
-                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
-                        <FaMoneyCheck size={52} className="text-primary" />
-                    </div>
-                    <h1 className="font-light mt-8 mb-2 text-black">
-                        Withdrawal
-                    </h1>
-                    <div className="flex items-end gap-2">
-                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
-                            3
-                        </h2>
-                    </div>
-                </Link>
-            </div>
+            <Title name={"Dashboard"} />
+            {!isLoading && (
+                <div className="flex flex-wrap gap-4">
+                    {report ? (
+                        <>
+                            <CardBasic
+                                link={"donor"}
+                                data={report.totalDonor}
+                                name={"Registered Donors"}
+                                icon={
+                                    <IoPersonOutline className="text-5xl font-light text-yellow-500" />
+                                }
+                                style={"bg-yellow-500/15"}
+                            />
+                            <CardBasic
+                                link={"withdrawal"}
+                                type={"money"}
+                                data={report.totalIncome}
+                                name={"Total Income"}
+                                icon={
+                                    <IoWalletOutline className="text-5xl font-light text-red-500" />
+                                }
+                                style={"bg-red-500/15"}
+                            />
+                            <CardBasic
+                                link={null}
+                                data={report.totalDonationTree}
+                                type={"money"}
+                                name={"Tree Donation"}
+                                icon={
+                                    <BsTree className="text-5xl font-light text-emerald-500" />
+                                }
+                                style={"bg-emerald-500/15"}
+                            />
+                            <CardBasic
+                                link={null}
+                                data={report.totalDonationOperation}
+                                type={"money"}
+                                name={"Operational Donation"}
+                                icon={
+                                    <MdBroadcastOnHome className="text-5xl font-light text-indigo-500" />
+                                }
+                                style={"bg-indigo-500/15"}
+                            />
+                            <div className="w-max flex flex-wrap gap-4">
+                                <EachUtils
+                                    of={datas}
+                                    render={(item) => (
+                                        <CardWithChart item={item} />
+                                    )}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <div className="flex w-full justify-center items-center h-[70vh]">
+                            <h1 className="text-dark/80 text-lg">
+                                Server not responding
+                            </h1>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {isLoading && <Loader />}
         </>
     );
 };

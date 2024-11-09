@@ -1,9 +1,11 @@
-import { clear, login } from "@/redux/feature/authSlice";
+import { clearAuthStatus, login } from "@/redux/feature/authSlice";
 import { Failed, Success } from "@/utils/AlertUtil";
+import { validateEmail, validatePassword } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
-import { FaEye, FaEyeSlash, FaSeedling } from "react-icons/fa6";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "@/assets/images/logo.webp";
 
 const image = "https://account.enigmacamp.com/2.jpg";
 
@@ -20,7 +22,6 @@ const LoginPartner = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { status } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (!isMount) {
@@ -37,46 +38,9 @@ const LoginPartner = () => {
         );
     }, [auth]);
 
-    const validateEmail = (str) => {
-        const regex = /^[\w.-]+@[\w.-]+\.\w+$/;
-        return regex.test(str);
-    };
-
-    const validatePassword = (str) => {
-        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-        return regex.test(str);
-    };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setAuth((state) => ({ ...state, [name]: value }));
-    };
-
-    useEffect(() => {
-        if (status !== null) {
-            if (status === "Logged in successfully") {
-                dispatch(clear());
-                // Success("Successfully login");
-                return navigate("/");
-            } else {
-                Failed(status || "Failed to login");
-            }
-            dispatch(clear());
-        }
-    }, [status]);
-
-    const handleSubmit = async (e) => {
-        try {
-            e.preventDefault();
-            dispatch(login(auth));
-            e.target.reset();
-            setAuth({
-                email: "",
-                password: "",
-            });
-        } catch (error) {
-            // console.log(error)
-        }
     };
 
     const handleClick = () => {
@@ -91,14 +55,41 @@ const LoginPartner = () => {
         setIsFocus(false);
     };
 
+    const handleSubmit = async (e) => {
+        try {
+            e.preventDefault();
+            e.target.reset();
+            setAuth({
+                email: "",
+                password: "",
+            });
+
+            await dispatch(login(auth)).unwrap();
+
+            Success("Successfully login");
+
+            dispatch(clearAuthStatus());
+            return navigate("/");
+        } catch (error) {
+            Failed(error.message);
+            dispatch(clearAuthStatus());
+        }
+    };
+
     return (
         <section className="h-full flex">
             <aside className="hidden lg:flex lg:w-2/3">
                 <img src={image} alt="hero" />
             </aside>
             <main className="flex flex-col h-full items-center pt-32 py-20 lg:w-1/3">
-                <div className="flex justify-center items-center w-max">
-                    <FaSeedling className="text-primary text-4xl lg:text-6xl" />
+                <div className="flex gap-3 justify-center items-center w-max">
+                    <div className="w-14 h-14">
+                        <img
+                            src={logo}
+                            alt="Logo"
+                            className="w-full h-full object-contain"
+                        />
+                    </div>
                     <h1 className="text-xl font-semibold text-primary lg:text-3xl">
                         CareMate
                     </h1>

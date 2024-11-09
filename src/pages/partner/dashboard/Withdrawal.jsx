@@ -1,53 +1,132 @@
 import CardCampaign from "@/components/dashboard/partner/CardCampaign";
 import CardWithdrawal from "@/components/dashboard/partner/CardWithDrawal";
+import Title from "@/components/dashboard/Title";
+import Filter from "@/components/Filter";
 import EachUtils from "@/utils/EachUtils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const sub = [
+import { getWithdrawalByPartnerId } from "@/redux/feature/partner/withdrawalSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "@/components/Loader";
+import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
+import InputSearch from "@/components/dashboard/InputSearch";
+import Pagination from "@/components/Pagination";
+
+const data = [
     {
-        name: "Pending",
+        name: "PENDING",
     },
     {
-        name: "Completed",
+        name: "APPROVED",
+    },
+    {
+        name: "REJECTED",
     },
 ];
 
 const Withdrawal = () => {
-    const [filter, setFilter] = useState("Pending");
+    const dispatch = useDispatch();
+
+    const { user } = useSelector((state) => state.auth);
+    const { partner } = useSelector((state) => state.partner);
+    const { withdrawals, paging } = useSelector((state) => state.withdrawal);
+
+    const [filter, setFilter] = useState(data[0].name);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentQuery, setCurrentQuery] = useState("");
+
+    useEffect(() => {
+        if (user?.id) {
+            fetch();
+        }
+    }, [user, filter, currentPage, currentQuery]);
+
+    const handlePageClick = (event) => {
+        setCurrentPage(event.selected);
+    };
+
+    const handleSearch = async (query) => {
+        setCurrentQuery(query);
+        setIsLoading(true);
+        try {
+            await dispatch(
+                getWithdrawalByPartnerId({
+                    id: user.id,
+                    status: filter,
+                    page: 0,
+                    query: query,
+                })
+            ).unwrap();
+            setCurrentPage(0);
+        } catch (error) {
+            console.error("Error fetching campaigns:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const fetch = async () => {
+        try {
+            await dispatch(getDetailPartner(user.id)).unwrap();
+            await dispatch(
+                getWithdrawalByPartnerId({
+                    id: user.id,
+                    status: filter,
+                    page: currentPage,
+                    query: currentQuery,
+                })
+            ).unwrap();
+        } catch (error) {
+            console.error("Error fetching campaigns:", error);
+        }
+    };
 
     return (
         <>
-            <div className="w-full py-2 pb-4 flex justify-between items-center mb-10 border-b border-black/70">
-                <h1 className="text-xl md:text-4xl font-medium text-black">
-                    Withdrawal
-                </h1>
-            </div>
-            <div className="flex py-2 mb-6 gap-8 justify-start overflow-scroll">
-                <EachUtils
-                    of={sub}
-                    render={(item) => (
-                        <h1
-                            onClick={() => setFilter(item.name)}
-                            className={`font-normal text-center w-24 cursor-pointer ${
-                                filter === item.name &&
-                                "text-black border-primary border-b transition-template"
-                            } `}
-                        >
-                            {item.name}
-                        </h1>
+            <Title name={"Withdrawal"} />
+            {partner && (
+                <>
+                    <Filter data={data} setFilter={setFilter} filter={filter} />
+
+                    <InputSearch
+                        name="withdrawal"
+                        handleSearch={handleSearch}
+                        filter={filter}
+                    />
+
+                    {!isLoading && (
+                        <>
+                            {withdrawals?.length > 0 ? (
+                                <>
+                                    <div className="grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 grid-rows-subgrid gap-4">
+                                        <EachUtils
+                                            of={withdrawals}
+                                            render={(item) => (
+                                                <CardWithdrawal
+                                                    withdrawal={item}
+                                                    status={filter}
+                                                />
+                                            )}
+                                        />
+                                    </div>
+                                    <Pagination
+                                        paging={paging}
+                                        handlePageClick={handlePageClick}
+                                    />
+                                </>
+                            ) : (
+                                <div className="flex text-black justify-center items-center h-[50vh]">
+                                    <h1>Withdrawal Not Found</h1>
+                                </div>
+                            )}
+                        </>
                     )}
-                />
-            </div>
-            <div className="flex flex-col gap-4 w-full mt-10 lg:flex-row lg:flex-wrap lg:justify-start">
-                <EachUtils
-                    of={sub}
-                    render={(item) =>
-                        filter === "Pending" && (
-                            <CardWithdrawal status={filter} />
-                        )
-                    }
-                />
-            </div>
+                    {isLoading && <Loader />}
+                </>
+            )}
+            {!partner && <Loader />}
         </>
     );
 };

@@ -1,10 +1,43 @@
-import { Failed } from "@/utils/AlertUtil";
+import { Confirm, Failed, Message, Success } from "@/utils/AlertUtil";
+import { validateFile } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
+import FileVerif from "./Input/FileVerif";
+import EachUtils from "@/utils/EachUtils";
+import Button from "@/components/Button";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    createDocumentPartner,
+    getDetailPartner,
+    updateDocumentPartner,
+} from "@/redux/feature/partner/partnerSlice";
+
+const data = [
+    {
+        title: "Certification of Foundation Estabishment",
+        name: "cfe",
+    },
+    {
+        title: "Financial Report",
+        name: "fr",
+    },
+    {
+        title: "Registered Certificate",
+        name: "rc",
+    },
+    {
+        title: "Foundation Financial Plan",
+        name: "ffp",
+    },
+    {
+        title: "Bank Account",
+        name: "ba",
+    },
+];
 
 const FormVerif = (props) => {
-    const { handleSubmitVerif } = props;
+    const { partner, handleIsEditDocument, setIsEditDocument } = props;
 
-    const [formData, setFormData] = useState({
+    const [document, setDocument] = useState({
         cfe: "",
         fr: "",
         rc: "",
@@ -12,162 +45,133 @@ const FormVerif = (props) => {
         ba: "",
     });
 
-    const handleChange = (e) => {
-        const maxSize = 1 * 1024 * 1024;
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
+
+    const handleChangeFile = (e) => {
         const { name, files } = e.target;
-        if (files[0].size <= maxSize) {
-            return setFormData({ ...formData, [name]: files[0] });
+        if (files.length < 1) {
+            return setDocument({ ...document, [name]: "" });
         }
-        return Failed("Maximum files is 1MB");
+        if (validateFile(files, "pdf")) {
+            return setDocument({ ...document, [name]: files[0] });
+        } else {
+            return setDocument({ ...document, [name]: "" });
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleSubmitVerif(formData);
+
+        const data = new FormData();
+
+        Object.entries(document).forEach(([key, value]) => {
+            data.append(key, value);
+        });
+
+        const { cfeFileName, frFileName, rcFileName, ffpFileName, baFileName } =
+            partner;
+        if (
+            cfeFileName == null &&
+            frFileName == null &&
+            rcFileName == null &&
+            ffpFileName == null &&
+            baFileName == null
+        ) {
+            const { cfe, fr, rc, ffp, ba } = document;
+            if (cfe == "" || fr == "" || rc == "" || ffp == "" || ba == "") {
+                return Failed("Please upload all files");
+            }
+            Confirm("Upload document verification", () => {
+                return handleSubmitVerification("upload", data);
+            });
+        } else {
+            Confirm(
+                "Changing the document will set the foundation status to In Review",
+                () => {
+                    return handleSubmitVerification("edit", data);
+                }
+            );
+        }
+    };
+
+    const handleSubmitVerification = async (type, data) => {
+        try {
+            if (type === "upload") {
+                await dispatch(
+                    createDocumentPartner({ id: user.id, data: data })
+                ).unwrap();
+            } else {
+                await dispatch(
+                    updateDocumentPartner({
+                        id: user.id,
+                        data: data,
+                    })
+                ).unwrap();
+            }
+            Success("Successfully submit document");
+        } catch (error) {
+            console.log(error);
+            Failed("Failed verification document");
+        } finally {
+            setIsEditDocument(false);
+            setDocument({
+                cfe: "",
+                fr: "",
+                rc: "",
+                ffp: "",
+                ba: "",
+            });
+            await dispatch(getDetailPartner(user.id)).unwrap();
+        }
+    };
+
+    const handleClickMessage = () => {
+        Message(partner.message);
     };
 
     return (
         <>
-            <form onSubmit={handleSubmit} encType="multipart/form-data">
-                <p className="text-xs lg:text-sm font-medium text-error mb-6">
-                    *Maximum files is 1MB
+            <div className="flex justify-between items-end mb-6">
+                <p className="text-xs lg:text-sm font-medium text-error">
+                    Maximum files is 1MB (.pdf)
                 </p>
+                {partner.status === "REJECTED" && (
+                    <Button
+                        type={"button"}
+                        name={"Message"}
+                        onClick={handleClickMessage}
+                    />
+                )}
+            </div>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="flex flex-col gap-2 gap-y-6 w-full items-end lg:flex-row lg:flex-wrap lg:justify-between">
-                    <div className="flex flex-col gap-1 w-full lg:w-[32%]">
-                        <div className="flex justify-between items-center">
-                            <label htmlFor="cfe" className="text-black/80">
-                                Certification of Foundation Estabishment
-                            </label>
-                        </div>
-                        <div className="border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-28">
-                            <h1
-                                className={`text-sm lg:text-lg font-medium text-accent ${
-                                    formData.cfe?.name && "text-black/80"
-                                }`}
-                            >
-                                {formData.cfe?.name || "Upload your file"}
-                            </h1>
-                            <input
-                                type="file"
-                                required
-                                id="cfe"
-                                name="cfe"
-                                onChange={handleChange}
-                                multiple
-                                accept=".pdf"
-                                className={`absolute w-full h-full opacity-0 cursor-pointer`}
+                    <EachUtils
+                        of={data}
+                        render={(item) => (
+                            <FileVerif
+                                title={item.title}
+                                name={item.name}
+                                document={document}
+                                handleChangeFile={handleChangeFile}
                             />
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-1 w-full lg:w-[32%]">
-                        <div className="flex justify-between items-center">
-                            <label htmlFor="fr" className="text-black/80">
-                                Financial Report
-                            </label>
-                        </div>
-                        <div className="border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-28">
-                            <h1
-                                className={`text-sm lg:text-lg font-medium text-accent ${
-                                    formData.fr?.name && "text-black/80"
-                                }`}
-                            >
-                                {formData.fr?.name || "Upload your file"}
-                            </h1>
-                            <input
-                                type="file"
-                                required
-                                id="fr"
-                                name="fr"
-                                onChange={handleChange}
-                                accept=".pdf"
-                                className="absolute w-full h-full opacity-0 cursor-pointer"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-1 w-full lg:w-[32%]">
-                        <div className="flex justify-between items-center">
-                            <label htmlFor="rc" className="text-black/80">
-                                Registered Certificate
-                            </label>
-                        </div>
-                        <div className="border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-28">
-                            <h1
-                                className={`text-sm lg:text-lg font-medium text-accent ${
-                                    formData.rc?.name && "text-black/80"
-                                }`}
-                            >
-                                {formData.rc?.name || "Upload your file"}
-                            </h1>
-                            <input
-                                type="file"
-                                required
-                                id="rc"
-                                name="rc"
-                                onChange={handleChange}
-                                accept=".pdf"
-                                className="absolute w-full h-full opacity-0 cursor-pointer"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-1 w-full lg:w-[32%]">
-                        <div className="flex justify-between items-center">
-                            <label htmlFor="ffp" className="text-black/80">
-                                Foundation Financial Plan
-                            </label>
-                        </div>
-                        <div className="border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-28">
-                            <h1
-                                className={`text-sm lg:text-lg font-medium text-accent ${
-                                    formData.ffp?.name && "text-black/80"
-                                }`}
-                            >
-                                {formData.ffp?.name || "Upload your file"}
-                            </h1>
-                            <input
-                                type="file"
-                                required
-                                id="ffp"
-                                name="ffp"
-                                onChange={handleChange}
-                                accept=".pdf"
-                                className="absolute w-full h-full opacity-0 cursor-pointer"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-1 w-full lg:w-[32%]">
-                        <div className="flex justify-between items-center">
-                            <label htmlFor="ba" className="text-black/80">
-                                Bank Account
-                            </label>
-                        </div>
-                        <div className="border-dashed overflow-hidden border flex relative justify-center items-center border-accent rounded-md h-28">
-                            <h1
-                                className={`text-sm lg:text-lg font-medium text-accent ${
-                                    formData.ba?.name && "text-black/80"
-                                }`}
-                            >
-                                {formData.ba?.name || "Upload your file"}
-                            </h1>
-                            <input
-                                type="file"
-                                required
-                                id="ba"
-                                name="ba"
-                                onChange={handleChange}
-                                accept=".pdf"
-                                className="absolute w-full h-full opacity-0 cursor-pointer"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-1 w-full lg:w-[32%]" />
+                        )}
+                    />
+                    <div className="w-[32%]"></div>
                 </div>
-                <div className="text-lg mt-8 flex gap-2 justify-end border-t pt-8">
-                    <button
-                        type="submit"
-                        className={`bg-primary w-full lg:w-max py-3 lg:py-2 px-8 text-sm lg:text-lg rounded-md shadow-md text-light font-semibold outline-none hover:bg-emerald-600 `}
-                    >
-                        Submit
-                    </button>
+                <div className="text-lg mt-8 flex gap-2 justify-end">
+                    <Button type={"submit"} name={"Submit"} />
+                    {partner?.cfe == null &&
+                        partner?.fr == null &&
+                        partner?.rc == null &&
+                        partner?.ffp == null &&
+                        partner?.ba == null && (
+                            <Button
+                                type={"reset"}
+                                name={"Cancel"}
+                                onClick={handleIsEditDocument}
+                            />
+                        )}
                 </div>
             </form>
         </>

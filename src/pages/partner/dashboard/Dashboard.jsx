@@ -1,84 +1,193 @@
-import React, { useEffect, useState } from "react";
-import { FaMoneyCheck, FaSchool } from "react-icons/fa6";
-import { TbClock } from "react-icons/tb";
-import { useSelector } from "react-redux";
+import CardWithChart from "@/components/dashboard/admin/CardWithChart";
+import Title from "@/components/dashboard/Title";
+import Loader from "@/components/Loader";
+import { getPartnerReport } from "@/redux/feature/partner/partnerReportSlice";
+import EachUtils from "@/utils/EachUtils";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import data from "@/data/dataDashboard.json";
+import { IoPersonOutline, IoWalletOutline } from "react-icons/io5";
+import CardBasic from "@/components/dashboard/admin/CardBasic";
+import { limitText } from "@/utils/Utils";
 import { Link } from "react-router-dom";
+import { FormatRupiah } from "@arismun/format-rupiah";
+import TableDisplay from "@/components/dashboard/admin/TableDisplay";
+import { getCampaignByPartnerId } from "@/redux/feature/admin/adminCampaignSlice";
+import { getWithdrawalByPartnerId } from "@/redux/feature/partner/withdrawalSlice";
 
 const Dashboard = () => {
-    const { currentPartner } = useSelector((state) => state.partner);
-    const [status, setStatus] = useState("Unverified");
+    const dispatch = useDispatch();
+    const { report } = useSelector((state) => state.partnerReport);
+    const { user } = useSelector((state) => state.auth);
+
+    const { campaigns } = useSelector((state) => state.campaign);
+    const { withdrawals } = useSelector((state) => state.withdrawal);
+
+    const [datas, setDatas] = useState(data);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (currentPartner !== null) {
-            setStatus(currentPartner.status);
-        }
-    }, [currentPartner]);
+        const fetch = async () => {
+            try {
+                setIsLoading(true);
+                await dispatch(getPartnerReport(user.id)).unwrap();
+                await dispatch(
+                    getCampaignByPartnerId({ id: user.id, size: 3 })
+                ).unwrap();
+                await dispatch(
+                    getWithdrawalByPartnerId({ id: user.id, size: 3 })
+                ).unwrap();
+            } catch (error) {
+                console.error("Error fetching : ", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    const capitalizeFirstLetter = (string) => {
-        return string
-            .toLowerCase()
-            .split(" ")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
-    };
+        fetch();
+    }, []);
+
+    useEffect(() => {
+        if (report === null) return;
+        const updatedDatas = datas.map((item) => {
+            const {
+                totalCampaignInReview,
+                totalCampaignActive,
+                totalCampaignCompleted,
+                totalCampaignRejected,
+                totalWithdrawalApproved,
+                totalWithdrawalPending,
+                totalWithdrawalReject,
+            } = report;
+            switch (item.name) {
+                case "Campaigns":
+                    return {
+                        ...item,
+                        data:
+                            totalCampaignInReview +
+                            totalCampaignActive +
+                            totalCampaignCompleted +
+                            totalCampaignRejected,
+                        dataChart: {
+                            labels: [
+                                "In Review",
+                                "Active",
+                                "Completed",
+                                "Rejected",
+                            ],
+                            datasets: [
+                                {
+                                    data: [
+                                        totalCampaignInReview,
+                                        totalCampaignActive,
+                                        totalCampaignCompleted,
+                                        totalCampaignRejected,
+                                    ],
+                                    backgroundColor: [
+                                        "#F43F5E",
+                                        "#FB7185",
+                                        "#FDA4AF",
+                                        "#FECDD3",
+                                    ],
+                                },
+                            ],
+                        },
+                    };
+                case "Withdrawals":
+                    return {
+                        ...item,
+                        data:
+                            totalWithdrawalPending +
+                            totalWithdrawalApproved +
+                            totalWithdrawalReject,
+                        dataChart: {
+                            labels: ["Pending", "Aproved", "Rejected"],
+                            datasets: [
+                                {
+                                    data: [
+                                        totalWithdrawalPending,
+                                        totalWithdrawalApproved,
+                                        totalWithdrawalReject,
+                                    ],
+                                    backgroundColor: [
+                                        "#F59E0B",
+                                        "#FBBF24",
+                                        "#FCD34D",
+                                    ],
+                                },
+                            ],
+                        },
+                    };
+                default:
+                    return item;
+            }
+        });
+        setDatas(updatedDatas);
+    }, [report]);
 
     return (
         <>
-            <div className="w-full py-2 mb-10 border-b border-black/70">
-                <h1 className="text-xl md:text-4xl font-medium text-black">
-                    Dashboard
-                </h1>
-            </div>
-            <div className="flex justify-start gap-4">
-                <Link
-                    to={"/dashboard/partner/profile"}
-                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
-                >
-                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
-                        <TbClock size={52} className="text-primary" />
-                    </div>
-                    <h1 className="font-light mt-8 mb-2 text-black">
-                        Status Fondation
-                    </h1>
-                    <div className="flex items-end gap-2">
-                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
-                            {capitalizeFirstLetter(status)}
-                        </h2>
-                    </div>
-                </Link>
-                <Link
-                    to={"/dashboard/partner/campaign"}
-                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
-                >
-                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
-                        <FaSchool size={52} className="text-primary" />
-                    </div>
-                    <h1 className="font-light mt-8 mb-2 text-black">
-                        Campaign
-                    </h1>
-                    <div className="flex items-end gap-2">
-                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
-                            7
-                        </h2>
-                    </div>
-                </Link>
-                <Link
-                    to={"/dashboard/partner/withdrawal"}
-                    className={`flex flex-col w-full lg:w-max lg:min-w-[200px] overflow-hidden rounded-2xl  bg-white px-4 py-6 shadow-md border`}
-                >
-                    <div className={`rounded-2xl bg-primary/15 p-2 w-max`}>
-                        <FaMoneyCheck size={52} className="text-primary" />
-                    </div>
-                    <h1 className="font-light mt-8 mb-2 text-black">
-                        Withdrawal
-                    </h1>
-                    <div className="flex items-end gap-2">
-                        <h2 className="text-4xl font-semibold leading-none text-slate-800/80">
-                            3
-                        </h2>
-                    </div>
-                </Link>
-            </div>
+            <Title name={"Dashboard"} />
+            {!isLoading && (
+                <div className="flex flex-wrap gap-4 w-full">
+                    {report ? (
+                        <>
+                            <div className="flex flex-wrap gap-4">
+                                <CardBasic
+                                    link={"profile"}
+                                    data={report.statusPartner}
+                                    name={"Status Foundation"}
+                                    icon={
+                                        <IoPersonOutline className="text-5xl font-light text-blue-500" />
+                                    }
+                                    style={"bg-blue-500/15"}
+                                />
+                                <CardBasic
+                                    link={"withdrawal"}
+                                    data={report.totalFund}
+                                    type={"money"}
+                                    name={"Total Fund"}
+                                    icon={
+                                        <IoWalletOutline className="text-5xl font-light text-emerald-500" />
+                                    }
+                                    style={"bg-emerald-500/15"}
+                                />
+                            </div>
+
+                            <div className=" flex flex-wrap gap-4 ">
+                                <EachUtils
+                                    of={datas}
+                                    render={(item) => (
+                                        <CardWithChart item={item} />
+                                    )}
+                                />
+                            </div>
+                            <TableDisplay
+                                link="/dashboard/partner/campaign"
+                                name="Campaigns"
+                                header={["Title", "Category"]}
+                                data={campaigns}
+                                item={["title", "category"]}
+                            />
+                            <TableDisplay
+                                link="/dashboard/partner/withdrawal"
+                                name="Withdrawals"
+                                header={["Title", "Raise Amount"]}
+                                data={withdrawals}
+                                item={["camptitle", "category"]}
+                            />
+                        </>
+                    ) : (
+                        <div className="flex w-full justify-center items-center h-[70vh]">
+                            <h1 className="text-dark/80 text-lg">
+                                Server not responding
+                            </h1>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {isLoading && <Loader />}
         </>
     );
 };

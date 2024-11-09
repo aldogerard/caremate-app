@@ -1,157 +1,105 @@
-import FormProfile from "@/components/dashboard/partner/FormProfile";
-import FormVerif from "@/components/dashboard/partner/FormVerif";
-import {
-    createPartnerDoc,
-    fetchPartnerDocByUserId,
-} from "@/redux/feature/PartnerDocSlice";
-import { fetchPartnerById, updatePartner } from "@/redux/feature/PartnerSlice";
-import { Failed, SuccessUpdate } from "@/utils/AlertUtil";
-import EachUtils from "@/utils/EachUtils";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const sub = [
+import Title from "@/components/dashboard/Title";
+import Filter from "@/components/Filter";
+import FormProfile from "@/components/dashboard/partner/FormProfile";
+import FormVerif from "@/components/dashboard/partner/FormVerif";
+import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
+
+import Loader from "@/components/Loader";
+import Button from "@/components/Button";
+import StatusMessage from "@/components/dashboard/partner/StatusMessage";
+import DocumentButtons from "@/components/dashboard/partner/DocumentButtons";
+import FormPassword from "@/components/dashboard/partner/FormPassword";
+
+const data = [
     {
         name: "Edit Profile",
-        filt: "edit",
     },
     {
         name: "Verification",
-        filt: "verif",
     },
 ];
 
 const Profile = () => {
-    const [isEdit, setIsEdit] = useState(false);
-    const [filter, setFilter] = useState("edit");
-
     const dispatch = useDispatch();
-    const { id } = useSelector((state) => state.auth);
-    const { currentPartner } = useSelector((state) => state.partner);
-    const { currentPartnerDoc, url } = useSelector((state) => state.partnerDoc);
 
-    const [status, setStatus] = useState("UNVERIFIED");
+    const { user } = useSelector((state) => state.auth);
+    const { partner } = useSelector((state) => state.partner);
+
+    const [filter, setFilter] = useState(data[0].name);
+    const [isEdit, setIsEdit] = useState(false);
+    const [isEditDocument, setIsEditDocument] = useState(false);
 
     useEffect(() => {
-        if (currentPartner !== null) {
-            setStatus(currentPartner.status);
+        if (user?.id) {
+            fetchPartnerDetails();
         }
-    }, [currentPartner]);
+    }, [user]);
 
-    useEffect(() => {
+    const fetchPartnerDetails = async () => {
         try {
-            dispatch(fetchPartnerById({ id }));
-        } catch (error) {}
-    }, [dispatch]);
+            await dispatch(getDetailPartner(user.id)).unwrap();
+        } catch (error) {
+            console.error("Error fetching : ", error);
+        }
+    };
 
-    useEffect(() => {
-        try {
-            dispatch(fetchPartnerDocByUserId({ id }));
-        } catch (error) {}
-    }, [dispatch]);
-
-    const handleClickEdit = () => {
+    const handleClickEditProfile = () => {
         setIsEdit((state) => !state);
     };
 
-    const handleSubmit = async (updatedPartner) => {
-        try {
-            const partner = { ...updatedPartner, userId: id };
-            await dispatch(updatePartner(partner))
-                .unwrap()
-                .then(() => {
-                    SuccessUpdate();
-                })
-                .catch(() => {
-                    Failed("Failed to update");
-                });
-            dispatch(fetchPartnerById({ id }));
-        } catch (error) {
-        } finally {
-            handleClickEdit();
-        }
-    };
-
-    useEffect(() => {
-        if (url) {
-            window.open(url, "_blank");
-        }
-    }, [url]);
-
-    const handleSubmitVerif = async (formData) => {
-        const doc = new FormData();
-
-        const entries = Object.entries(formData);
-        entries.forEach(([key, value]) => {
-            doc.append(key, value);
-        });
-        doc.append("userId", id);
-
-        try {
-            await dispatch(createPartnerDoc(doc))
-                .unwrap()
-                .then(() => {
-                    alert("Successfully submit partner document");
-                })
-                .catch(() => {
-                    alert("Failed submit partner document");
-                });
-        } catch (error) {}
+    const handleIsEditDocument = () => {
+        setIsEditDocument((state) => !state);
     };
 
     return (
         <>
-            <div className="w-full py-2 mb-10 border-b border-black/70">
-                <h1 className="text-xl md:text-4xl font-medium text-black">
-                    Profile
-                </h1>
-            </div>
-            <div className="flex py-2 mb-6 gap-8 justify-start">
-                <EachUtils
-                    of={sub}
-                    render={(item) => (
-                        <h1
-                            onClick={() => setFilter(item.filt)}
-                            className={`font-normal text-center w-24 cursor-pointer ${
-                                filter === item.filt &&
-                                "text-black border-primary border-b transition-template"
-                            } `}
-                        >
-                            {item.name}
-                        </h1>
-                    )}
-                />
-            </div>
-            {filter === "edit" && (
-                <FormProfile
-                    handleClickEdit={handleClickEdit}
-                    isEdit={isEdit}
-                    currentPartner={currentPartner}
-                    handleSubmit={handleSubmit}
-                />
-            )}
-            {filter === "verif" && currentPartnerDoc === null && (
-                <FormVerif
-                    handleSubmitVerif={handleSubmitVerif}
-                    currentPartnerDoc={currentPartnerDoc}
-                />
-            )}
-            {filter === "verif" &&
-                currentPartnerDoc !== null &&
-                status === "UNVERIFIED" && (
-                    <h1 className="text-primary text-center mt-32 text-xs lg:text-lg">
-                        You have submitted a verification request, please wait
-                        for approval
-                    </h1>
-                )}
+            <Title name={"Profile"} />
+            {partner && (
+                <>
+                    <Filter data={data} setFilter={setFilter} filter={filter} />
 
-            {filter === "verif" &&
-                currentPartnerDoc !== null &&
-                status === "VERIFIED" && (
-                    <h1 className="text-primary text-center mt-32 text-xs lg:text-lg">
-                        Your foundation has been successfully verified
-                    </h1>
-                )}
+                    {filter === "Edit Profile" && (
+                        <div className="flex flex-col 2xl:flex-row gap-4">
+                            <FormProfile
+                                isEdit={isEdit}
+                                partner={partner}
+                                handleClickEditProfile={handleClickEditProfile}
+                            />
+                            <FormPassword />
+                        </div>
+                    )}
+
+                    {filter === "Verification" &&
+                        (isEditDocument || partner.status === "UNVERIFIED") && (
+                            <FormVerif
+                                partner={partner}
+                                handleIsEditDocument={handleIsEditDocument}
+                                setIsEditDocument={setIsEditDocument}
+                            />
+                        )}
+
+                    {filter === "Verification" &&
+                        !isEditDocument &&
+                        partner.status !== "UNVERIFIED" && (
+                            <>
+                                <StatusMessage />
+                                <DocumentButtons />
+                                <div className="flex justify-end mt-6">
+                                    <Button
+                                        name={"Edit Document"}
+                                        type={"button"}
+                                        onClick={handleIsEditDocument}
+                                    />
+                                </div>
+                            </>
+                        )}
+                </>
+            )}
+
+            {!partner && <Loader />}
         </>
     );
 };

@@ -8,15 +8,50 @@ import {
     FaChevronLeft,
     FaHeart,
     FaMoneyCheckDollar,
-    FaSeedling,
+    FaPeopleRoof,
     FaUser,
 } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
+import logo from "@/assets/images/logo.webp";
+
+const list = [
+    {
+        name: "Dashboard",
+        link: "/dashboard/admin",
+        icon: <FaThLarge size={14} color="#eee" />,
+        slug: "",
+    },
+    {
+        name: "Partner",
+        link: "/dashboard/admin/partner",
+        icon: <FaPeopleRoof size={14} color="#eee" />,
+        slug: "partner",
+    },
+    {
+        name: "Campaign",
+        link: "/dashboard/admin/campaign",
+        icon: <FaHeart size={14} color="#eee" />,
+        slug: "campaign",
+    },
+    {
+        name: "Withdrawal",
+        link: "/dashboard/admin/withdrawal",
+        icon: <FaMoneyCheckDollar size={14} color="#eee" />,
+        slug: "withdrawal",
+    },
+    {
+        name: "Donor",
+        link: "/dashboard/admin/donor",
+        icon: <FaUser size={14} color="#eee" />,
+        slug: "donor",
+    },
+];
+
 const AdminDashboardLayout = () => {
     const [isOpen, setIsOpen] = useState(window.innerWidth > 1023);
-    const location = useLocation().pathname;
+    const location = useLocation().pathname.split("/")[3] || "";
     const dispatch = useDispatch();
 
     const handleLogout = () => {
@@ -48,29 +83,6 @@ const AdminDashboardLayout = () => {
         };
     }, []);
 
-    const list = [
-        {
-            name: "Dashboard",
-            link: "/dashboard/admin",
-            icon: <FaThLarge size={14} color="#eee" />,
-        },
-        {
-            name: "Partner",
-            link: "/dashboard/admin/partner",
-            icon: <FaUserFriends size={14} color="#eee" />,
-        },
-        {
-            name: "Campaign",
-            link: "/dashboard/admin/campaign",
-            icon: <FaHeart size={14} color="#eee" />,
-        },
-        {
-            name: "Withdrawal",
-            link: "/dashboard/admin/withdrawal",
-            icon: <FaMoneyCheckDollar size={14} color="#eee" />,
-        },
-    ];
-
     return (
         <>
             <section className="flex  bg-dark relative ">
@@ -90,28 +102,34 @@ const AdminDashboardLayout = () => {
 
                     <Link
                         to="/"
-                        className="flex gap-3 w-max self-center items-center justify-start"
+                        className="flex gap-2 w-max self-center items-center justify-start"
                     >
-                        <div className="p-2 bg-primary rounded-md ">
-                            <FaSeedling size={24} color="#171717" />
+                        <div className="w-10 h-10">
+                            <img
+                                src={logo}
+                                alt="Logo"
+                                className="w-full h-full object-contain"
+                            />
                         </div>
                         {isOpen && (
-                            <h1 className="text-light text-xl">CareMate</h1>
+                            <h1 className="text-primary text-xl font-medium">
+                                CareMate
+                            </h1>
                         )}
                     </Link>
 
-                    <main className=" flex flex-col gap-y-2">
+                    <main className=" flex flex-col gap-y-2 h-[74%]">
                         <EachUtils
                             of={list}
                             render={(item) => (
                                 <Link
                                     to={item.link}
-                                    className={`flex gap-4 p-4 rounded-md hover:bg-primary duration-300 items-center ${
+                                    className={`flex gap-4 p-4 py-5 rounded-md hover:bg-primary duration-300 items-center ${
                                         isOpen
                                             ? "justify-start"
                                             : "justify-start"
                                     }  ${
-                                        location === item.link && "bg-primary"
+                                        location === item.slug && "bg-primary"
                                     }`}
                                 >
                                     <div className={`${!isOpen && "mx-auto"}`}>
@@ -149,7 +167,7 @@ const AdminDashboardLayout = () => {
                 </nav>
 
                 <main
-                    className={`bg-white overflow-x-hidden transition-all duration-300 w-full rounded-s-xl py-10 px-6 sm:px-8 md:px-16 relative ${
+                    className={`bg-gray-50 overflow-x-hidden transition-all duration-300 w-full py-10 px-6 sm:px-8 md:px-16 relative ${
                         isOpen ? "ml-56" : "ml-16"
                     } min-h-screen`}
                 >

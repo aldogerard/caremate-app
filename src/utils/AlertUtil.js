@@ -5,7 +5,7 @@ export const Success = (prompt) => {
         toast: true,
         position: "top-end",
         showConfirmButton: false,
-        timer: 3000,
+        timer: 1000,
         timerProgressBar: true,
         didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
@@ -62,9 +62,48 @@ export const Update = (cb) => {
     });
 };
 
+export const Confirm = (prompt, cb) => {
+    Swal.fire({
+        title: "Are you sure?",
+        text: prompt,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes !",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            cb();
+        }
+    });
+};
+
 export const SuccessUpdate = () => {
     Swal.fire({
         icon: "success",
         text: "You already update profile",
+    });
+};
+
+export const InputMessage = async (cb) => {
+    const { value: message } = await Swal.fire({
+        title: "Enter the message",
+        input: "text",
+        showCancelButton: true,
+        inputValidator: (value) => {
+            if (!value) {
+                return "You need to write something!";
+            }
+        },
+    });
+    if (message) {
+        cb(message);
+    }
+};
+
+export const Message = (prompt, type = "warning") => {
+    Swal.fire({
+        icon: type,
+        text: prompt,
     });
 };

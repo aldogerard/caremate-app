@@ -8,12 +8,12 @@ export const login = createAsyncThunk(
             const response = await axiosInstance.post(`/auth/login`, data);
             return response.data;
         } catch (e) {
-            return rejectWithValue(e.response.data);
+            return rejectWithValue(e.response?.data || "Login failed");
         }
     }
 );
 
-export const registerPartner = createAsyncThunk(
+export const register = createAsyncThunk(
     "auth/register",
     async (data, { rejectWithValue }) => {
         try {
@@ -23,7 +23,22 @@ export const registerPartner = createAsyncThunk(
             );
             return response.data;
         } catch (e) {
-            return rejectWithValue(e.response.data);
+            return rejectWithValue(e.response?.data || "Registration failed");
+        }
+    }
+);
+
+export const changePassword = createAsyncThunk(
+    "auth/changePassword",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.put(
+                `/auth/change-password`,
+                data
+            );
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Registration failed");
         }
     }
 );
@@ -34,62 +49,69 @@ const authSLice = createSlice({
         isLogin: null,
         token: null,
         role: null,
-        id: null,
+        user: null,
         status: null,
-        error: null,
     },
     reducers: {
         setAuth: (state, action) => {
-            const { token, role, id } = action.payload;
+            const { token, isLogin, role, user } = action.payload;
             state.token = token;
-            state.isLogin = !!token;
-            state.id = id;
+            state.isLogin = isLogin;
             state.role = role;
+            state.user = user;
         },
-        logout: (state, action) => {
+        logout: (state) => {
             state.isLogin = false;
-            state.id = null;
             state.token = null;
+            state.user = null;
             state.role = null;
-            localStorage.removeItem("token");
-            localStorage.removeItem("id");
-            localStorage.removeItem("role");
-        },
-        clear: (state) => {
             state.status = null;
-            state.error = null;
+            localStorage.removeItem("token");
+            localStorage.removeItem("role");
+            localStorage.removeItem("user");
+        },
+        clearAuthStatus: (state) => {
+            state.status = null;
         },
     },
     extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
+                const { token, role, userData } = action.payload.data;
                 state.isLogin = true;
-                state.id = action.payload.data.id;
-                state.token = action.payload.data.token;
-                state.role = action.payload.data.role;
-                state.status = action.payload.message;
-                localStorage.setItem("token", action.payload.data.token);
-                localStorage.setItem("role", action.payload.data.role);
-                localStorage.setItem("id", action.payload.data.id);
+                state.token = token;
+                state.role = role;
+                state.user = userData;
+                state.status = "success";
+                localStorage.setItem("token", token);
+                localStorage.setItem("role", role);
+                localStorage.setItem("user", JSON.stringify(userData));
             })
-            .addCase(login.rejected, (state, action) => {
-                state.error = action.payload.error;
+            .addCase(login.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(register.fulfilled, (state, action) => {
+                state.status = "success";
+            })
+            .addCase(register.rejected, (state, action) => {
                 state.status = action.payload.message;
             })
-            .addCase(registerPartner.fulfilled, (state, action) => {
+
+            .addCase(changePassword.fulfilled, (state, action) => {
+                state.status = "success";
+            })
+            .addCase(changePassword.rejected, (state, action) => {
                 state.status = action.payload.message;
             })
-            .addCase(registerPartner.rejected, (state, action) => {
-                state.error = action.payload.error;
-                state.status = action.payload.message;
-            })
+
             .addMatcher(
                 (action) => action.type.endsWith("/rejected"),
-                (state, action) => {
-                    state.error = action.payload;
+                (state) => {
+                    state.status = "failed";
                 }
             );
     },
 });
-export const { setAuth, logout, clear } = authSLice.actions;
+export const { setAuth, logout, clearAuthStatus } = authSLice.actions;
 export default authSLice.reducer;

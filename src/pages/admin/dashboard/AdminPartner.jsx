@@ -1,127 +1,115 @@
 import AdminDetailPartner from "@/components/dashboard/admin/AdminDetailPartner";
-import EachUtils from "@/utils/EachUtils";
-import React, { useState } from "react";
+import TablePartner from "@/components/dashboard/admin/TablePartner";
+import Title from "@/components/dashboard/Title";
+import Filter from "@/components/Filter";
+import React, { useEffect, useState } from "react";
 
-const sub = [
+import { useDispatch, useSelector } from "react-redux";
+import { getAllPartner } from "@/redux/feature/admin/adminPartnerSlice";
+import Loader from "@/components/Loader";
+import InputSearch from "@/components/dashboard/InputSearch";
+import Pagination from "@/components/Pagination";
+
+const data = [
     {
-        name: "In Review",
+        name: "UNVERIFIED",
     },
     {
-        name: "Verified",
+        name: "IN_REVIEW",
     },
     {
-        name: "Reject",
+        name: "VERIFIED",
+    },
+    {
+        name: "REJECTED",
     },
 ];
 
-// inreview, reject, approved
-
 const AdminPartner = () => {
-    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-    const [filter, setFilter] = useState("In Review");
+    const dispatch = useDispatch();
 
-    function limitText(text, limit) {
-        const words = text.split("");
-        if (words.length > limit) {
-            return words.slice(0, limit).join("") + "....";
-        } else {
-            return text;
+    const [filter, setFilter] = useState(data[0].name);
+    const [isLoading, setIsloading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentQuery, setCurrentQuery] = useState("");
+
+    const { partners, paging } = useSelector((state) => state.adminPartner);
+
+    useEffect(() => {
+        const fetchAllPartner = async () => {
+            try {
+                await dispatch(
+                    getAllPartner({
+                        status: filter,
+                        page: currentPage,
+                        query: currentQuery,
+                    })
+                ).unwrap();
+            } catch (error) {
+                console.log(error);
+                console.error("Error fetching : ", error);
+            }
+        };
+
+        fetchAllPartner();
+    }, [dispatch, currentPage]);
+
+    useEffect(() => {
+        if (partners) {
+            handleSearch("");
         }
-    }
+    }, [filter]);
 
-    const handleDetailModal = () => {
-        setIsDetailModalOpen((state) => !state);
+    const handlePageClick = (event) => {
+        setCurrentPage(event.selected);
+    };
+
+    const handleSearch = async (query) => {
+        try {
+            setCurrentQuery(query);
+            setIsloading(true);
+            await dispatch(
+                getAllPartner({
+                    query: query,
+                    status: filter,
+                    page: 0,
+                })
+            ).unwrap();
+            setCurrentPage(0);
+        } catch (error) {
+            console.error("Error fetching : ", error);
+        } finally {
+            setIsloading(false);
+        }
     };
 
     return (
         <>
-            <div className="w-full py-2 mb-10 border-b border-black/70">
-                <h1 className="text-xl md:text-4xl font-medium text-black">
-                    Partner
-                </h1>
-            </div>
-            <div className="flex py-2 mb-6 gap-8 justify-start">
-                <EachUtils
-                    of={sub}
-                    render={(item) => (
-                        <h1
-                            onClick={() => setFilter(item.name)}
-                            className={`font-normal text-center w-24 cursor-pointer ${
-                                filter === item.name &&
-                                "text-black border-primary border-b transition-template"
-                            } `}
-                        >
-                            {item.name}
-                        </h1>
+            <Title name={"Partner"} />
+            {partners !== null && (
+                <>
+                    <Filter data={data} setFilter={setFilter} filter={filter} />
+                    <InputSearch
+                        name="partner"
+                        handleSearch={handleSearch}
+                        filter={filter}
+                    />
+                    {!isLoading && (
+                        <>
+                            <TablePartner />
+                            {partners.length > 0 && (
+                                <Pagination
+                                    paging={paging}
+                                    handlePageClick={handlePageClick}
+                                />
+                            )}
+                        </>
                     )}
-                />
-            </div>
-            <div className="w-full border rounded-md shadow-sm">
-                <table className="w-full text-left">
-                    <thead>
-                        <tr className="border-b">
-                            <th className="p-4 w-[5%]">No</th>
-                            <th className="w-[20%]">Foundation Name</th>
-                            <th className="w-[15%]">Phone</th>
-                            <th className="w-[20%]">Address</th>
-                            <th className="w-[40%]">Desc</th>
-                            <th className="w-[20%] pr-4">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <EachUtils
-                            of={sub}
-                            render={(item, index) =>
-                                filter === "In Review" ? (
-                                    <tr
-                                        className={`${
-                                            index % 2 == 0 && "bg-primary/10"
-                                        }  `}
-                                    >
-                                        <td className="p-5">{index + 1}</td>
-                                        <td>
-                                            {limitText("Yayasan Enigma", 25)}
-                                        </td>
-                                        <td>08126384124</td>
-                                        <td>
-                                            {limitText("Jalan topaz No 7", 25)}
-                                        </td>
-                                        <td>
-                                            {limitText(
-                                                "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi natus, soluta distinctio consequuntur quisquam quis at dolores suscipit quasi doloremque consequatur, adipisci omnis. Sunt, consequuntur. Laborum illum odio quam voluptas cupiditate quos dicta alias earum. Ex natus quidem vero, sit vitae eligendi impedit quia nesciunt optio incidunt fuga delectus nisi.",
-                                                60
-                                            )}
-                                        </td>
-                                        <td className="pr-4">
-                                            <div
-                                                onClick={handleDetailModal}
-                                                className=" cursor-pointer px-4 py-2 rounded-md shadow-sm hover:shadow-sm transition-template bg-primary flex justify-center items-center w-max text-light"
-                                            >
-                                                <h1>Detail</h1>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    index === 0 && (
-                                        <tr>
-                                            <td
-                                                colSpan={6}
-                                                className="py-6 text-center"
-                                            >
-                                                Partner not found
-                                            </td>
-                                        </tr>
-                                    )
-                                )
-                            }
-                        />
-                    </tbody>
-                </table>
-            </div>
-            <AdminDetailPartner
-                isOpen={isDetailModalOpen}
-                closeModal={handleDetailModal}
-            />
+
+                    {isLoading && <Loader />}
+                </>
+            )}
+            {partners === null && <Loader />}
         </>
     );
 };

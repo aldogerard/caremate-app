@@ -1,42 +1,96 @@
+import Button from "@/components/Button";
 import CardCampaign from "@/components/dashboard/partner/CardCampaign";
 import FormCampaign from "@/components/dashboard/partner/FormCampaign";
+import Title from "@/components/dashboard/Title";
+import Filter from "@/components/Filter";
 import { Failed } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-const sub = [
+import { getCampaignByPartnerId } from "@/redux/feature/partner/campaignSlice";
+import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
+import Loader from "@/components/Loader";
+import Pagination from "@/components/Pagination";
+import InputSearch from "@/components/dashboard/InputSearch";
+
+const data = [
     {
-        name: "Active",
+        name: "IN_REVIEW",
     },
     {
-        name: "Pending",
+        name: "ACTIVE",
     },
     {
-        name: "Completed",
+        name: "COMPLETED",
     },
     {
-        name: "Rejected",
+        name: "REJECTED",
     },
 ];
 
 const Campaign = () => {
-    const [filter, setFilter] = useState("Active");
+    const dispatch = useDispatch();
 
+    const { user } = useSelector((state) => state.auth);
+    const { partner } = useSelector((state) => state.partner);
+    const { campaigns, paging } = useSelector((state) => state.campaign);
+
+    const [filter, setFilter] = useState(data[0].name);
     const [isFormModalOpen, setIsFormModalOpen] = useState(false);
 
-    const { currentPartner } = useSelector((state) => state.partner);
-    const [status, setStatus] = useState("UNVERIFIED");
+    const [isLoading, setIsLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentQuery, setCurrentQuery] = useState("");
 
     useEffect(() => {
-        if (currentPartner !== null) {
-            setStatus(currentPartner.status);
+        if (user?.id) {
+            fetchCampaignData();
         }
-    }, [currentPartner]);
+    }, [user, filter, currentPage, currentQuery]);
+
+    const handlePageClick = (event) => {
+        setCurrentPage(event.selected);
+    };
+
+    const handleSearch = async (query) => {
+        setCurrentQuery(query);
+        setIsLoading(true);
+        try {
+            await dispatch(
+                getCampaignByPartnerId({
+                    id: user.id,
+                    status: filter,
+                    page: 0,
+                    query: query,
+                })
+            ).unwrap();
+            setCurrentPage(0);
+        } catch (error) {
+            console.error("Error fetching campaigns:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const fetchCampaignData = async () => {
+        try {
+            await dispatch(getDetailPartner(user.id)).unwrap();
+            await dispatch(
+                getCampaignByPartnerId({
+                    id: user.id,
+                    status: filter,
+                    page: currentPage,
+                    query: currentQuery,
+                })
+            ).unwrap();
+        } catch (error) {
+            console.error("Error fetching campaigns:", error);
+        }
+    };
 
     const handleFromModal = () => {
-        if (status === "VERIFIED") {
+        if (partner?.status !== "VERIFIED") {
             return Failed("Your foundation has not been verified");
         }
         setIsFormModalOpen((state) => !state);
@@ -44,47 +98,64 @@ const Campaign = () => {
 
     return (
         <>
-            <div className="w-full py-2 pb-4 flex justify-between items-center mb-10 border-b border-black/70">
-                <h1 className="text-xl md:text-4xl font-medium text-black">
-                    Campaign
-                </h1>
-                <div
-                    onClick={handleFromModal}
-                    className=" bg-primary px-3 py-2 cursor-pointer  rounded-lg hover:shadow-md transition-template"
-                >
-                    <h1 className="font-medium text-light text-xs lg:text-sm">
-                        Add Campaign
-                    </h1>
+            <Title name={"Campaign"}>
+                <div className="pb-2">
+                    <Button
+                        type={"button"}
+                        name={"Add"}
+                        onClick={handleFromModal}
+                    />
                 </div>
-            </div>
+            </Title>
+
             <FormCampaign
                 isOpen={isFormModalOpen}
                 closeModal={handleFromModal}
+                filter={filter}
             />
-            <div className="flex py-2 mb-6 gap-8 justify-start overflow-scroll">
-                <EachUtils
-                    of={sub}
-                    render={(item) => (
-                        <h1
-                            onClick={() => setFilter(item.name)}
-                            className={`font-normal text-center w-24 cursor-pointer ${
-                                filter === item.name &&
-                                "text-black border-primary border-b transition-template"
-                            } `}
-                        >
-                            {item.name}
-                        </h1>
+
+            {campaigns && (
+                <>
+                    <Filter data={data} setFilter={setFilter} filter={filter} />
+
+                    <InputSearch
+                        name="campaign"
+                        handleSearch={handleSearch}
+                        filter={filter}
+                    />
+
+                    {!isLoading && (
+                        <>
+                            {campaigns?.length > 0 ? (
+                                <>
+                                    <div className="grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 grid-rows-subgrid gap-4">
+                                        <EachUtils
+                                            of={campaigns}
+                                            render={(item) => (
+                                                <CardCampaign
+                                                    item={item}
+                                                    status={filter}
+                                                />
+                                            )}
+                                        />
+                                    </div>
+                                    <Pagination
+                                        paging={paging}
+                                        handlePageClick={handlePageClick}
+                                    />
+                                </>
+                            ) : (
+                                <div className="flex text-black justify-center items-center h-[50vh]">
+                                    <h1>Campaign Not Found</h1>
+                                </div>
+                            )}
+                        </>
                     )}
-                />
-            </div>
-            <div className="flex flex-col gap-4 w-full mt-10 lg:flex-row lg:flex-wrap lg:justify-start">
-                <EachUtils
-                    of={sub}
-                    render={(item) =>
-                        filter === "Active" && <CardCampaign status={filter} />
-                    }
-                />
-            </div>
+
+                    {isLoading && <Loader />}
+                </>
+            )}
+            {!campaigns && <Loader />}
         </>
     );
 };
