@@ -75,3 +75,8 @@ tr {
 .break-me {
     @apply hidden;
 }
+
+html {
+    scroll-behavior: smooth;
+  }
+  

@@ -1,7 +1,14 @@
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 
 const BaseLayouts = () => {
+    const location = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
     return (
         <>
             <Header />
@@ -10,6 +17,8 @@ const BaseLayouts = () => {
                     <Outlet />
                 </main>
             </section>
+            <Footer />
+
         </>
     );
 };

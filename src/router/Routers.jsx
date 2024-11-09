@@ -17,6 +17,14 @@ import AdminProtected from "./AdminProtected";
 import AdminDashboard from "@/pages/admin/dashboard/AdminDashboard";
 import AdminPartner from "@/pages/admin/dashboard/AdminPartner";
 import Home from "@/pages/landing/Home";
+import AboutUs from "@/pages/landing/AboutUs";
+import Faq from "@/pages/landing/Faq";
+import CampaignLanding from "@/pages/landing/campaign/CampaignLanding";
+import News from "@/pages/landing/News/News";
+import NewsPage from "@/pages/landing/News/NewsPage";
+import CampaignDetails from "@/pages/landing/campaign/CampaignDetails";
+import CampaignCategory from "@/pages/landing/campaign/CampaignCategory";
+import DownloadApps from "@/pages/landing/DownloadApps";
 import AdminCampaign from "@/pages/admin/dashboard/AdminCampaign";
 import AdminWithdrawal from "@/pages/admin/dashboard/AdminWIthdrawal";
 import CampaignDetail from "@/pages/partner/dashboard/CampaignDetail";
@@ -33,22 +41,42 @@ const Routers = () => {
             element: <BaseLayouts />,
             errorElement: <NotFound />,
             children: [
-                {
-                    path: "/",
-                    element: <Home />,
-                },
-                {
-                    path: "/about",
-                    element: <></>,
-                },
-                {
-                    path: "/contact",
-                    element: <></>,
-                },
-                {
-                    path: "/faq",
-                    element: <></>,
-                },
+              {
+                path: "/",
+                element: <Home />,
+              },
+              {
+                path: "/about",
+                element: <AboutUs />,
+              },
+              {
+                path: "/campaign",
+                element: <CampaignLanding />,
+              },
+              {
+                path: "/news",
+                element: <News />,
+              },
+              {
+                path: "/faq",
+                element: <Faq />,
+              },
+              {
+                path: "/news/:id",
+                element: <NewsPage />,
+              },
+              {
+                path: "/campaign/category",
+                element: <CampaignCategory />,
+              },
+              {
+                path: "/campaign/details",
+                element: <CampaignDetails />,
+              },
+              {
+                path: "/download",
+                element: <DownloadApps />,
+              },
             ],
         },
         {
@@ -163,6 +191,7 @@ const Routers = () => {
         },
     ]);
 
-    return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 };
+
 export default Routers;
