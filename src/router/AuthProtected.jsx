@@ -4,11 +4,12 @@ import { Navigate } from "react-router-dom";
 const AuthProtected = ({ children }) => {
     const { isLogin } = useSelector((state) => state.auth);
 
-    if (!isLogin) {
+    if (isLogin !== null) {
+        if (isLogin) {
+            return <Navigate to={"/"} />;
+        }
         return children;
     }
-
-    return <Navigate to={"/"} />;
 };
 
 export default AuthProtected;

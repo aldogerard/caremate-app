@@ -9,7 +9,11 @@
 }
 
 body {
-    @apply bg-light;
+    @apply bg-light overflow-x-hidden;
+}
+
+* {
+    scrollbar-width: none;
 }
 
 .padding {
@@ -51,14 +55,23 @@ input {
     color: rgba(0, 0, 0, 0.8); /* Warna teks */
 }
 
-* {
-    overflow-x: hidden; /* Sembunyikan overflow horizontal */
-    overflow-y: scroll; /* Aktifkan scrolling vertikal */
-    scrollbar-width: none; /* Untuk Firefox */
-    -ms-overflow-style: none; /* Untuk Internet Explorer dan Edge */
+th,
+tr {
+    @apply font-normal text-dark;
 }
 
-/* Sembunyikan scrollbar untuk browser WebKit (Chrome, Safari) */
-*::-webkit-scrollbar {
-    display: none; /* Sembunyikan scrollbar */
+.pagination {
+    @apply mt-10 gap-2 p-0 flex justify-center list-none;
+}
+
+.pagination a {
+    @apply text-lg py-1 px-3 border bg-light border-accent rounded-md text-dark/80 hover:border-primary hover:text-primary transition-template;
+}
+
+.active a {
+    @apply border-primary text-primary;
+}
+
+.break-me {
+    @apply hidden;
 }

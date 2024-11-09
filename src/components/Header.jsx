@@ -1,16 +1,18 @@
+import { logout } from "@/redux/feature/authSlice";
+import { Logout } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
+import { capitalizeFirstLetter } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
-import {
-    FaArrowRightToBracket,
-    FaBars,
-    FaCaretDown,
-    FaSeedling,
-    FaXmark,
-} from "react-icons/fa6";
+import { FaAngleDown, FaBars, FaXmark } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
+import logo from "@/assets/images/logo.webp";
+
 const Header = () => {
+    const dispatch = useDispatch();
     const location = useLocation().pathname;
+    const { isLogin, role } = useSelector((state) => state.auth);
 
     const [isOpen, setIsOpen] = useState(false);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -21,8 +23,14 @@ const Header = () => {
     };
 
     const handleIsDetail = () => {
-        console.log(isDetailOpen);
         setIsDetailOpen((state) => !state);
+    };
+
+    const handleLogout = () => {
+        Logout(() => {
+            dispatch(logout());
+            setIsDetailOpen(false);
+        });
     };
 
     useEffect(() => {
@@ -62,10 +70,6 @@ const Header = () => {
 
     const loginList = [
         {
-            name: "Donor",
-            link: "/donor/signin",
-        },
-        {
             name: "Partner",
             link: "/partner/signin",
         },
@@ -75,16 +79,31 @@ const Header = () => {
         },
     ];
 
+    const dashboardList = [
+        {
+            name: "Dashboard",
+        },
+    ];
+
     return (
-        <section className="flex justify-center w-full bg-light fixed z-50">
+        <section className="flex justify-center w-full bg-light fixed z-50 border-b">
             <main className="container relative lg:flex lg:items-center lg:justify-between">
                 <header className="py-4 flex justify-between items-center padding">
-                    <div className="flex justify-center items-center w-max gap-1">
-                        <FaSeedling className="text-primary text-3xl" />
+                    <Link
+                        to={"/"}
+                        className="flex justify-center items-center w-max gap-2 cursor-pointer"
+                    >
+                        <div className="w-7 h-7">
+                            <img
+                                src={logo}
+                                alt="Logo"
+                                className="w-full h-full object-contain"
+                            />
+                        </div>
                         <h1 className="text-xl font-semibold text-primary">
                             CareMate
                         </h1>
-                    </div>
+                    </Link>
                     <div
                         className="cursor-pointer lg:hidden"
                         onClick={handleIsOpen}
@@ -97,11 +116,13 @@ const Header = () => {
                     </div>
                 </header>
                 <nav
-                    className={`padding absolute w-full  transition-template border-b lg:border-0  bg-light lg:h-max lg:static lg:w-max lg:py-5 lg:overflow-visible ${
+                    className={`padding  w-full transition-template  bg-light lg:h-max lg:static lg:w-max lg:py-5 lg:overflow-visible ${
                         isOpen ? "pt-4 pb-6 h-max" : "h-0 overflow-hidden"
                     }`}
                 >
-                    <ul className="relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between lg:w-[420px]">
+                    <ul
+                        className={`relative flex flex-col gap-4 text-dark lg:flex-row lg:items-center lg:justify-between lg:w-[440px]`}
+                    >
                         <EachUtils
                             of={link}
                             render={(item) => (
@@ -109,7 +130,7 @@ const Header = () => {
                                     <li
                                         className={` transition-template ${
                                             item.link === location &&
-                                            "lg:font-medium "
+                                            "lg:text-primary"
                                         }`}
                                     >
                                         {item.name}
@@ -121,24 +142,56 @@ const Header = () => {
                             onClick={handleIsDetail}
                             className="cursor-pointer"
                         >
-                            <h1>Login</h1>
+                            {isLogin && (
+                                <div
+                                    className={` border-accent flex gap-2 items-center transition-template ${
+                                        isDetailOpen && "border-primary"
+                                    }`}
+                                >
+                                    <h1 className="capitalize">
+                                        Hi, {capitalizeFirstLetter(role)}
+                                    </h1>
+                                    <FaAngleDown
+                                        size={12}
+                                        className={`${
+                                            isDetailOpen &&
+                                            "rotate-180 transition-template"
+                                        }`}
+                                    />
+                                </div>
+                            )}
+                            {!isLogin && <h1>Login</h1>}
                         </div>
                         <div
                             className={`${
                                 isDetailOpen ? "flex absolute" : "hidden"
-                            } flex-col top-[152px] w-52 bg-red-50 border gap-1 p-2 rounded-md lg:top-8 lg:right-0`}
+                            } flex-col top-[152px] w-52 bg-light border gap-1 p-2 rounded-md lg:top-8 lg:right-0`}
                         >
                             <EachUtils
-                                of={loginList}
+                                of={!isLogin ? loginList : dashboardList}
                                 render={(item) => (
                                     <Link
-                                        to={item.link}
+                                        to={
+                                            item.link
+                                                ? item.link
+                                                : role === "PARTNER"
+                                                ? "/dashboard/partner"
+                                                : "/dashboard/admin"
+                                        }
                                         className="w-full hover:bg-accent/10 transition-template px-2 py-1 rounded-md"
                                     >
                                         <li>{item.name}</li>
                                     </Link>
                                 )}
                             />
+                            {isLogin && (
+                                <div
+                                    onClick={handleLogout}
+                                    className="w-full hover:bg-accent/10 transition-template px-2 py-1 rounded-md cursor-pointer"
+                                >
+                                    <li>Logout</li>
+                                </div>
+                            )}
                         </div>
                     </ul>
                 </nav>

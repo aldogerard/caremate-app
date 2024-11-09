@@ -1,9 +1,11 @@
-import { clearAuth, registerPartner } from "@/redux/feature/authSlice";
+import { clearAuthStatus, register } from "@/redux/feature/authSlice";
 import { Failed, Success } from "@/utils/AlertUtil";
+import { validateEmail, validatePassword } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
-import { FaEye, FaEyeSlash, FaSeedling } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "@/assets/images/logo.webp";
 
 const image = "https://account.enigmacamp.com/3.jpg";
 
@@ -13,11 +15,10 @@ const RegisterPartner = () => {
         password: "",
         confirmPassword: "",
         foundationName: "",
-        contactAddress: "",
+        address: "",
         phoneNumber: "",
     });
     const [isMount, setIsMount] = useState(false);
-    const [message, setMessage] = useState("");
 
     const [isEmailInvalid, setIsEmailInvalid] = useState(false);
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
@@ -32,13 +33,8 @@ const RegisterPartner = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { status } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if (!isMount) {
-            setIsMount(true);
-            return;
-        }
         const { email, password, confirmPassword } = auth;
 
         setIsEmailInvalid(
@@ -55,19 +51,13 @@ const RegisterPartner = () => {
         );
     }, [auth]);
 
-    const validateEmail = (str) => {
-        const regex = /^[\w.-]+@[\w.-]+\.\w+$/;
-        return regex.test(str);
-    };
-
-    const validatePassword = (str) => {
-        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-        return regex.test(str);
-    };
-
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setAuth((state) => ({ ...state, [name]: value }));
+        if (e?.target) {
+            const { name, value } = e.target;
+            setAuth((state) => ({ ...state, [name]: value }));
+        } else {
+            setAuth((state) => ({ ...state, phoneNumber: e }));
+        }
     };
 
     const handleClickPassword = () => {
@@ -88,68 +78,61 @@ const RegisterPartner = () => {
     const handleFocusConfirmPassword = () => setIsCurrentPasswordFocus(true);
     const handleBlurConfirmPassword = () => setIsCurrentPasswordFocus(false);
 
-    useEffect(() => {
-        if (status !== null) {
-            if (status === "Partner created successfully") {
-                Success("Successful registration");
-                clearAuth();
-                navigate("/partner/signin");
-            } else if (status === "Email already exists.") {
-                Failed("Email has been registered");
-            } else if (status === "Phone_number already exists.") {
-                Failed("Phone number already exists.");
-            } else if (status === "failed") {
-                Failed("Failed registration");
-            }
-            dispatch(clearAuth());
-        }
-    }, [status]);
-
-    const handleSubmit = async (e) => {
-        try {
-            e.preventDefault();
-            Clear();
-            const data = {
-                email: auth.email,
-                password: auth.password,
-                foundationName: auth.foundationName,
-                contactAddress: auth.contactAddress,
-                phoneNumber: auth.phoneNumber,
-            };
-
-            dispatch(registerPartner(data));
-        } catch (error) {
-            // console.log(error);
-        }
-    };
-
-    const Clear = () => {
+    const clearState = () => {
         setAuth({
             email: "",
             password: "",
             confirmPassword: "",
             foundationName: "",
-            contactAddress: "",
+            address: "",
             phoneNumber: "",
         });
     };
 
-    useEffect(() => {
-        if (message !== null) {
-            setTimeout(() => {
-                setMessage(null);
-            }, [10000]);
+    const handleSubmit = async (e) => {
+        try {
+            e.preventDefault();
+            e.target.reset();
+
+            await dispatch(register(auth)).unwrap();
+            Success("Successful registration");
+
+            clearState();
+            dispatch(clearAuthStatus());
+
+            return navigate("/partner/signin");
+        } catch (error) {
+            handleFailedRegistration(error?.message);
+            dispatch(clearAuthStatus());
         }
-    }, [message]);
+    };
+
+    const handleFailedRegistration = (message = "") => {
+        if (message === "Email already exists.") {
+            return Failed("Email has been registered");
+        }
+
+        if (message === "Phone_number already exists.") {
+            return Failed("Phone number already exists");
+        }
+
+        return Failed("Failed registration");
+    };
 
     return (
         <section className="h-full flex">
             <aside className="hidden lg:flex lg:w-2/3">
                 <img src={image} alt="hero" />
             </aside>
-            <main className="flex flex-col h-full items-center py-4 lg:w-1/3">
-                <div className="flex justify-center items-center w-max">
-                    <FaSeedling className="text-primary text-4xl lg:text-6xl" />
+            <main className="flex flex-col h-full items-center py-4 lg:w-1/3 ">
+                <div className="flex gap-3 justify-center items-center w-max">
+                    <div className="w-14 h-14">
+                        <img
+                            src={logo}
+                            alt="Logo"
+                            className="w-full h-full object-contain"
+                        />
+                    </div>
                     <h1 className="text-xl font-semibold text-primary lg:text-3xl">
                         CareMate
                     </h1>
@@ -182,6 +165,7 @@ const RegisterPartner = () => {
                                 className="px-5 py-4 text-black/80 outline-none rounded-md border focus:shadow-sm  bg-white"
                             />
                         </div>
+
                         <div className="flex flex-col gap-1 w-full">
                             <div className="flex justify-between items-center">
                                 <label
@@ -211,18 +195,18 @@ const RegisterPartner = () => {
                         <div className="flex flex-col gap-1 w-full">
                             <div className="flex justify-between items-center">
                                 <label
-                                    htmlFor="contactAddress"
+                                    htmlFor="address"
                                     className="text-black/80"
                                 >
-                                    Contact Address
+                                    Address
                                 </label>
                             </div>
                             <input
                                 type="text"
                                 required
-                                id="contactAddress"
+                                id="address"
                                 autoComplete="off"
-                                name="contactAddress"
+                                name="address"
                                 onInput={handleChange}
                                 placeholder="Enter your contact address"
                                 className="px-5 py-4 text-black/80 no-arrow outline-none rounded-md border focus:shadow-sm bg-white"
@@ -301,6 +285,7 @@ const RegisterPartner = () => {
                                 </div>
                             </div>
                         </div>
+
                         <div className="flex flex-col gap-1 w-full">
                             <div className="flex justify-between items-center">
                                 <label
@@ -374,9 +359,6 @@ const RegisterPartner = () => {
                                 </Link>
                             </h1>
                         </div>
-                        <h1 className="text-xs text-error text-center">
-                            {message}
-                        </h1>
                     </div>
                 </form>
             </main>

@@ -1,5 +1,10 @@
 export default {
-    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/react-tailwindcss-select/dist/index.esm.js",
+        "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
+    ],
     theme: {
         extend: {
             fontFamily: {
@@ -12,7 +17,7 @@ export default {
                 secondary: "#064E3B",
                 accent: "#A1A1AA",
                 background: "#F8FAFC",
-                warning: "#FBBF24",
+                warning: "#D97706",
                 error: "#BE123C",
             },
         },

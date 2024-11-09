@@ -1,6 +1,11 @@
+import { clearAuthStatus, login } from "@/redux/feature/authSlice";
+import { Failed, Success } from "@/utils/AlertUtil";
+import { validateEmail, validatePassword } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
-import { FaEye, FaEyeSlash, FaSeedling } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "@/assets/images/logo.webp";
 
 const image = "https://account.enigmacamp.com/2.jpg";
 
@@ -15,6 +20,9 @@ const LoginPartner = () => {
     const [isMount, setIsMount] = useState(false);
     const [isFocus, setIsFocus] = useState(false);
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (!isMount) {
             setIsMount(true);
@@ -22,24 +30,17 @@ const LoginPartner = () => {
         }
         const { email, password } = auth;
 
-        const regex = /^[\w.-]+@[\w.-]+\.\w+$/;
-
         setIsEmailInvalid(
-            regex.test(email) || email.length <= 0 ? false : true
+            validateEmail(email) || email.length <= 0 ? false : true
         );
         setIsPasswordInvalid(
-            password.length >= 8 || password.length <= 0 ? false : true
+            validatePassword(password) || password.length <= 0 ? false : true
         );
     }, [auth]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setAuth((state) => ({ ...state, [name]: value }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        e.target.reset();
     };
 
     const handleClick = () => {
@@ -54,20 +55,47 @@ const LoginPartner = () => {
         setIsFocus(false);
     };
 
+    const handleSubmit = async (e) => {
+        try {
+            e.preventDefault();
+            e.target.reset();
+            setAuth({
+                email: "",
+                password: "",
+            });
+
+            await dispatch(login(auth)).unwrap();
+
+            Success("Successfully login");
+
+            dispatch(clearAuthStatus());
+            return navigate("/");
+        } catch (error) {
+            Failed(error.message);
+            dispatch(clearAuthStatus());
+        }
+    };
+
     return (
         <section className="h-full flex">
             <aside className="hidden lg:flex lg:w-2/3">
                 <img src={image} alt="hero" />
             </aside>
             <main className="flex flex-col h-full items-center pt-32 py-20 lg:w-1/3">
-                <div className="flex justify-center items-center w-max">
-                    <FaSeedling className="text-primary text-4xl lg:text-6xl" />
+                <div className="flex gap-3 justify-center items-center w-max">
+                    <div className="w-14 h-14">
+                        <img
+                            src={logo}
+                            alt="Logo"
+                            className="w-full h-full object-contain"
+                        />
+                    </div>
                     <h1 className="text-xl font-semibold text-primary lg:text-3xl">
                         CareMate
                     </h1>
                 </div>
-                <h1 className="lg:w-11/12 lg:max-w-lg text-lg font-light text-center  text-secondary my-14 lg:text-2xl">
-                    Welcome back, Partner! Let’s make a difference together!
+                <h1 className="lg:w-11/12 lg:max-w-lg text-lg font-light text-center text-secondary my-8 lg:text-xl">
+                    Welcome back, Partner! Let's make a difference together!
                 </h1>
                 <form
                     onSubmit={handleSubmit}
@@ -94,7 +122,7 @@ const LoginPartner = () => {
                                 id="email"
                                 autoComplete="off"
                                 name="email"
-                                onChange={handleChange}
+                                onInput={handleChange}
                                 placeholder="Enter your email"
                                 className="px-5 py-4 text-black/80 outline-none rounded-md border focus:shadow-sm  bg-white"
                             />
@@ -107,11 +135,20 @@ const LoginPartner = () => {
                                 >
                                     Password
                                 </label>
-                                {isPasswordInvalid && (
-                                    <p className="text-xs font-medium text-error">
-                                        *Minimum password is 8 letters
-                                    </p>
-                                )}
+                                {isPasswordInvalid &&
+                                    auth.password.length >= 8 && (
+                                        <p className="text-xs text-[10px] text-right font-medium text-error">
+                                            *Password must contain lowercase,
+                                            uppercase, numbers
+                                        </p>
+                                    )}
+
+                                {auth.password.length < 8 &&
+                                    auth.password.length > 0 && (
+                                        <p className="text-xs text-right font-medium text-error">
+                                            *Password must be 8 letters long
+                                        </p>
+                                    )}
                             </div>
                             <div
                                 className={`flex justify-between gap-2 items-center relative px-5 py-4 outline-none rounded-md border bg-white ${
@@ -125,7 +162,7 @@ const LoginPartner = () => {
                                     autoComplete="off"
                                     id="password"
                                     placeholder="Enter your password"
-                                    onChange={handleChange}
+                                    onInput={handleChange}
                                     className="bg-white text-black/80 outline-none w-[95%]"
                                     onFocus={handleFocus}
                                     onBlur={handleBlur}
