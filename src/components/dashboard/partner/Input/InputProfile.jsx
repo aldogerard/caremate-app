@@ -16,11 +16,15 @@ const InputProfile = (props) => {
         id: name,
         autoComplete: "off",
         onInput: handleChangeInput,
-        disabled: !isEdit,
+        disabled: name === "email" ? true : !isEdit,
         name: name,
-        className: `px-5 py-4 outline-none rounded-md border no-arrow focus:shadow-sm bg-white ${
-            !isEdit ? "text-black/40 cursor-not-allowed" : "text-black/80"
-        }`,
+        className: `px-5 py-4 outline-none rounded-md border no-arrow focus:shadow-sm bg-white 
+        ${
+            name !== "email" &&
+            (!isEdit ? "text-black/40 cursor-not-allowed" : "text-black/80")
+        }
+        ${name === "email" && "text-black/40 cursor-not-allowed"}
+        `,
     };
 
     return (

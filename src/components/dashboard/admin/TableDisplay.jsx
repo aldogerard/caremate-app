@@ -44,7 +44,7 @@ const TableDisplay = (props) => {
                             </div>
                             <div className="col-start-3">
                                 <div
-                                    className={`flex justify-center items-center px-2 py-1 rounded-full bg-primary/20
+                                    className={`flex justify-center items-center px-2 py-1 rounded-full 
                                     ${
                                         (item.status === "IN_REVIEW" ||
                                             item.status === "PENDING") &&
