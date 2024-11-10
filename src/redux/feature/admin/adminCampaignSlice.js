@@ -53,17 +53,18 @@ export const getAllCampaignByCategory = createAsyncThunk(
         const category = data?.category || "";
         const page = data?.page || 0;
         const size = data?.size || 7;
+        const status = data?.status || "ACTIVE";
 
         try {
             if (query == "") {
                 const response = await axiosInstance.get(
-                    `/campaign/category?category=${category}&page=${page}&size=${size}`
+                    `/campaign/category?category=${category}&page=${page}&size=${size}&status=${status}`
                 );
                 return response.data;
             }
 
             const response = await axiosInstance.get(
-                `/campaign/category?name=${query}&category=${category}&page=${page}&size=${size}`
+                `/campaign/category?name=${query}&category=${category}&page=${page}&size=${size}&status=${status}`
             );
             return response.data;
         } catch (e) {

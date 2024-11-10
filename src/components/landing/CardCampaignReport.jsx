@@ -33,11 +33,13 @@ const CardCampaignReport = ({ item }) => {
                     </h3>
                 </div>
                 <p className="text-[#3d3d3d] text-sm">{item.description}</p>
-                <img
-                    src={imageUrl}
-                    alt="Campaign 1"
-                    className="w-1/3 h-auto mt-1"
-                />
+                <div className="w-52 aspect-square">
+                    <img
+                        src={imageUrl}
+                        alt="Campaign 1"
+                        className="w-full h-full object-cover"
+                    />
+                </div>
             </div>
         )
     );

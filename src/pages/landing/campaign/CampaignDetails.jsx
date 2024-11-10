@@ -69,7 +69,9 @@ const CampaignDetails = () => {
                 await dispatch(
                     getCampaignImageByName(data.campaignImageName)
                 ).unwrap();
-                await dispatch(getDonationByCampaignId({ id })).unwrap();
+                await dispatch(
+                    getDonationByCampaignId({ id, size: 8 })
+                ).unwrap();
                 await dispatch(
                     getCampaignReportByCampaignId({ id, size: 5 })
                 ).unwrap();

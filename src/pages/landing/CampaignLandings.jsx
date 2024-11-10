@@ -23,24 +23,27 @@ const CampaignLandings = () => {
                 setIsLoading(true);
                 const edu = await dispatch(
                     getAllCampaignByCategory({
-                        size: 1000,
+                        size: 3,
                         category: "Educational Support",
+                        status: "ACTIVE",
                     })
                 ).unwrap();
                 setCampaignEduSupport(edu.data.content);
 
                 const infra = await dispatch(
                     getAllCampaignByCategory({
-                        size: 1000,
+                        size: 3,
                         category: "Infrastructure Support",
+                        status: "ACTIVE",
                     })
                 ).unwrap();
                 setCampaignInfraSupport(infra.data.content);
 
                 const opera = await dispatch(
                     getAllCampaignByCategory({
-                        size: 1000,
+                        size: 3,
                         category: "Operational Needs",
+                        status: "ACTIVE",
                     })
                 ).unwrap();
                 setCampaignOperaNeeds(opera.data.content);

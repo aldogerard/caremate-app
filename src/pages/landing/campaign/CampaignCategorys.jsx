@@ -33,6 +33,7 @@ const CampaignCategorys = () => {
                         category: categorys,
                         page: currentPage,
                         query: currentQuery,
+                        status: "ACTIVE",
                         size: 6,
                     })
                 ).unwrap();
@@ -66,6 +67,7 @@ const CampaignCategorys = () => {
                 getAllCampaignByCategory({
                     query: query,
                     size: 6,
+                    status: "ACTIVE",
                     page: 0,
                     category: categorys,
                 })
