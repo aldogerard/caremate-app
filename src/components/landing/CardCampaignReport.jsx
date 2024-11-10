@@ -29,7 +29,7 @@ const CardCampaignReport = ({ item }) => {
             <div className="flex flex-col gap-1 py-4">
                 <div className="flex flex-row space-x-2 items-center">
                     <h3 className="text-sm font-medium">
-                        {formatDate("10-12-2024")}
+                        {formatDate(item.createDate || "1-1-2024")}
                     </h3>
                 </div>
                 <p className="text-[#3d3d3d] text-sm">{item.description}</p>

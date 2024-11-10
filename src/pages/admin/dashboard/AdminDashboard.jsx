@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import CardBasic from "@/components/dashboard/admin/CardBasic";
 import { BsTree } from "react-icons/bs";
 import { MdBroadcastOnHome } from "react-icons/md";
+import { RiHandCoinLine } from "react-icons/ri";
 
 const AdminDashboard = () => {
     const dispatch = useDispatch();
@@ -184,6 +185,15 @@ const AdminDashboard = () => {
                                     <BsTree className="text-5xl font-light text-emerald-500" />
                                 }
                                 style={"bg-emerald-500/15"}
+                            />
+                            <CardBasic
+                                link={null}
+                                data={report.totalPointTree || 327}
+                                name={"Point Tree"}
+                                icon={
+                                    <RiHandCoinLine className="text-5xl font-light text-cyan-500" />
+                                }
+                                style={"bg-cyan-500/15"}
                             />
                             <CardBasic
                                 link={null}

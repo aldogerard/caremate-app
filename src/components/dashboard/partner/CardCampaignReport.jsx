@@ -63,7 +63,7 @@ const CardCampaignReport = ({ item }) => {
                     onError={(e) => (e.target.src = NOT_FOUND)}
                 />
             </div>
-            <div className="p-2 pb-3 h-[120px] overflow-y-scroll break-words">
+            <div className="p-2 pb-3 h-[120px] overflow-y-scroll break-words scrollbar-hide">
                 <h1 className="text-dark/85">{item?.description || "NaN"}</h1>
             </div>
             {role === "PARTNER" && (

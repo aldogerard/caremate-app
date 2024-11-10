@@ -222,7 +222,10 @@ const CampaignDetails = () => {
                                 <div className="flex flex-row items-center mt-5 text-xs lg:text-sm">
                                     <span>
                                         Created at{" "}
-                                        {formatDate(currentCampaign.startDate)}
+                                        {formatDate(
+                                            currentCampaign.createDate ||
+                                                "1-1-2024"
+                                        )}
                                     </span>
                                     <PiDotOutlineFill />
                                     <span>{currentCampaign.category}</span>

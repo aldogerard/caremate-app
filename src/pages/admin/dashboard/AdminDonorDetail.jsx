@@ -11,6 +11,7 @@ import { formatPhoneNumber } from "@/utils/Utils";
 import NOT_FOUND from "@/assets/images/NotFound.jpg";
 import SectionDonorDetail from "@/components/dashboard/admin/SectionDonorDetail";
 import SectionListDonation from "@/components/dashboard/admin/SectionListDonation";
+import SectionListPoint from "@/components/dashboard/admin/SectionListPoint";
 
 const AdminDonorDetail = () => {
     const { id } = useParams();
@@ -37,8 +38,8 @@ const AdminDonorDetail = () => {
                 <>
                     <Title name={"Detail Donor"} />
                     <SectionDonorDetail />
-
                     <SectionListDonation />
+                    <SectionListPoint />
                 </>
             )}
 
