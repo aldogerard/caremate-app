@@ -56,7 +56,7 @@ const CampaignCategorys = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleSearch("");
+        handleSearch(currentQuery);
     };
 
     const handleSearch = async (query) => {
