@@ -26,7 +26,7 @@ export const getAllCampaignByStatus = createAsyncThunk(
         const query = data?.query || "";
         const status = data?.status || "";
         const page = data?.page || 0;
-        const size = 7;
+        const size = data?.size || 7;
 
         try {
             if (query == "") {
@@ -38,6 +38,32 @@ export const getAllCampaignByStatus = createAsyncThunk(
 
             const response = await axiosInstance.get(
                 `/campaign/status?name=${query}&status=${status}&page=${page}&size=${size}`
+            );
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Fetch to failed");
+        }
+    }
+);
+
+export const getAllCampaignByCategory = createAsyncThunk(
+    "campaign/getAllCampaignByCategory",
+    async (data, { rejectWithValue }) => {
+        const query = data?.query || "";
+        const category = data?.category || "";
+        const page = data?.page || 0;
+        const size = data?.size || 7;
+
+        try {
+            if (query == "") {
+                const response = await axiosInstance.get(
+                    `/campaign/category?category=${category}&page=${page}&size=${size}`
+                );
+                return response.data;
+            }
+
+            const response = await axiosInstance.get(
+                `/campaign/category?name=${query}&category=${category}&page=${page}&size=${size}`
             );
             return response.data;
         } catch (e) {
@@ -150,6 +176,21 @@ const adminCampaignSlice = createSlice({
                 state.status = "success";
             })
             .addCase(getAllCampaignByStatus.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(getAllCampaignByCategory.fulfilled, (state, action) => {
+                const { data } = action.payload;
+                state.campaigns = data.content;
+                state.paging = {
+                    page: data.pageable.pageNumber,
+                    size: data.size,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                };
+                state.status = "success";
+            })
+            .addCase(getAllCampaignByCategory.rejected, (state) => {
                 state.status = "failed";
             })
 

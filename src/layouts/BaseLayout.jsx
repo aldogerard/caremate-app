@@ -1,19 +1,15 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import ScrollToTop from "@/components/ScrollToTop";
+import { Outlet } from "react-router-dom";
 
 const BaseLayouts = () => {
-    const location = useLocation();
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [location]);
     return (
         <>
+            <ScrollToTop />
             <Header />
             <section className="flex justify-center bg-third">
-                <main className="container py-16 min-h-screen padding overflow-hidden scrollbar-hide">
+                <main className="container py-16 min-h-screen padding scrollbar-hide">
                     <Outlet />
                 </main>
             </section>

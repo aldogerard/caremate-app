@@ -3,7 +3,7 @@ import BaseLayouts from "@/layouts/BaseLayout";
 import LoginAdmin from "@/pages/admin/LoginAdmin";
 import LoginPartner from "@/pages/partner/LoginPartner";
 import RegisterPartner from "@/pages/partner/RegisterPartner";
-import { Outlet, RouterProvider } from "react-router-dom";
+import { Outlet, RouterProvider, useLocation } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
 import AuthProtected from "./AuthProtected";
 import Profile from "@/pages/partner/dashboard/Profile";
@@ -17,7 +17,6 @@ import AdminProtected from "./AdminProtected";
 import AdminDashboard from "@/pages/admin/dashboard/AdminDashboard";
 import AdminPartner from "@/pages/admin/dashboard/AdminPartner";
 import Home from "@/pages/landing/Home";
-import AboutUs from "@/pages/landing/AboutUs";
 import Faq from "@/pages/landing/Faq";
 import CampaignLanding from "@/pages/landing/campaign/CampaignLanding";
 import News from "@/pages/landing/News/News";
@@ -33,7 +32,9 @@ import NotFound from "@/pages/NotFound";
 import AdminPartnerDetail from "@/pages/admin/dashboard/AdminPartnerDetail";
 import AdminDonor from "@/pages/admin/dashboard/AdminDonor";
 import AdminDonorDetail from "@/pages/admin/dashboard/AdminDonorDetail";
-import HomePage from "@/pages/landing/HomePage";
+import About from "@/pages/landing/About";
+import CampaignLandings from "@/pages/landing/CampaignLandings";
+import CampaignCategorys from "@/pages/landing/campaign/CampaignCategorys";
 
 const Routers = () => {
     const router = createBrowserRouter([
@@ -44,15 +45,15 @@ const Routers = () => {
             children: [
                 {
                     path: "/",
-                    element: <HomePage />,
+                    element: <Home />,
                 },
                 {
                     path: "/about",
-                    element: <AboutUs />,
+                    element: <About />,
                 },
                 {
                     path: "/campaign",
-                    element: <CampaignLanding />,
+                    element: <CampaignLandings />,
                 },
                 {
                     path: "/news",
@@ -67,11 +68,11 @@ const Routers = () => {
                     element: <NewsPage />,
                 },
                 {
-                    path: "/campaign/category",
-                    element: <CampaignCategory />,
+                    path: "/campaign/:category",
+                    element: <CampaignCategorys />,
                 },
                 {
-                    path: "/campaign/details",
+                    path: "/campaign/details/:id",
                     element: <CampaignDetails />,
                 },
                 {
@@ -192,7 +193,11 @@ const Routers = () => {
         },
     ]);
 
-    return <RouterProvider router={router} />;
+    return (
+        <>
+            <RouterProvider router={router} />
+        </>
+    );
 };
 
 export default Routers;
