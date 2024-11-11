@@ -24,6 +24,7 @@ const RegisterPartner = () => {
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
     const [isConfirmPasswordInvalid, setIsConfirmPasswordInvalid] =
         useState(false);
+    const [isPhoneNumberInvalid, setIsPhoneNumberInvalid] = useState(false);
 
     const [isPasswordFocus, setIsPasswordFocus] = useState(false);
     const [isCurrentPasswordFocus, setIsCurrentPasswordFocus] = useState(false);
@@ -35,13 +36,18 @@ const RegisterPartner = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const { email, password, confirmPassword } = auth;
+        const { email, password, confirmPassword, phoneNumber } = auth;
 
         setIsEmailInvalid(
             validateEmail(email) || email.length <= 0 ? false : true
         );
         setIsPasswordInvalid(
             validatePassword(password) || password.length <= 0 ? false : true
+        );
+
+        setIsPhoneNumberInvalid(
+            phoneNumber.length > 0 &&
+                (phoneNumber.length < 10 || phoneNumber.length > 15)
         );
 
         setIsConfirmPasswordInvalid(
@@ -117,6 +123,21 @@ const RegisterPartner = () => {
         }
 
         return Failed("Failed registration");
+    };
+
+    const isFormInvalid = () => {
+        return (
+            isPasswordInvalid ||
+            isEmailInvalid ||
+            isConfirmPasswordInvalid ||
+            isPhoneNumberInvalid ||
+            !auth.email ||
+            !auth.password ||
+            !auth.confirmPassword ||
+            !auth.foundationName ||
+            !auth.address ||
+            !auth.phoneNumber
+        );
     };
 
     return (
@@ -221,6 +242,12 @@ const RegisterPartner = () => {
                                 >
                                     Phone Number
                                 </label>
+                                {isPhoneNumberInvalid && (
+                                    <p className="text-xs font-medium text-error">
+                                        *Phone number must be between 10 and 15
+                                        digits
+                                    </p>
+                                )}
                             </div>
                             <input
                                 type="number"
@@ -333,16 +360,9 @@ const RegisterPartner = () => {
                         <div className="text-lg mt-4">
                             <button
                                 className={`w-full bg-primary py-4 text-lg rounded-md shadow-md text-light font-semibold outline-none hover:bg-emerald-600 ${
-                                    (isPasswordInvalid || isEmailInvalid) &&
-                                    "cursor-not-allowed"
+                                    isFormInvalid() && "cursor-not-allowed"
                                 }`}
-                                disabled={
-                                    isPasswordInvalid ||
-                                    isEmailInvalid ||
-                                    isConfirmPasswordInvalid
-                                        ? true
-                                        : false
-                                }
+                                disabled={isFormInvalid()}
                             >
                                 Register
                             </button>
