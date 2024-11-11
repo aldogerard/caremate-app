@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "@/assets/images/logo.webp";
 
-const image = "https://account.enigmacamp.com/3.jpg";
+import image from "@/assets/images/1813.webp";
 
 const RegisterPartner = () => {
     const [auth, setAuth] = useState({
@@ -143,7 +143,7 @@ const RegisterPartner = () => {
     return (
         <section className="h-full flex">
             <aside className="hidden lg:flex lg:w-2/3">
-                <img src={image} alt="hero" />
+                <img src={image} alt="hero" className="object-cover" />
             </aside>
             <main className="flex flex-col h-full items-center py-4 lg:w-1/3 ">
                 <div className="flex gap-3 justify-center items-center w-max">

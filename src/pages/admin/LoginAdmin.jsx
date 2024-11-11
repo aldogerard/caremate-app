@@ -3,7 +3,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import logo from "@/assets/images/logo.webp";
 import { validateEmail, validatePassword } from "@/utils/Utils";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { clearAuthStatus, login } from "@/redux/feature/authSlice";
 import { Failed, Success } from "@/utils/AlertUtil";
 
@@ -82,7 +82,10 @@ const LoginAdmin = () => {
                 <img src={image} alt="hero" />
             </aside>
             <main className="flex flex-col h-full items-center pt-32 py-20 lg:w-1/3">
-                <div className="flex gap-3 justify-center items-center w-max">
+                <Link
+                    to={"/"}
+                    className="flex gap-3 justify-center items-center w-max"
+                >
                     <div className="w-14 h-14">
                         <img
                             src={logo}
@@ -93,7 +96,7 @@ const LoginAdmin = () => {
                     <h1 className="text-xl font-semibold text-primary lg:text-3xl">
                         CareMate
                     </h1>
-                </div>
+                </Link>
                 <h1 className="text-lg font-light text-center  text-secondary my-14 lg:text-2xl lg:w-11/12 lg:max-w-lg">
                     Welcome back, Admin! Let's get started
                 </h1>

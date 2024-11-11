@@ -27,7 +27,11 @@ const Home = () => {
                 await dispatch(
                     getAllCampaignByStatus({ size: 6, status: "ACTIVE" })
                 ).unwrap();
-                await dispatch(fetchNews()).unwrap();
+                // await dispatch(
+                //     fetchNews({
+                //         size: 3,
+                //     })
+                // ).unwrap();
             } catch (error) {
             } finally {
                 setIsLoading(false);
@@ -209,7 +213,7 @@ const Home = () => {
                             </Link>
                         </div>
                         {campaigns?.length > 0 && (
-                            <main className="flex justify-between flex-wrap gap-y-4 gap-x-2">
+                            <main className="grid grid-cols-1 xl:grid-cols-3   flex-wrap gap-y-4 gap-x-2">
                                 <EachUtils
                                     of={campaigns}
                                     render={(item) => (

@@ -53,10 +53,10 @@ const HomeNewsCard = ({ articles }) => {
                 {articles.slice(0, 4).map((article) => (
                     <div
                         key={article.id}
-                        className="flex flex-row border border-black rounded-[50px] p-5"
+                        className="flex flex-row border rounded-[32px] p-5 bg-white"
                     >
                         <img
-                            className="h-[200px] w-full lg:w-60 object-cover rounded-3xl mb-0 mr-4"
+                            className="h-[200px] w-full lg:w-60 object-cover rounded-[24px] mb-0 mr-4"
                             src={article.imageUrl}
                             alt={article.title}
                         />

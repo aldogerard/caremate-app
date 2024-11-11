@@ -5,10 +5,13 @@ const BASE_URL = "http://10.10.102.91:1337/api";
 
 export const fetchNews = createAsyncThunk(
     "news/fetchNews",
-    async (_, { rejectWithValue }) => {
+    async (data, { rejectWithValue }) => {
+        const size = data?.size || 9;
+        const page = data?.page || 1;
+
         try {
             const response = await axios.get(
-                `${BASE_URL}/articles?populate=imagecontent`
+                `${BASE_URL}/articles?populate=imagecontent&pagination[page]=${page}&pagination[pageSize]=${size}`
             );
 
             // Map through the news items and construct the image URL
@@ -30,7 +33,10 @@ export const fetchNews = createAsyncThunk(
                 };
             });
 
-            return newsWithImageUrls;
+            return {
+                data: newsWithImageUrls,
+                paginate: response.data.meta.pagination,
+            };
         } catch (e) {
             return rejectWithValue(e.response?.data || "Login failed");
         }
@@ -68,6 +74,12 @@ const newsSlice = createSlice({
     initialState: {
         newsItems: [],
         selectedItem: null,
+        paging: {
+            page: 0,
+            size: 7,
+            totalPages: 0,
+            totalElements: 0,
+        },
         error: null,
         status: "idle",
     },
@@ -76,7 +88,13 @@ const newsSlice = createSlice({
         builder
             .addCase(fetchNews.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.newsItems = action.payload.sort(
+                state.paging = {
+                    page: action.payload.paginate.page,
+                    size: action.payload.paginate.pageSize,
+                    totalPages: action.payload.paginate.pageCount,
+                    totalElements: action.payload.paginate.total,
+                };
+                state.newsItems = action.payload.data.sort(
                     (a, b) =>
                         new Date(b.createdAt).getTime() -
                         new Date(a.createdAt).getTime()

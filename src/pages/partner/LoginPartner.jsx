@@ -6,8 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "@/assets/images/logo.webp";
-
-const image = "https://account.enigmacamp.com/2.jpg";
+import image from "@/assets/images/3907.webp";
 
 const LoginPartner = () => {
     const [auth, setAuth] = useState({
@@ -79,10 +78,13 @@ const LoginPartner = () => {
     return (
         <section className="h-full flex">
             <aside className="hidden lg:flex lg:w-2/3">
-                <img src={image} alt="hero" />
+                <img src={image} alt="hero" className="object-cover" />
             </aside>
             <main className="flex flex-col h-full items-center pt-32 py-20 lg:w-1/3">
-                <div className="flex gap-3 justify-center items-center w-max">
+                <Link
+                    to={"/"}
+                    className="flex gap-3 justify-center items-center w-max"
+                >
                     <div className="w-14 h-14">
                         <img
                             src={logo}
@@ -93,7 +95,7 @@ const LoginPartner = () => {
                     <h1 className="text-xl font-semibold text-primary lg:text-3xl">
                         CareMate
                     </h1>
-                </div>
+                </Link>
                 <h1 className="lg:w-11/12 lg:max-w-lg text-lg font-light text-center text-secondary my-8 lg:text-xl">
                     Welcome back, Partner! Let's make a difference together!
                 </h1>

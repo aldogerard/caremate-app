@@ -135,7 +135,7 @@ const CampaignCategorys = () => {
                 <section className="pt-20 pb-16 text-dark/90 px-8 xl:px-0">
                     {!isLoading ? (
                         <>
-                            <main className="flex flex-wrap justify-between gap-y-4 gap-x-2">
+                            <main className="grid grid-cols-1 xl:grid-cols-3 gap-y-4 gap-x-2">
                                 <EachUtils
                                     of={campaigns}
                                     render={(item) => (

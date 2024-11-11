@@ -4,13 +4,14 @@ import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import axiosInstance from "@/api/axios";
 import { Link } from "react-router-dom";
+import { limitText } from "@/utils/Utils";
 
 const BigHomeCard = () => {
     const { campaigns } = useSelector((state) => state.adminCampaign);
 
     const [imageUrl, setImageUrl] = useState("");
     const percent =
-        (campaigns[2]?.currentAmount / campaigns[2]?.goalAmount) * 100;
+        (campaigns[0]?.currentAmount / campaigns[0]?.goalAmount) * 100;
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -18,7 +19,7 @@ const BigHomeCard = () => {
             setIsLoading(true);
             try {
                 const response = await axiosInstance.get(
-                    `/file/${campaigns[2]?.campaignImageName}`
+                    `/file/${campaigns[0]?.campaignImageName}`
                 );
                 return setImageUrl(response.data);
             } catch (error) {
@@ -29,36 +30,36 @@ const BigHomeCard = () => {
         };
 
         fetchImageUrl();
-    }, [campaigns[2]?.campaignImageName]);
+    }, [campaigns[0]?.campaignImageName]);
 
     return (
         <>
-            {!isLoading ? (
+            {!isLoading && campaigns?.length > 0 ? (
                 <section className="pt-28 pb-16">
                     <div className="flex flex-col-reverse gap-4 xl:flex-row p-2 xl:p-4 rounded-[32px] bg-light border">
                         <div className="pb-6 px-1 xl:px-3 flex flex-col justify-between gap-2 xl:gap-4 w-full xl:w-1/2 xl:py-8">
                             <h1 className="text-dark/90 text-xl xl:text-6xl font-semibold">
-                                {campaigns[2].title}
+                                {limitText(campaigns[0]?.title, 20)}
                             </h1>
                             <div className="flex items-center gap-1 xl:mb-4 mb-2">
                                 <RiVerifiedBadgeFill className="text-primary text-lg xl:text-3xl" />
                                 <span className=" text-sm xl:text-xl">
-                                    {campaigns[2].partnerName}
+                                    {campaigns[0]?.partnerName}
                                 </span>
                             </div>
                             <p className="text-dark/80 text-xs xl:text-base xl:font-medium">
-                                {campaigns[2].description}
+                                {campaigns[0]?.description}
                             </p>
                             <div className="mb-6">
                                 <div className="flex justify-between items-end text-dark/80 font-medium">
                                     <h1 className="text-sm xl:text-base">
                                         <FormatRupiah
-                                            value={campaigns[2].currentAmount}
+                                            value={campaigns[0]?.currentAmount}
                                         />
                                     </h1>
                                     <h1 className="text-sm xl:text-base">
                                         <FormatRupiah
-                                            value={campaigns[2].goalAmount}
+                                            value={campaigns[0]?.goalAmount}
                                         />
                                     </h1>
                                 </div>
@@ -71,7 +72,7 @@ const BigHomeCard = () => {
                             </div>
                             <Link
                                 to={"/download"}
-                                className="flex justify-center items-center w-full xl:w-2/3  rounded-full cursor-pointer bg-amber-500 py-2"
+                                className="flex justify-center items-center w-full xl:w-2/3  rounded-full cursor-pointer bg-amber-500 py-3"
                             >
                                 <h1 className="text-light font-semibold text-lg">
                                     Donate Now

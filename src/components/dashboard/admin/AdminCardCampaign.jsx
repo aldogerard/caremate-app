@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const AdminCardCampaign = ({ item }) => {
     return (
         <Link
-            to={`/dashboard/admin/campaign/${item.campaignId}`}
+            to={`/dashboard/admin/campaign/${item.id}`}
             className="text-dark/85 bg-light shadow-md outline-none w-full p-4 border rounded-md flex gap-3 flex-col cursor-pointer transition-templates"
         >
             <div className="flex justify-between">

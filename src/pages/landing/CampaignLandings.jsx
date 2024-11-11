@@ -1,8 +1,5 @@
 import HomeDonateCard from "@/components/landing/HomeDonateCard";
-import {
-    getAllCampaignByCategory,
-    getAllCampaignByStatus,
-} from "@/redux/feature/admin/adminCampaignSlice";
+import { getAllCampaignByCategory } from "@/redux/feature/admin/adminCampaignSlice";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
 import { GoArrowRight, GoChevronRight } from "react-icons/go";
@@ -100,8 +97,7 @@ const CampaignLandings = () => {
                         Our Partner Campaigns
                     </h1>
                 </div>
-                {campaignEduSupport?.filter((res) => res.status === "ACTIVE")
-                    .length > 0 && (
+                {campaignEduSupport?.length > 0 && (
                     <>
                         <div className="flex justify-between items-center mt-12 mb-2">
                             <h1 className="font-medium text-xl ">
@@ -115,11 +111,9 @@ const CampaignLandings = () => {
                                 <GoChevronRight size={20} />
                             </Link>
                         </div>
-                        <main className="flex justify-between gap-y-4 gap-x-2 overflow-x-auto scrollbar-hide">
+                        <main className="grid grid-cols-1 xl:grid-cols-3 gap-2 gap-y-4 gap-x-2 overflow-x-auto scrollbar-hide">
                             <EachUtils
-                                of={campaignEduSupport
-                                    .filter((res) => res.status === "ACTIVE")
-                                    .slice(0, 3)}
+                                of={campaignEduSupport}
                                 render={(item) => (
                                     <HomeDonateCard item={item} />
                                 )}
@@ -128,8 +122,7 @@ const CampaignLandings = () => {
                     </>
                 )}
 
-                {campaignInfraSupport?.filter((res) => res.status === "ACTIVE")
-                    .length > 0 && (
+                {campaignInfraSupport?.length > 0 && (
                     <>
                         <div className="flex justify-between items-center mt-12 mb-2">
                             <h1 className="font-medium text-xl ">
@@ -143,11 +136,9 @@ const CampaignLandings = () => {
                                 <GoChevronRight size={20} />
                             </Link>
                         </div>
-                        <main className="flex justify-between gap-y-4 gap-x-2 overflow-x-auto scrollbar-hide">
+                        <main className="grid grid-cols-1 xl:grid-cols-3 gap-2 gap-y-4 gap-x-2 overflow-x-auto scrollbar-hide">
                             <EachUtils
-                                of={campaignInfraSupport
-                                    .filter((res) => res.status === "ACTIVE")
-                                    .slice(0, 3)}
+                                of={campaignInfraSupport}
                                 render={(item, index) => (
                                     <HomeDonateCard item={item} />
                                 )}
@@ -171,7 +162,7 @@ const CampaignLandings = () => {
                                 <GoChevronRight size={20} />
                             </Link>
                         </div>
-                        <main className="flex justify-between gap-y-4 gap-x-2 overflow-x-auto scrollbar-hide">
+                        <main className="grid grid-cols-1 xl:grid-cols-3 gap-2 gap-y-4 gap-x-2 overflow-x-auto scrollbar-hide">
                             <EachUtils
                                 of={campaignOperaNeeds
                                     .filter((res) => res.status === "ACTIVE")
