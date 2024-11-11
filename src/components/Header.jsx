@@ -179,7 +179,7 @@ const Header = () => {
                         <div
                             className={`${
                                 isDetailOpen ? "flex absolute" : "hidden"
-                            } flex-col top-[152px] w-44 bg-third border gap-1 p-2 rounded-md lg:top-12 lg:right-0`}
+                            } flex-col top-[152px] w-44 bg-third border gap-1 p-2 rounded-md lg:top-11 lg:right-0`}
                         >
                             <EachUtils
                                 of={!isLogin ? loginList : dashboardList}

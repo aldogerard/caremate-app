@@ -172,7 +172,7 @@ const FormEditCampaign = (props) => {
                             name="description"
                             required
                             placeholder="Enter description for your foundation"
-                            maxLength={300}
+                            maxLength={255}
                             className={`px-5 py-4 h-40 lg:h-40 text-dark outline-none rounded-md border focus:shadow-sm  bg-white resize-none `}
                         />
                     </div>

@@ -11,7 +11,7 @@ import { FormatRupiah } from "@arismun/format-rupiah";
 import { Link } from "react-router-dom";
 import CardBasic from "@/components/dashboard/admin/CardBasic";
 import { BsTree } from "react-icons/bs";
-import { MdBroadcastOnHome } from "react-icons/md";
+import { MdBroadcastOnHome, MdMoneyOff } from "react-icons/md";
 import { RiHandCoinLine } from "react-icons/ri";
 
 const AdminDashboard = () => {
@@ -188,15 +188,6 @@ const AdminDashboard = () => {
                             />
                             <CardBasic
                                 link={null}
-                                data={report.totalPointTree || 327}
-                                name={"Point Tree"}
-                                icon={
-                                    <RiHandCoinLine className="text-5xl font-light text-cyan-500" />
-                                }
-                                style={"bg-cyan-500/15"}
-                            />
-                            <CardBasic
-                                link={null}
                                 data={report.totalDonationOperation}
                                 type={"money"}
                                 name={"Operational Donation"}
@@ -204,6 +195,25 @@ const AdminDashboard = () => {
                                     <MdBroadcastOnHome className="text-5xl font-light text-indigo-500" />
                                 }
                                 style={"bg-indigo-500/15"}
+                            />
+                            <CardBasic
+                                link={null}
+                                data={report.totalFee || 0}
+                                type={"money"}
+                                name={"Total Fee"}
+                                icon={
+                                    <MdMoneyOff className="text-5xl font-light text-pink-500" />
+                                }
+                                style={"bg-pink-500/15"}
+                            />
+                            <CardBasic
+                                link={null}
+                                data={report.totalPointUsed || 0}
+                                name={"Point Tree"}
+                                icon={
+                                    <RiHandCoinLine className="text-5xl font-light text-cyan-500" />
+                                }
+                                style={"bg-cyan-500/15"}
                             />
                             <div className="w-max flex flex-wrap gap-4">
                                 <EachUtils

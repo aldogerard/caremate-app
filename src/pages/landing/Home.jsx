@@ -42,7 +42,7 @@ const Home = () => {
 
     return (
         <>
-            {!isLoading ? (
+            {!isLoading && campaigns?.length > 0 ? (
                 <>
                     <section className="flex xl:flex-row flex-col h-[93.5vh] gap-4 relative">
                         <div className=" hidden xl:block w-[480px] aspect-square bg-primary absolute right-0"></div>
@@ -100,55 +100,6 @@ const Home = () => {
                     </div>
 
                     <BigHomeCard />
-
-                    {/* <section className="pt-28 pb-16">
-                        <div className="flex flex-col-reverse gap-4 xl:flex-row p-2 xl:p-4 rounded-[32px] bg-light border">
-                            <div className="pb-6 px-1 xl:px-3 flex flex-col gap-2 xl:gap-4 w-full xl:w-1/2 xl:py-8">
-                                <h1 className="text-dark/90 text-xl xl:text-6xl font-semibold">
-                                    Berbagi Alat Tulis Kepada Penggapai Mimpi
-                                </h1>
-                                <div className="flex items-center gap-1 xl:mb-4 mb-2">
-                                    <RiVerifiedBadgeFill className="text-primary text-lg xl:text-3xl" />
-                                    <span className=" text-sm xl:text-xl">
-                                        Griya Yatim Fathia
-                                    </span>
-                                </div>
-                                <p className="text-dark/80 text-xs xl:text-base xl:font-medium">
-                                    Dengan berbagi alat tulis kita tidak hanya
-                                    memberikan benda, tetapi juga memberi
-                                    harapan dan semangat belajar.
-                                </p>
-                                <div className="mb-6">
-                                    <div className="flex justify-between items-end text-dark/80 font-medium">
-                                        <h1 className="text-sm xl:text-base">
-                                            <FormatRupiah value={370000} />
-                                        </h1>
-                                        <h1 className="text-sm xl:text-base">
-                                            <FormatRupiah value={2500000} />
-                                        </h1>
-                                    </div>
-                                    <div className="w-full h-2 xl:h-4 rounded-full overflow-hidden bg-accent/20 ">
-                                        <div
-                                            style={{ width: `22%` }}
-                                            className="h-full bg-amber-500 rounded-full"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="flex justify-center items-center w-full xl:w-2/3  rounded-full cursor-pointer bg-amber-500 py-2">
-                                    <h1 className="text-light font-semibold text-lg">
-                                        Donate Now
-                                    </h1>
-                                </div>
-                            </div>
-                            <div className=" w-full xl:w-1/2 h-80 xl:h-auto rounded-[24px] xl:rounded-[28px] overflow-hidden">
-                                <img
-                                    src="https://mi.polinela.ac.id/wp-content/uploads/2021/12/bursa_kerja_it_bootcamp_enigmacamp_d3_mi_polinela.jpg"
-                                    alt=""
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                        </div>
-                    </section> */}
 
                     <section className="pt-20 pb-16">
                         <div className="flex flex-col items-center justify-center">

@@ -78,7 +78,7 @@ tr {
 
 html {
     scroll-behavior: smooth;
-    @apply scrollbar-hide lg:scrollbar-default;
+    @apply scrollbar-hide lg:scrollbar-default scroll-pt-28;
 }
 
 .paragraph {

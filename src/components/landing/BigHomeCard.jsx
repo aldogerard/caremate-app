@@ -5,13 +5,14 @@ import { useSelector } from "react-redux";
 import axiosInstance from "@/api/axios";
 import { Link } from "react-router-dom";
 import { limitText } from "@/utils/Utils";
+import NOT_FOUND from "@/assets/images/NotFound.jpg";
 
 const BigHomeCard = () => {
     const { campaigns } = useSelector((state) => state.adminCampaign);
 
     const [imageUrl, setImageUrl] = useState("");
     const percent =
-        (campaigns[0]?.currentAmount / campaigns[0]?.goalAmount) * 100;
+        (campaigns[2]?.currentAmount / campaigns[2]?.goalAmount) * 100;
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -19,7 +20,7 @@ const BigHomeCard = () => {
             setIsLoading(true);
             try {
                 const response = await axiosInstance.get(
-                    `/file/${campaigns[0]?.campaignImageName}`
+                    `/file/${campaigns[2]?.campaignImageName}`
                 );
                 return setImageUrl(response.data);
             } catch (error) {
@@ -30,36 +31,39 @@ const BigHomeCard = () => {
         };
 
         fetchImageUrl();
-    }, [campaigns[0]?.campaignImageName]);
+    }, [campaigns[2]?.campaignImageName]);
 
     return (
         <>
-            {!isLoading && campaigns?.length > 0 ? (
+            {!isLoading && campaigns[2] != undefined ? (
                 <section className="pt-28 pb-16">
-                    <div className="flex flex-col-reverse gap-4 xl:flex-row p-2 xl:p-4 rounded-[32px] bg-light border">
+                    <Link
+                        to={`campaign/details/${campaigns[2]?.id}`}
+                        className="flex flex-col-reverse gap-4 xl:flex-row p-2 xl:p-4 rounded-[32px] bg-light border"
+                    >
                         <div className="pb-6 px-1 xl:px-3 flex flex-col justify-between gap-2 xl:gap-4 w-full xl:w-1/2 xl:py-8">
                             <h1 className="text-dark/90 text-xl xl:text-6xl font-semibold">
-                                {limitText(campaigns[0]?.title, 20)}
+                                {limitText(campaigns[2]?.title, 20)}
                             </h1>
                             <div className="flex items-center gap-1 xl:mb-4 mb-2">
                                 <RiVerifiedBadgeFill className="text-primary text-lg xl:text-3xl" />
                                 <span className=" text-sm xl:text-xl">
-                                    {campaigns[0]?.partnerName}
+                                    {campaigns[2]?.partnerName}
                                 </span>
                             </div>
                             <p className="text-dark/80 text-xs xl:text-base xl:font-medium">
-                                {campaigns[0]?.description}
+                                {campaigns[2]?.description}
                             </p>
                             <div className="mb-6">
                                 <div className="flex justify-between items-end text-dark/80 font-medium">
                                     <h1 className="text-sm xl:text-base">
                                         <FormatRupiah
-                                            value={campaigns[0]?.currentAmount}
+                                            value={campaigns[2]?.currentAmount}
                                         />
                                     </h1>
                                     <h1 className="text-sm xl:text-base">
                                         <FormatRupiah
-                                            value={campaigns[0]?.goalAmount}
+                                            value={campaigns[2]?.goalAmount}
                                         />
                                     </h1>
                                 </div>
@@ -84,9 +88,10 @@ const BigHomeCard = () => {
                                 src={imageUrl}
                                 alt=""
                                 className="w-full h-full object-cover"
+                                onError={(e) => (e.target.src = NOT_FOUND)}
                             />
                         </div>
-                    </div>
+                    </Link>
                 </section>
             ) : (
                 <section className="pt-28 pb-16">

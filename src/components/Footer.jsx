@@ -26,14 +26,14 @@ const Footer = () => {
                         Information
                     </h1>
                     <div className="flex flex-col gap-2 w-max font-medium">
-                        <Link to="/faq">
+                        <Link to="/about">
                             <h1>About Us</h1>
                         </Link>
                         <Link to="/faq">
                             <h1>Frequently Asked Question</h1>
                         </Link>
-                        <Link to="/faq">
-                            <h1>User Policy</h1>
+                        <Link to="/terms-and-conditions">
+                            <h1>Terms and conditions</h1>
                         </Link>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import axiosInstance from "@/api/axios";
 import { Link } from "react-router-dom";
+import NOT_FOUND from "@/assets/images/NotFound.jpg";
 
 const SubCardHero = () => {
     const { campaigns } = useSelector((state) => state.adminCampaign);
@@ -33,13 +34,17 @@ const SubCardHero = () => {
 
     return (
         <>
-            {!isLoading ? (
-                <div className="flex flex-col translate-y-12 scale-90  w-[340px] p-2 rounded-[32px] border gap-4 bg-light h-max">
+            {!isLoading && campaigns[1] !== undefined ? (
+                <Link
+                    to={`campaign/details/${campaigns[1]?.id}`}
+                    className="flex flex-col translate-y-12 scale-90  w-[340px] p-2 rounded-[32px] border gap-4 bg-light h-max"
+                >
                     <div className="w-full h-52 rounded-t-[24px] rounded-b-[20px] overflow-hidden">
                         <img
                             src={imageUrl}
                             alt=""
                             className="w-full h-full object-cover"
+                            onError={(e) => (e.target.src = NOT_FOUND)}
                         />
                     </div>
                     <div className="pb-6 px-3 flex flex-col gap-1">
@@ -84,7 +89,7 @@ const SubCardHero = () => {
                             </h1>
                         </Link>
                     </div>
-                </div>
+                </Link>
             ) : (
                 <div className="flex scale-90 translate-y-4 flex-col w-[340px] p-2 rounded-[32px] border gap-4 bg-light h-max">
                     {/* Skeleton untuk gambar */}

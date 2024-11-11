@@ -53,7 +53,7 @@ export const getAllCampaignByCategory = createAsyncThunk(
         const category = data?.category || "";
         const page = data?.page || 0;
         const size = data?.size || 7;
-        const status = data?.status || "ACTIVE";
+        const status = data?.status || "ACTIVE,COMPLETED";
 
         try {
             if (query == "") {

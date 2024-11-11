@@ -35,6 +35,7 @@ import AdminDonorDetail from "@/pages/admin/dashboard/AdminDonorDetail";
 import About from "@/pages/landing/About";
 import CampaignLandings from "@/pages/landing/CampaignLandings";
 import CampaignCategorys from "@/pages/landing/campaign/CampaignCategorys";
+import TermsAndConditions from "@/pages/landing/TermsAndConditions";
 
 const Routers = () => {
     const router = createBrowserRouter([
@@ -76,8 +77,8 @@ const Routers = () => {
                     element: <CampaignDetails />,
                 },
                 {
-                    path: "/download",
-                    element: <DownloadApps />,
+                    path: "/terms-and-conditions",
+                    element: <TermsAndConditions />,
                 },
             ],
         },
@@ -162,10 +163,6 @@ const Routers = () => {
                             element: <Withdrawal />,
                         },
                     ],
-                },
-                {
-                    path: "/dashboard/admin",
-                    element: <></>,
                 },
             ],
         },

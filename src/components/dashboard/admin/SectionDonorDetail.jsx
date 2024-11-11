@@ -87,6 +87,12 @@ const SectionDonorDetail = () => {
                             {currentDonor.totalPoints}
                         </h1>
                     </div>
+                    <div className="lg:w-2/5">
+                        <h1 className="font-light">Point Used</h1>
+                        <h1 className="text-lg font-medium">
+                            {currentDonor?.totalPointUsed || 0}
+                        </h1>
+                    </div>
                 </div>
             </div>
         </>
