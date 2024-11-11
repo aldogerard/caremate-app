@@ -263,7 +263,9 @@ const CampaignDetails = () => {
                                     <div className="flex items-center justify-center">
                                         <ProgressRing
                                             percentage={
-                                                percent < 100 ? percent : 100
+                                                percent < 100
+                                                    ? percent.toFixed(2)
+                                                    : 100
                                             }
                                         />
                                     </div>
