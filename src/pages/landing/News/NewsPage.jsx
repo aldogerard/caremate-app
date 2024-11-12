@@ -63,7 +63,7 @@ const NewsPage = () => {
     };
 
     return (
-        <div className="m-4 md:m-6">
+        <section className="min-h-screen py-10">
             {isLoading && <div>Loading...</div>}
 
             {!isLoading && processedContent !== "" && (
@@ -142,7 +142,7 @@ const NewsPage = () => {
                     </div>
                 </>
             )}
-        </div>
+        </section>
     );
 };
 

@@ -80,6 +80,10 @@ const Routers = () => {
                     path: "/terms-and-conditions",
                     element: <TermsAndConditions />,
                 },
+                {
+                    path: "/download",
+                    element: <DownloadApps />,
+                },
             ],
         },
         {

@@ -8,8 +8,6 @@ import { limitText } from "@/utils/Utils";
 import axiosInstance from "@/api/axios";
 
 const HomeDonateCard = ({ item }) => {
-    const navigate = useNavigate();
-
     const [imageUrl, setImageUrl] = useState("");
     const percent = (item.currentAmount / item.goalAmount) * 100;
     const [isLoading, setIsLoading] = useState(false);
@@ -95,7 +93,7 @@ const HomeDonateCard = ({ item }) => {
                     </div>
                 </Link>
             ) : (
-                <div className="flex flex-col w-full xl:w-[32%] p-2 min-w-[360px] rounded-[36px] border gap-4 bg-light h-max">
+                <div className="flex flex-col w-full max-w-[440px] p-2 rounded-[36px] border gap-4 bg-light h-max">
                     {/* Skeleton untuk gambar */}
                     <div className="w-full h-60 xl:h-72 rounded-t-[28px] rounded-b-[24px] bg-gray-300 animate-pulse"></div>
 

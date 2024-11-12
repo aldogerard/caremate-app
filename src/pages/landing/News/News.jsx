@@ -33,7 +33,7 @@ const News = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <section className="min-h-screen flex flex-col py-10">
             <div>
                 <h1 className="text-4xl font-semibold">News</h1>
 
@@ -42,7 +42,7 @@ const News = () => {
                 {status === "succeeded" && <NewsCard articles={newsItems} />}
             </div>
             <Pagination handlePageClick={handlePageClick} paging={paging} />
-        </div>
+        </section>
     );
 };
 

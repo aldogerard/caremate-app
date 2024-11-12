@@ -1,7 +1,11 @@
 import Button from "@/components/Button";
 import IconDetail from "@/components/IconDetail";
 import EachUtils from "@/utils/EachUtils";
-import { capitalizeFirstLetter, formatPhoneNumber } from "@/utils/Utils";
+import {
+    capitalizeFirstLetter,
+    formatDate,
+    formatPhoneNumber,
+} from "@/utils/Utils";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -28,7 +32,7 @@ const TableDonor = () => {
                         <h1>Email</h1>
                     </div>
                     <div className="col-start-4">
-                        <h1>Phone Number</h1>
+                        <h1>Registration date</h1>
                     </div>
                     <div className="col-start-5">
                         <h1>Total Point</h1>
@@ -56,7 +60,7 @@ const TableDonor = () => {
                                 <h1>{item.email}</h1>
                             </div>
                             <div className="col-start-4">
-                                <h1>{formatPhoneNumber(item.phone)}</h1>
+                                <h1>{formatDate(item.createdDate)}</h1>
                             </div>
                             <div className="col-start-5">
                                 <h1>{item.totalPoints}</h1>

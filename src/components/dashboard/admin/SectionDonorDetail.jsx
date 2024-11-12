@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NOT_FOUND from "@/assets/images/NotFound.jpg";
-import { formatPhoneNumber } from "@/utils/Utils";
+import { formatDate, formatPhoneNumber } from "@/utils/Utils";
 import { getDonationByDonorId } from "@/redux/feature/admin/adminDonationSlice";
 import {
     clearCurrentDonorUrl,
@@ -74,19 +74,27 @@ const SectionDonorDetail = () => {
                         </h1>
                     </div>
                     <div className="lg:w-2/5">
+                        <h1 className="font-light">Registration Date</h1>
+                        <h1 className="text-lg font-medium">
+                            {formatDate(currentDonor.createdDate)}
+                        </h1>
+                    </div>
+                </div>
+                <div className="flex mb-8 items-center">
+                    <div className="lg:w-2/5">
                         <h1 className="font-light">Total Donation</h1>
                         <h1 className="text-lg font-medium">
                             {paging.totalElements}
                         </h1>
                     </div>
-                </div>
-                <div className="flex mb-8 items-center">
                     <div className="lg:w-2/5">
                         <h1 className="font-light">Total Point</h1>
                         <h1 className="text-lg font-medium">
                             {currentDonor.totalPoints}
                         </h1>
                     </div>
+                </div>
+                <div className="flex mb-8 items-center">
                     <div className="lg:w-2/5">
                         <h1 className="font-light">Point Used</h1>
                         <h1 className="text-lg font-medium">

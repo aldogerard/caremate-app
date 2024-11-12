@@ -22,7 +22,7 @@ const CampaignLandings = () => {
                     getAllCampaignByCategory({
                         size: 3,
                         category: "Educational Support",
-                        status: "ACTIVE",
+                        status: "ACTIVE,COMPLETED",
                     })
                 ).unwrap();
                 setCampaignEduSupport(edu.data.content);
@@ -31,7 +31,7 @@ const CampaignLandings = () => {
                     getAllCampaignByCategory({
                         size: 3,
                         category: "Infrastructure Support",
-                        status: "ACTIVE",
+                        status: "ACTIVE,COMPLETED",
                     })
                 ).unwrap();
                 setCampaignInfraSupport(infra.data.content);
@@ -40,7 +40,7 @@ const CampaignLandings = () => {
                     getAllCampaignByCategory({
                         size: 3,
                         category: "Operational Needs",
-                        status: "ACTIVE",
+                        status: "ACTIVE,COMPLETED",
                     })
                 ).unwrap();
                 setCampaignOperaNeeds(opera.data.content);
@@ -147,8 +147,7 @@ const CampaignLandings = () => {
                     </>
                 )}
 
-                {campaignOperaNeeds?.filter((res) => res.status === "ACTIVE")
-                    .length > 0 && (
+                {campaignOperaNeeds?.length > 0 && (
                     <>
                         <div className="flex justify-between items-center mt-12 mb-2">
                             <h1 className="font-medium text-xl ">
@@ -164,9 +163,7 @@ const CampaignLandings = () => {
                         </div>
                         <main className="grid grid-cols-1 xl:grid-cols-3 gap-2 gap-y-4 gap-x-2 overflow-x-auto scrollbar-hide">
                             <EachUtils
-                                of={campaignOperaNeeds
-                                    .filter((res) => res.status === "ACTIVE")
-                                    .slice(0, 3)}
+                                of={campaignOperaNeeds}
                                 render={(item, index) => (
                                     <HomeDonateCard item={item} />
                                 )}

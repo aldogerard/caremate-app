@@ -65,15 +65,27 @@ const CampaignDetail = () => {
         const { status, isWithdrawal } = currentCampaign;
 
         if (status !== "COMPLETED") {
-            return Failed("Only campaigns that have been completed");
+            return Failed(
+                "Only campaigns that are completed can request a withdrawal."
+            );
         }
 
-        if (status === "COMPLETED" && isWithdrawal === "PENDING") {
-            return Failed("You already request a withdrawal");
+        if (status === "COMPLETED") {
+            if (isWithdrawal === "PENDING") {
+                return Failed("You have already requested a withdrawal.");
+            }
+
+            if (isWithdrawal === "APPROVED") {
+                return Failed(
+                    "The withdrawal for this campaign has already been approved."
+                );
+            }
         }
 
-        if (status === "COMPLETED" && isWithdrawal === "APPROVED") {
-            return Failed("Withdrawal campaign already approved");
+        if (currentCampaign.currentAmount === 0) {
+            return Failed(
+                "Withdrawal cannot be processed because the raised amount is zero."
+            );
         }
 
         Confirm("Request a withdrawal", async () => {

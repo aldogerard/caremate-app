@@ -59,7 +59,7 @@ const CardCampaignReport = ({ item }) => {
                 <img
                     src={imageUrl}
                     alt="Image Campaign Report"
-                    className="w-full h-full object-covers"
+                    className="w-full h-full object-cover"
                     onError={(e) => (e.target.src = NOT_FOUND)}
                 />
             </div>

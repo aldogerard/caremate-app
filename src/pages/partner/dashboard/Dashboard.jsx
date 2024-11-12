@@ -49,6 +49,8 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (report === null) return;
+        console.log(report);
+
         const updatedDatas = datas.map((item) => {
             const {
                 totalCampaignInReview,
@@ -130,7 +132,7 @@ const Dashboard = () => {
             <Title name={"Dashboard"} />
             {!isLoading && (
                 <div className="flex flex-wrap gap-4 w-full">
-                    {report ? (
+                    {report && campaigns && withdrawals ? (
                         <>
                             <div className="flex flex-wrap gap-4">
                                 <CardBasic

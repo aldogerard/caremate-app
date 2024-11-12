@@ -155,7 +155,7 @@ const AdminDashboard = () => {
             <Title name={"Dashboard"} />
             {!isLoading && (
                 <div className="flex flex-wrap gap-4">
-                    {report ? (
+                    {report != null ? (
                         <>
                             <CardBasic
                                 link={"donor"}

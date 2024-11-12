@@ -7,6 +7,7 @@ import {
 import { Confirm, Failed, Success } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import { validateFile } from "@/utils/Utils";
+import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import { FaAngleRight } from "react-icons/fa6";
@@ -38,7 +39,7 @@ const FormCampaign = (props) => {
         category: option[0].value,
         title: "",
         description: "",
-        goalAmount: 0,
+        goalAmount: 500000,
         startDate: null,
         endDate: null,
         image: null,
@@ -98,6 +99,10 @@ const FormCampaign = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        if (isDisable()) {
+            return Failed("Minimum goal amount is Rp 500.000");
+        }
+
         if (formData.category === option[0].value) {
             return Failed("Select category");
         }
@@ -143,6 +148,23 @@ const FormCampaign = (props) => {
             console.log(error);
             Failed("Failed create campaign");
         }
+    };
+
+    const isDisable = () => {
+        const cleanedValue = formData.goalAmount
+            .replace("Rp", "")
+            .trim()
+            .replace(/\./g, "");
+
+        return (
+            cleanedValue < 500000 ||
+            formData.category === option[0].value ||
+            formData.title === "" ||
+            formData.description === "" ||
+            formData.startDate === null ||
+            formData.endDate === null ||
+            formData.image === ""
+        );
     };
 
     return (
@@ -232,6 +254,10 @@ const FormCampaign = (props) => {
                                     >
                                         Goal Amount
                                     </label>
+                                    <h1 className="text-xs text-amber-600 font-medium">
+                                        *Minimum goal amount is{" "}
+                                        <FormatRupiah value={500000} />
+                                    </h1>
                                 </div>
                                 <CurrencyInput
                                     id="goalAmount"
@@ -255,7 +281,7 @@ const FormCampaign = (props) => {
                                     <label className="text-black/80">
                                         Range Date
                                     </label>
-                                    <h1 className="text-xs text-warning font-medium">
+                                    <h1 className="text-xs text-amber-600 font-medium">
                                         *Minimum start date is 1 week from now
                                     </h1>
                                 </div>

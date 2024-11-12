@@ -4,7 +4,10 @@ import HomeDonateCard from "@/components/landing/HomeDonateCard";
 import HomeNewsCard from "@/components/landing/HomeNewsCard";
 import SubCardHero from "@/components/landing/SubCardHero";
 import Loader from "@/components/Loader";
-import { getAllCampaignByStatus } from "@/redux/feature/admin/adminCampaignSlice";
+import {
+    getAllCampaignByCategory,
+    getAllCampaignByStatus,
+} from "@/redux/feature/admin/adminCampaignSlice";
 import { fetchNews } from "@/redux/landing/newsSlice";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
@@ -25,7 +28,11 @@ const Home = () => {
             try {
                 setIsLoading(true);
                 await dispatch(
-                    getAllCampaignByStatus({ size: 6, status: "ACTIVE" })
+                    getAllCampaignByCategory({
+                        size: 6,
+                        category: " ",
+                        status: "ACTIVE,COMPLETED",
+                    })
                 ).unwrap();
                 // await dispatch(
                 //     fetchNews({

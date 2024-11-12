@@ -52,7 +52,7 @@ const BigHomeCard = () => {
                                 </span>
                             </div>
                             <p className="text-dark/80 text-xs xl:text-base xl:font-medium">
-                                {campaigns[2]?.description}
+                                {limitText(campaigns[2]?.description, 130)}
                             </p>
                             <div className="mb-6">
                                 <div className="flex justify-between items-end text-dark/80 font-medium">
