@@ -1,16 +1,15 @@
-import CardCampaign from "@/components/dashboard/partner/CardCampaign";
 import CardWithdrawal from "@/components/dashboard/partner/CardWithDrawal";
 import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
 
+import InputSearch from "@/components/dashboard/InputSearch";
+import Loader from "@/components/Loader";
+import Pagination from "@/components/Pagination";
+import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
 import { getWithdrawalByPartnerId } from "@/redux/feature/partner/withdrawalSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "@/components/Loader";
-import { getDetailPartner } from "@/redux/feature/partner/partnerSlice";
-import InputSearch from "@/components/dashboard/InputSearch";
-import Pagination from "@/components/Pagination";
 
 const data = [
     {

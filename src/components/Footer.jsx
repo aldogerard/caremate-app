@@ -1,11 +1,6 @@
 import { formatPhoneNumber } from "@/utils/Utils";
 import React from "react";
-import {
-    FaGooglePlay,
-    FaLocationDot,
-    FaPhone,
-    FaRegEnvelope,
-} from "react-icons/fa6";
+import { FaLocationDot, FaPhone, FaRegEnvelope } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 const Footer = () => {

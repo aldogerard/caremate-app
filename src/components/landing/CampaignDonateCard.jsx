@@ -1,7 +1,7 @@
 import React from "react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const CampaignDonateCard = ({ campaigns }) => {
     return (

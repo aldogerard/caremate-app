@@ -11,6 +11,7 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 
 import NOT_FOUND from "@/assets/images/NotFound.jpg";
+import { formatDate } from "@/utils/Utils";
 
 const CardCampaignReport = ({ item }) => {
     const dispatch = useDispatch();
@@ -64,7 +65,12 @@ const CardCampaignReport = ({ item }) => {
                 />
             </div>
             <div className="p-2 pb-3 h-[120px] overflow-y-scroll break-words scrollbar-hide">
-                <h1 className="text-dark/85">{item?.description || "NaN"}</h1>
+                <h1 className="text-dark/85 text-[10px] text-gray-400 text-right">
+                    {formatDate(item?.createdDate)}
+                </h1>
+                <h1 className="text-dark/85 text-sm">
+                    {item?.description || "-"}
+                </h1>
             </div>
             {role === "PARTNER" && (
                 <div

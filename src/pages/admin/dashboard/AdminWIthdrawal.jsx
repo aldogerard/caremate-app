@@ -1,13 +1,13 @@
 import AdminDetailWithdrawal from "@/components/dashboard/admin/AdminDetailWithdrawal";
 import TableWithdrawal from "@/components/dashboard/admin/TableWithdrawal";
+import InputSearch from "@/components/dashboard/InputSearch";
 import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
+import Loader from "@/components/Loader";
+import Pagination from "@/components/Pagination";
+import { getAllWithdrawalByStatus } from "@/redux/feature/admin/adminWithdrawalSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllWithdrawalByStatus } from "@/redux/feature/admin/adminWithdrawalSlice";
-import Loader from "@/components/Loader";
-import InputSearch from "@/components/dashboard/InputSearch";
-import Pagination from "@/components/Pagination";
 
 const data = [
     {

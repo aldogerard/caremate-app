@@ -1,8 +1,8 @@
 import React from "react";
 import { GoArrowRight } from "react-icons/go";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 import { Link } from "react-router-dom";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const HomeNewsCard = ({ articles }) => {
     return (

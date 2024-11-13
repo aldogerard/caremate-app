@@ -1,16 +1,14 @@
+import NOT_FOUND from "@/assets/images/NotFound.jpg";
 import Button from "@/components/Button";
 import CustomModal from "@/components/CustomModal";
 import {
-    getCampaignByPartnerId,
     getCampaignDetailById,
-    getCampaignImageByName,
     updateCampaignByPartnerId,
 } from "@/redux/feature/partner/campaignSlice";
 import { Confirm, Failed, Success } from "@/utils/AlertUtil";
 import { validateFile } from "@/utils/Utils";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import NOT_FOUND from "@/assets/images/NotFound.jpg";
 
 const FormEditCampaign = (props) => {
     const dispatch = useDispatch();

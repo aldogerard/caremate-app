@@ -2,7 +2,7 @@ import { logout } from "@/redux/feature/authSlice";
 import { Logout } from "@/utils/AlertUtil";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
-import { FaThLarge, FaUserFriends } from "react-icons/fa";
+import { FaThLarge } from "react-icons/fa";
 import {
     FaArrowRightFromBracket,
     FaChevronLeft,

@@ -1,14 +1,14 @@
 import { capitalizeFirstLetter, formatDate } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import NOT_FOUND from "@/assets/images/NotFound.jpg";
+import Loader from "@/components/Loader";
 import {
     clearCurrentCampaignUrl,
     getCampaignImageByName,
 } from "@/redux/feature/partner/campaignSlice";
-import Loader from "@/components/Loader";
 
 const SectionDetailCampaign = () => {
     const dispatch = useDispatch();

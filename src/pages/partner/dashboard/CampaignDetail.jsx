@@ -84,7 +84,7 @@ const CampaignDetail = () => {
 
         if (currentCampaign.currentAmount === 0) {
             return Failed(
-                "Withdrawal cannot be processed because the raised amount is zero."
+                "Withdrawal cannot be processed because the raised amount is Rp 0."
             );
         }
 

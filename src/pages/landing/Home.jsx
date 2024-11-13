@@ -4,11 +4,7 @@ import HomeDonateCard from "@/components/landing/HomeDonateCard";
 import HomeNewsCard from "@/components/landing/HomeNewsCard";
 import SubCardHero from "@/components/landing/SubCardHero";
 import Loader from "@/components/Loader";
-import {
-    getAllCampaignByCategory,
-    getAllCampaignByStatus,
-} from "@/redux/feature/admin/adminCampaignSlice";
-import { fetchNews } from "@/redux/landing/newsSlice";
+import { getAllCampaignByCategory } from "@/redux/feature/admin/adminCampaignSlice";
 import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
 import { GoArrowRight, GoPeople } from "react-icons/go";

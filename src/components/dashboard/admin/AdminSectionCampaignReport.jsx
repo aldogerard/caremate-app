@@ -1,8 +1,8 @@
+import Pagination from "@/components/Pagination";
+import { getCampaignReportByCampaignId } from "@/redux/feature/partner/campaignReportSlice";
+import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Pagination from "@/components/Pagination";
-import EachUtils from "@/utils/EachUtils";
-import { getCampaignReportByCampaignId } from "@/redux/feature/partner/campaignReportSlice";
 import CardCampaignReport from "../partner/CardCampaignReport";
 
 const AdminSectionCampaignReport = () => {

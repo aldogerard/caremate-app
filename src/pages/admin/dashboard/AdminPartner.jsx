@@ -1,14 +1,13 @@
-import AdminDetailPartner from "@/components/dashboard/admin/AdminDetailPartner";
 import TablePartner from "@/components/dashboard/admin/TablePartner";
 import Title from "@/components/dashboard/Title";
 import Filter from "@/components/Filter";
 import React, { useEffect, useState } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
-import { getAllPartner } from "@/redux/feature/admin/adminPartnerSlice";
-import Loader from "@/components/Loader";
 import InputSearch from "@/components/dashboard/InputSearch";
+import Loader from "@/components/Loader";
 import Pagination from "@/components/Pagination";
+import { getAllPartner } from "@/redux/feature/admin/adminPartnerSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const data = [
     {

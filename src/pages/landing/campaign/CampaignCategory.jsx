@@ -1,8 +1,7 @@
-import CampaignDonateCard from "@/components/landing/CampaignDonateCard";
+import CampaignDetailsDonateCard from "@/components/landing/CampaignDetailsDonateCard";
 import { cn, Pagination, PaginationItemType } from "@nextui-org/react";
 import React, { useState } from "react";
 import { ChevronIcon } from "../News/ChevronIcon";
-import CampaignDetailsDonateCard from "@/components/landing/CampaignDetailsDonateCard";
 
 const campaigns = Array.from({ length: 12 }, (_, i) => ({
     id: i + 1,

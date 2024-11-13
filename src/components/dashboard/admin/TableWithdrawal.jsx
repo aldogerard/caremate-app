@@ -10,11 +10,18 @@ const TableWithdrawal = (props) => {
     const { handleDetailModal } = props;
 
     const dispatch = useDispatch();
-    const { withdrawals } = useSelector((state) => state.adminWithdrawal);
+    const { withdrawals, paging } = useSelector(
+        (state) => state.adminWithdrawal
+    );
+    const { page, size } = paging;
 
     const handleClickDetail = (res) => {
         dispatch(setCurrentWithdrawal({ item: res }));
         handleDetailModal();
+    };
+
+    const calculateRowNumber = (index) => {
+        return index + 1 + page * size;
     };
 
     return (
@@ -53,7 +60,7 @@ const TableWithdrawal = (props) => {
                                 grid grid-cols-[.7fr,3fr,3fr,2fr,2fr,2fr,1fr] px-6 py-3 items-center gap-x-2`}
                         >
                             <div className="col-start-1">
-                                <h1>{index + 1}</h1>
+                                <h1>{calculateRowNumber(index)}</h1>
                             </div>
                             <div className="col-start-2">
                                 <h1>{item.partnerName}</h1>

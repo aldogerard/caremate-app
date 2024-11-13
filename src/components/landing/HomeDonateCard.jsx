@@ -1,11 +1,10 @@
+import axiosInstance from "@/api/axios";
+import { limitText } from "@/utils/Utils";
+import { FormatRupiah } from "@arismun/format-rupiah";
 import React, { useEffect, useState } from "react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Link } from "react-router-dom";
 import "swiper/css";
-import { Link, useNavigate } from "react-router-dom";
-import { FormatRupiah } from "@arismun/format-rupiah";
-import { limitText } from "@/utils/Utils";
-import axiosInstance from "@/api/axios";
 
 const HomeDonateCard = ({ item }) => {
     const [imageUrl, setImageUrl] = useState("");

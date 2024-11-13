@@ -4,8 +4,6 @@ import EachUtils from "@/utils/EachUtils";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AdminCardDonation from "./AdminCardDonation";
-import dummy from "@/data/dummyDonation.json";
-import CustomModal from "@/components/CustomModal";
 
 const SectionListDonation = () => {
     const dispatch = useDispatch();

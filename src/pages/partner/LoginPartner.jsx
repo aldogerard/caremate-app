@@ -1,12 +1,12 @@
+import image from "@/assets/images/3907.webp";
+import logo from "@/assets/images/logo.webp";
 import { clearAuthStatus, login } from "@/redux/feature/authSlice";
 import { Failed, Success } from "@/utils/AlertUtil";
 import { validateEmail, validatePassword } from "@/utils/Utils";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "@/assets/images/logo.webp";
-import image from "@/assets/images/3907.webp";
 
 const LoginPartner = () => {
     const [auth, setAuth] = useState({

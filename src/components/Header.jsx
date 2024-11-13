@@ -68,12 +68,12 @@ const Header = () => {
             link: "/about",
         },
         {
-            name: "News",
-            link: "/news",
-        },
-        {
             name: "Campaign",
             link: "/campaign",
+        },
+        {
+            name: "News",
+            link: "/news",
         },
     ];
 

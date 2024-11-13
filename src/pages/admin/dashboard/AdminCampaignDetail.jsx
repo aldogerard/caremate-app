@@ -1,22 +1,22 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import {
     getCampaignDetailById,
     getCampaignImageByName,
 } from "@/redux/feature/partner/campaignSlice";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
+import Button from "@/components/Button";
+import AdminSectionCampaignReport from "@/components/dashboard/admin/AdminSectionCampaignReport";
+import SectionDetailCampaign from "@/components/dashboard/partner/SectionDetailCampaign";
+import SectionDonationCampaign from "@/components/dashboard/partner/SectionDonationCampaign";
 import Title from "@/components/dashboard/Title";
 import Loader from "@/components/Loader";
-import Button from "@/components/Button";
-import { Confirm, Failed, InputMessage, Success } from "@/utils/AlertUtil";
-import SectionDetailCampaign from "@/components/dashboard/partner/SectionDetailCampaign";
 import {
     approveCampaign,
     rejectCampaign,
 } from "@/redux/feature/admin/adminCampaignSlice";
-import AdminSectionCampaignReport from "@/components/dashboard/admin/AdminSectionCampaignReport";
-import SectionDonationCampaign from "@/components/dashboard/partner/SectionDonationCampaign";
+import { Confirm, Failed, InputMessage, Success } from "@/utils/AlertUtil";
 
 const AdminCampaignDetail = () => {
     const { slug } = useParams();

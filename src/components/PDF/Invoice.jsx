@@ -1,7 +1,7 @@
-import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import { formatDate } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
+import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import React from "react";
 
 const styles = StyleSheet.create({
     page: {

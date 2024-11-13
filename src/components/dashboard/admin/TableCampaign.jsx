@@ -16,7 +16,7 @@ const TableCampaign = (props) => {
     return (
         <div className="overflow-scroll text-dark/80 font-medium scrollbar-hide">
             <div className="w-[1280px] xl:w-full border bg-light rounded-lg">
-                <div className="grid grid-cols-[.7fr,4fr,3fr,3fr,2fr,2fr,1fr] px-6 py-4 border-b gap-x-2">
+                <div className="grid grid-cols-[.7fr,3.5fr,4fr,3fr,2fr,2fr,1fr] px-6 py-4 border-b gap-x-2">
                     <div className="col-start-1">
                         <h1>No</h1>
                     </div>
@@ -46,10 +46,10 @@ const TableCampaign = (props) => {
                             className={`
                                 ${index % 2 == 0 && "bg-stone-50"} 
                                 ${index + 1 != campaigns.length && "border-b"}
-                                grid grid-cols-[.7fr,4fr,3fr,3fr,2fr,2fr,1fr] px-6 py-3 items-center gap-x-2`}
+                                grid grid-cols-[.7fr,3.5fr,4fr,3fr,2fr,2fr,1fr] px-6 py-3 items-center gap-x-2`}
                         >
                             <div className="col-start-1">
-                                <h1>{index + 1}</h1>
+                                <h1>{calculateRowNumber(index)}</h1>
                             </div>
                             <div className="col-start-2">
                                 <h1>{item.partnerName}</h1>

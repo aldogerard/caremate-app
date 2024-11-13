@@ -1,42 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { PiCalendarDotsThin, PiDotOutlineFill } from "react-icons/pi";
-import { RiVerifiedBadgeFill } from "react-icons/ri";
-import { GoChevronDown, GoChevronUp } from "react-icons/go";
-import { RxAvatar } from "react-icons/rx";
+import CardCampaignReport from "@/components/landing/CardCampaignReport";
 import ProgressRing from "@/components/landing/ProgressRing";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import Loader from "@/components/Loader";
+import { getCampaignReportByCampaignId } from "@/redux/feature/partner/campaignReportSlice";
 import {
     getCampaignDetailById,
     getCampaignImageByName,
 } from "@/redux/feature/partner/campaignSlice";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "@/components/Loader";
+import { getDonationByCampaignId } from "@/redux/feature/partner/donationSlice";
+import EachUtils from "@/utils/EachUtils";
 import { formatDate } from "@/utils/Utils";
 import { FormatRupiah } from "@arismun/format-rupiah";
-import { getDonationByCampaignId } from "@/redux/feature/partner/donationSlice";
-import { getCampaignReportByCampaignId } from "@/redux/feature/partner/campaignReportSlice";
-import EachUtils from "@/utils/EachUtils";
-import CardCampaignReport from "@/components/landing/CardCampaignReport";
-
-const messages = [
-    { id: 1, amount: "Rp 10.000", days: "11d", hope: "Donor's Hope" },
-    { id: 2, amount: "Rp 10.000", days: "12d", hope: "Keep going!" },
-    { id: 3, amount: "Rp 10.000", days: "13d", hope: "You got this!" },
-    { id: 4, amount: "Rp 20.000", days: "14d", hope: "Stay strong!" },
-    { id: 5, amount: "Rp 20.000", days: "14d", hope: "Stay strong!" },
-    { id: 6, amount: "Rp 20.000", days: "14d", hope: "Stay strong!" },
-    { id: 7, amount: "Rp 20.000", days: "14d", hope: "Stay strong!" },
-    { id: 8, amount: "Rp 20.000", days: "14d", hope: "Stay strong!" },
-];
-
-const article =
-    "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.";
+import React, { useEffect, useState } from "react";
+import { GoChevronDown, GoChevronUp } from "react-icons/go";
+import { PiDotOutlineFill } from "react-icons/pi";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { RxAvatar } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 
 const CampaignDetails = () => {
     const { id } = useParams();
     const [isExpanded, setIsExpanded] = useState(false);
     const [showAllMessage, setShowAllMessage] = useState(false);
     const [showAllDonate, setShowAllDonate] = useState(false);
+    const [showAllCampaignReport, setShowAllCampaignReport] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     const dispatch = useDispatch();
@@ -51,6 +38,10 @@ const CampaignDetails = () => {
         ? donations
         : donations?.slice(0, 3);
     const donateToDisplay = showAllDonate ? donations : donations?.slice(0, 5);
+
+    const campaignReportsToDisplay = showAllCampaignReport
+        ? campaignReports
+        : campaignReports?.slice(0, 1);
 
     const percent =
         (currentCampaign?.currentAmount / currentCampaign?.goalAmount) * 100;
@@ -73,7 +64,7 @@ const CampaignDetails = () => {
                     getDonationByCampaignId({ id, size: 8 })
                 ).unwrap();
                 await dispatch(
-                    getCampaignReportByCampaignId({ id, size: 5 })
+                    getCampaignReportByCampaignId({ id, size: 100000 })
                 ).unwrap();
             } catch (error) {
                 console.log("Erorr : ", error);
@@ -154,11 +145,25 @@ const CampaignDetails = () => {
                                     Updates ({campaignReports?.length})
                                 </h2>
                                 <EachUtils
-                                    of={campaignReports}
+                                    of={campaignReportsToDisplay}
                                     render={(item) => (
                                         <CardCampaignReport item={item} />
                                     )}
                                 />
+                                {campaignReports.length > 1 && (
+                                    <button
+                                        className="bg-primary rounded-lg py-2 px-4 text-white mt-5 text-sm"
+                                        onClick={() =>
+                                            setShowAllCampaignReport(
+                                                !showAllCampaignReport
+                                            )
+                                        }
+                                    >
+                                        {showAllCampaignReport
+                                            ? "Show Less"
+                                            : "Show More"}
+                                    </button>
+                                )}
                             </div>
 
                             <div>
@@ -204,7 +209,7 @@ const CampaignDetails = () => {
                                         </div>
                                     ))}
                                 </div>
-                                {messages.length > 3 && (
+                                {donations.length > 3 && (
                                     <button
                                         className="bg-primary rounded-lg py-2 px-4 text-white mt-5 text-sm"
                                         onClick={() =>
@@ -256,7 +261,7 @@ const CampaignDetails = () => {
                                             </span>
                                             <PiDotOutlineFill className="text-gray-400" />
                                             <span>
-                                                {messages.length} donations
+                                                {donations.length} donations
                                             </span>
                                         </div>
                                     </div>
@@ -312,7 +317,7 @@ const CampaignDetails = () => {
                                         </div>
                                     ))}
                                 </div>
-                                {messages.length > 5 && (
+                                {donations.length > 5 && (
                                     <button
                                         className="bg-gradient-to-b from-[#f8b8a6] to-[#e17052] rounded-lg py-2 px-4 text-white mt-5 text-sm self-start"
                                         onClick={() =>

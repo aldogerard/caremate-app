@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import logo from "@/assets/images/logo.webp";
-import { validateEmail, validatePassword } from "@/utils/Utils";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
 import { clearAuthStatus, login } from "@/redux/feature/authSlice";
 import { Failed, Success } from "@/utils/AlertUtil";
+import { validateEmail, validatePassword } from "@/utils/Utils";
+import React, { useEffect, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const image = "https://account.enigmacamp.com/1.jpg";
 

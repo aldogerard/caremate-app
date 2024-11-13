@@ -1,18 +1,16 @@
+import CardBasic from "@/components/dashboard/admin/CardBasic";
 import CardWithChart from "@/components/dashboard/admin/CardWithChart";
 import Title from "@/components/dashboard/Title";
 import Loader from "@/components/Loader";
+import data from "@/data/adminDataDashboard.json";
 import { getAdminReport } from "@/redux/feature/admin/adminReportSlice";
 import EachUtils from "@/utils/EachUtils";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import data from "@/data/adminDataDashboard.json";
-import { IoPersonOutline, IoWalletOutline } from "react-icons/io5";
-import { FormatRupiah } from "@arismun/format-rupiah";
-import { Link } from "react-router-dom";
-import CardBasic from "@/components/dashboard/admin/CardBasic";
 import { BsTree } from "react-icons/bs";
+import { IoPersonOutline, IoWalletOutline } from "react-icons/io5";
 import { MdBroadcastOnHome, MdMoneyOff } from "react-icons/md";
 import { RiHandCoinLine } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminDashboard = () => {
     const dispatch = useDispatch();

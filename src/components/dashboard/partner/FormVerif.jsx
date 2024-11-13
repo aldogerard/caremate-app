@@ -1,15 +1,15 @@
-import { Confirm, Failed, Message, Success } from "@/utils/AlertUtil";
-import { validateFile } from "@/utils/Utils";
-import React, { useEffect, useState } from "react";
-import FileVerif from "./Input/FileVerif";
-import EachUtils from "@/utils/EachUtils";
 import Button from "@/components/Button";
-import { useDispatch, useSelector } from "react-redux";
 import {
     createDocumentPartner,
     getDetailPartner,
     updateDocumentPartner,
 } from "@/redux/feature/partner/partnerSlice";
+import { Confirm, Failed, Message, Success } from "@/utils/AlertUtil";
+import EachUtils from "@/utils/EachUtils";
+import { validateFile } from "@/utils/Utils";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import FileVerif from "./Input/FileVerif";
 
 const data = [
     {

@@ -45,7 +45,7 @@ const TablePartner = () => {
                                 grid grid-cols-[.6fr,4fr,3fr,2.5fr,4fr,1fr] px-6 py-3 items-center gap-x-2`}
                         >
                             <div className="col-start-1">
-                                <h1>{index + 1}</h1>
+                                <h1>{calculateRowNumber(index)}</h1>
                             </div>
                             <div className="col-start-2">
                                 <h1>{item.name}</h1>

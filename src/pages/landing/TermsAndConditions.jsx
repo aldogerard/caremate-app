@@ -222,11 +222,11 @@ const data = [
             },
             {
                 term: "Email",
-                definition: "[email@example.com]",
+                definition: "service@caremate.com",
             },
             {
                 term: "Address",
-                definition: "[CareMate Office Address]",
+                definition: "Topaz Street Number 7, Malang",
             },
         ],
     },
@@ -276,7 +276,7 @@ const TermsAndConditions = () => {
                 </div>
             </section>
             <section className="flex gap-2 py-10">
-                <aside className="w-1/3 p-4 hidden rounded-xl h-max border bg-light xl:flex flex-col gap-6 capitalize sticky top-24">
+                <aside className="w-1/3 p-4 hidden rounded-xl h-max border bg-light xl:flex flex-col gap-6 sticky top-24">
                     <EachUtils
                         of={data}
                         render={(item, index) => (
@@ -300,7 +300,7 @@ const TermsAndConditions = () => {
                         )}
                     />
                 </aside>
-                <main className="w-full xl:w-2/3 p-4 rounded-xl border bg-light flex flex-col gap-6 capitalize">
+                <main className="w-full xl:w-2/3 p-4 rounded-xl border bg-light flex flex-col gap-6">
                     <EachUtils
                         of={data}
                         render={(item) => (
