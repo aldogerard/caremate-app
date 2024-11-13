@@ -75,7 +75,7 @@ const SectionDetailCampaign = () => {
                 </div>
                 <div className="flex mb-8 items-center">
                     <div className="lg:w-1/2">
-                        <h1 className="font-light">Start Data</h1>
+                        <h1 className="font-light">Start Date</h1>
                         <h1 className="text-lg font-medium">
                             {formatDate(currentCampaign.startDate)}
                         </h1>

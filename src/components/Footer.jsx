@@ -3,6 +3,8 @@ import React from "react";
 import { FaLocationDot, FaPhone, FaRegEnvelope } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
+import image from "@/assets/icon-gp.png";
+
 const Footer = () => {
     return (
         <main className="bg-primary flex justify-center text-light">
@@ -53,7 +55,7 @@ const Footer = () => {
                     <div className="flex justify-center items-center cursor-pointer text-light w-max gap-4 px-4 py-2 h-max rounded-xl bg-dark">
                         <div className="w-14 aspect-square flex justify-center items-center">
                             <img
-                                src="../../src/assets/icon-gp.png"
+                                src={image}
                                 alt=""
                                 className="w-full h-full object-contain"
                             />

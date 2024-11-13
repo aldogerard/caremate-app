@@ -6,6 +6,8 @@ import { GoArrowRight, GoChevronRight } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+import image from "@/assets/campaignLanding.png";
+
 const CampaignLandings = () => {
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true);
@@ -81,7 +83,7 @@ const CampaignLandings = () => {
                     <div className="w-full xl:w-1/2 h-full">
                         <img
                             className="w-full h-full object-contain"
-                            src="../src/assets/campaignLanding.png"
+                            src={image}
                             alt="About Us Image 1"
                         />
                     </div>

@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import image_1 from "@/assets/about us.png";
+
 const About = () => {
     return (
         <>
@@ -58,7 +60,7 @@ const About = () => {
                     <div className="w-full xl:w-1/2 h-80">
                         <img
                             className="w-full h-full object-cover"
-                            src="../src/assets/about us.png"
+                            src={image_1}
                             alt="About Us Image 1"
                         />
                     </div>
@@ -98,7 +100,7 @@ const About = () => {
                     <div className="w-full xl:w-1/2 h-80">
                         <img
                             className="w-full h-full object-cover"
-                            src="../src/assets/about us.png"
+                            src={image_1}
                             alt="About Us Image 1"
                         />
                     </div>
