@@ -36,7 +36,7 @@ const SubCardHero = () => {
         <>
             {!isLoading && campaigns[1] !== undefined ? (
                 <Link
-                    to={`campaign/details/${campaigns[1]?.id}`}
+                    to={`campaign/details/${campaigns[1]?.slug}`}
                     className="flex flex-col translate-y-12 scale-90  w-[340px] p-2 rounded-[32px] border gap-4 bg-light h-max"
                 >
                     <div className="w-full h-52 rounded-t-[24px] rounded-b-[20px] overflow-hidden">

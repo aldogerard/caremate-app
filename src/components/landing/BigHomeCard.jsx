@@ -38,7 +38,7 @@ const BigHomeCard = () => {
             {!isLoading && campaigns[2] != undefined ? (
                 <section className="pt-28 pb-16">
                     <Link
-                        to={`campaign/details/${campaigns[2]?.id}`}
+                        to={`campaign/details/${campaigns[2]?.slug}`}
                         className="flex flex-col-reverse gap-4 xl:flex-row p-2 xl:p-4 rounded-[32px] bg-light border"
                     >
                         <div className="pb-6 px-1 xl:px-3 flex flex-col justify-between gap-2 xl:gap-4 w-full xl:w-1/2 xl:py-8">

@@ -64,8 +64,6 @@ const CampaignDetail = () => {
     const requestWithdrawal = () => {
         const { status, isWithdrawal } = currentCampaign;
 
-        console.log(isWithdrawal);
-
         if (status !== "COMPLETED") {
             return Failed(
                 "Only campaigns that are completed can request a withdrawal."
@@ -133,7 +131,7 @@ const CampaignDetail = () => {
 
     const stopCampaign = () => {
         const { currentAmount, goalAmount } = currentCampaign;
-        if (currentAmount <= goalAmount * (50 / 100)) {
+        if (currentAmount < goalAmount * (50 / 100)) {
             return Failed(
                 "The process can be stopped once the raised amount exceeds 50% of the goal amount"
             );

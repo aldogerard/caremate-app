@@ -36,7 +36,7 @@ const CardHero = () => {
         <>
             {!isLoading && campaigns[0] !== undefined ? (
                 <Link
-                    to={`campaign/details/${campaigns[0]?.id}`}
+                    to={`campaign/details/${campaigns[0]?.slug}`}
                     className="flex scale-110 translate-y-4 flex-col w-[380px] p-2 rounded-[36px] border gap-4 bg-light h-max"
                 >
                     <div className="w-full h-72 rounded-t-[28px] rounded-b-[24px] overflow-hidden">

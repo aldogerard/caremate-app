@@ -71,6 +71,7 @@ const FormCampaign = (props) => {
             const { name, value } = e.target;
             setFormData({ ...formData, [name]: value });
         } else {
+            console.log(e);
             const { startDate, endDate } = e;
             if (startDate >= oneWeekFromNow) {
                 setFormData({ ...formData, startDate, endDate });
@@ -100,7 +101,9 @@ const FormCampaign = (props) => {
         e.preventDefault();
 
         if (isDisable()) {
-            return Failed("Minimum goal amount is Rp 500.000");
+            return Failed(
+                "Please ensure all fields are correctly and fully filled out before proceeding."
+            );
         }
 
         if (formData.category === option[0].value) {
@@ -345,7 +348,7 @@ const FormCampaign = (props) => {
                                     autoComplete="off"
                                     name="description"
                                     placeholder="Enter description for your foundation"
-                                    maxLength={255}
+                                    maxLength={1000}
                                     className={`px-5 py-4 h-40 lg:h-40 text-dark outline-none rounded-md border focus:shadow-sm  bg-white resize-none `}
                                 />
                             </div>

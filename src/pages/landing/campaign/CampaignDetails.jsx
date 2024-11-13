@@ -195,7 +195,9 @@ const CampaignDetails = () => {
                                                         : item.name}
                                                 </h3>
                                                 <div className="flex flex-row text-sm items-center">
-                                                    <p>{item.amount}</p>
+                                                    <FormatRupiah
+                                                        value={item.amount}
+                                                    />
                                                     <PiDotOutlineFill className="mx-1" />
                                                     <p>
                                                         {formatDate(
@@ -306,7 +308,9 @@ const CampaignDetails = () => {
                                                         : item.name}
                                                 </h3>
                                                 <div className="flex flex-row text-sm items-center">
-                                                    <p>{item.amount}</p>
+                                                    <FormatRupiah
+                                                        value={item.amount}
+                                                    />
                                                     <PiDotOutlineFill className="mx-1" />
                                                     <p>
                                                         {formatDate(

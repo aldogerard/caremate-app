@@ -10,7 +10,7 @@ export const getDonationByCampaignId = createAsyncThunk(
 
         try {
             const response = await axiosInstance.get(
-                `/donation/campaign/${id}?&page=${page}&size=${size}`
+                `/donation/campaign/${id}?&page=${page}&size=${size}&status=settlement,capture`
             );
             return response.data;
         } catch (e) {

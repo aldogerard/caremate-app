@@ -22,7 +22,7 @@ export const getDonationByDonorId = createAsyncThunk(
 
         try {
             const response = await axiosInstance.get(
-                `/donation/donor/${id}?&page=${page}&size=${size}`
+                `/donation/donor/${id}?&page=${page}&size=${size}&status=settlement,capture`
             );
             return response.data;
         } catch (e) {

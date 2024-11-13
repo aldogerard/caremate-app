@@ -141,7 +141,7 @@ const RegisterPartner = () => {
             !auth.foundationName ||
             !auth.address ||
             !auth.phoneNumber ||
-            auth.tnc
+            auth.tnc == false
         );
     };
 

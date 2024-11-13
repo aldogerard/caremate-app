@@ -116,7 +116,7 @@ const FormCampaignReports = () => {
                     onInput={handleChange}
                     name="description"
                     placeholder="Description for campaign report"
-                    maxLength={150}
+                    maxLength={255}
                     className={`px-5 py-4 h-24 lg:h-44 text-dark outline-none rounded-md border focus:shadow-sm  bg-white resize-none `}
                 />
             </div>
