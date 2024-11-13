@@ -2,7 +2,7 @@ import React from "react";
 
 import image1 from "@/assets/google play hitam putih.png";
 import image2 from "@/assets/app store hitam putih.png";
-import image3 from "@/assets/assets/downloadApps.png";
+import image3 from "@/assets/downloadApps.png";
 
 const DownloadApps = () => {
     return (
