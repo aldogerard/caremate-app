@@ -8,11 +8,9 @@ export const getAllCampaign = createAsyncThunk(
         const size = data?.size || 7;
 
         try {
-            console.log("first");
             const response = await axiosInstance.get(
                 `/campaign?size=${size}&page=${page}`
             );
-            console.log(response.data);
             return response.data;
         } catch (e) {
             return rejectWithValue(e.response?.data || "Fetch to failed");

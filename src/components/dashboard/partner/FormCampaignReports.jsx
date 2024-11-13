@@ -55,7 +55,10 @@ const FormCampaignReports = () => {
                 await dispatch(createCampaignReport(data)).unwrap();
                 Success("Successfully create campaign report");
                 await dispatch(
-                    getCampaignReportByCampaignId({ id: currentCampaign.id })
+                    getCampaignReportByCampaignId({
+                        id: currentCampaign.id,
+                        page: 0,
+                    })
                 ).unwrap();
                 resetForm(e);
             });

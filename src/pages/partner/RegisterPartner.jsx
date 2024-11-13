@@ -17,8 +17,8 @@ const RegisterPartner = () => {
         foundationName: "",
         address: "",
         phoneNumber: "",
+        tnc: false,
     });
-    const [isMount, setIsMount] = useState(false);
 
     const [isEmailInvalid, setIsEmailInvalid] = useState(false);
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
@@ -60,7 +60,11 @@ const RegisterPartner = () => {
     const handleChange = (e) => {
         if (e?.target) {
             const { name, value } = e.target;
-            setAuth((state) => ({ ...state, [name]: value }));
+            if (name == "tnc") {
+                setAuth((state) => ({ ...state, [name]: !state.tnc }));
+            } else {
+                setAuth((state) => ({ ...state, [name]: value }));
+            }
         } else {
             setAuth((state) => ({ ...state, phoneNumber: e }));
         }
@@ -136,7 +140,8 @@ const RegisterPartner = () => {
             !auth.confirmPassword ||
             !auth.foundationName ||
             !auth.address ||
-            !auth.phoneNumber
+            !auth.phoneNumber ||
+            auth.tnc
         );
     };
 
@@ -146,7 +151,10 @@ const RegisterPartner = () => {
                 <img src={image} alt="hero" className="object-cover" />
             </aside>
             <main className="flex flex-col h-full items-center py-4 lg:w-1/3 ">
-                <div className="flex gap-3 justify-center items-center w-max">
+                <Link
+                    to={"/"}
+                    className="flex gap-3 justify-center items-center w-max"
+                >
                     <div className="w-14 h-14">
                         <img
                             src={logo}
@@ -157,7 +165,7 @@ const RegisterPartner = () => {
                     <h1 className="text-xl font-semibold text-primary lg:text-3xl">
                         CareMate
                     </h1>
-                </div>
+                </Link>
                 <h1 className="lg:w-11/12 lg:max-w-lg text-lg font-light text-center text-secondary my-8 lg:text-xl">
                     Register today to unite your foundation for a better future
                 </h1>
@@ -357,7 +365,25 @@ const RegisterPartner = () => {
                             </div>
                         </div>
 
-                        <div className="text-lg mt-4">
+                        <div className="flex justify-start gap-2">
+                            <input
+                                type="checkbox"
+                                required
+                                onChange={handleChange}
+                                name="tnc"
+                            />
+                            <h1 className="text-dark">
+                                I have agreed{" "}
+                                <Link
+                                    to={"/terms-and-conditions"}
+                                    className="text-primary font-medium cursor-pointer"
+                                >
+                                    Terms and Conditions
+                                </Link>
+                            </h1>
+                        </div>
+
+                        <div className="text-lg">
                             <button
                                 className={`w-full bg-primary py-4 text-lg rounded-md shadow-md text-light font-semibold outline-none hover:bg-emerald-600 ${
                                     isFormInvalid() && "cursor-not-allowed"

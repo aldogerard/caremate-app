@@ -17,7 +17,7 @@ const AdminSectionCampaignReport = () => {
 
     useEffect(() => {
         fetchData();
-    }, [dispatch, currentPage, campaignReports]);
+    }, [dispatch, currentPage]);
 
     const fetchData = async () => {
         try {
