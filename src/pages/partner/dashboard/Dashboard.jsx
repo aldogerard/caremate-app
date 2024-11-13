@@ -49,7 +49,6 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (report === null) return;
-        console.log(report);
 
         const updatedDatas = datas.map((item) => {
             const {
