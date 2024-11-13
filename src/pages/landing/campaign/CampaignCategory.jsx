@@ -13,6 +13,8 @@ const campaigns = Array.from({ length: 12 }, (_, i) => ({
     image: "https://mi.polinela.ac.id/wp-content/uploads/2021/12/bursa_kerja_it_bootcamp_enigmacamp_d3_mi_polinela.jpg",
 }));
 
+import image from "@/assets/Campaign details.png";
+
 const CampaignCategory = () => {
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -148,7 +150,7 @@ const CampaignCategory = () => {
                 </div>
                 <img
                     className="hidden md:block max-h-[400px] mx-16"
-                    src="../src/assets/Campaign details.png"
+                    src={image}
                     alt="Campaign"
                 />
             </div>

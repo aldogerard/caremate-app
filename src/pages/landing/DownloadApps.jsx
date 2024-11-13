@@ -1,5 +1,9 @@
 import React from "react";
 
+import image1 from "@/assets/google play hitam putih.png";
+import image2 from "@/assets/app store hitam putih.png";
+import image3 from "@/assets/assets/downloadApps.png";
+
 const DownloadApps = () => {
     return (
         <div className="flex flex-col-reverse lg:flex-row items-center justify-between mt-10 lg:mt-20 space-y-10 lg:space-y-0">
@@ -14,14 +18,14 @@ const DownloadApps = () => {
                 <div className="flex flex-row space-x-5 mt-5">
                     <button>
                         <img
-                            src="../src/assets/google play hitam putih.png"
+                            src={image1}
                             alt="Google Play"
                             className="w-32 lg:w-3/4"
                         />
                     </button>
                     <button>
                         <img
-                            src="../src/assets/app store hitam putih.png"
+                            src={image2}
                             alt="App Store"
                             className="w-32 lg:w-3/4"
                         />
@@ -29,7 +33,7 @@ const DownloadApps = () => {
                 </div>
             </div>
             <img
-                src="../src/assets/downloadApps.png"
+                src={image3}
                 alt="Download App"
                 className="w-2/3 lg:w-1/2 max-w-xs lg:max-w-full"
             />

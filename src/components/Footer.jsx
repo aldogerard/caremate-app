@@ -52,7 +52,10 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="w-full md:w-[47%] lg:w-[17%]">
-                    <div className="flex justify-center items-center cursor-pointer text-light w-max gap-4 px-4 py-2 h-max rounded-xl bg-dark">
+                    <Link
+                        to={"/download"}
+                        className="flex justify-center items-center cursor-pointer text-light w-max gap-4 px-4 py-2 h-max rounded-xl bg-dark"
+                    >
                         <div className="w-14 aspect-square flex justify-center items-center">
                             <img
                                 src={image}
@@ -64,7 +67,7 @@ const Footer = () => {
                             <h1>GET IT ON</h1>
                             <h1>Google Play</h1>
                         </div>
-                    </div>
+                    </Link>
                 </div>
                 <div className="border-t border-black/20 flex w-full justify-center mt-4 pt-6">
                     Copyright &copy; 2024 CareMate
