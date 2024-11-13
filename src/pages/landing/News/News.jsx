@@ -35,13 +35,21 @@ const News = () => {
     return (
         <section className="min-h-screen flex flex-col py-10">
             <div>
-                <h1 className="text-4xl font-semibold">News</h1>
-
-                {status === "loading" && <p>Loading...</p>}
-                {status === "failed" && <p>Error: {error}</p>}
-                {status === "succeeded" && <NewsCard articles={newsItems} />}
+                <div className="flex justify-center items-center h-[50vh]">
+                    {status === "loading" && <p>Loading...</p>}
+                    {status === "failed" && <p>Server is not responding</p>}
+                </div>
+                {status === "succeeded" && (
+                    <>
+                        <h1 className="text-4xl font-semibold">News</h1>
+                        <NewsCard articles={newsItems} />
+                        <Pagination
+                            handlePageClick={handlePageClick}
+                            paging={paging}
+                        />
+                    </>
+                )}
             </div>
-            <Pagination handlePageClick={handlePageClick} paging={paging} />
         </section>
     );
 };
