@@ -154,50 +154,58 @@ const CampaignDetail = () => {
         <>
             {!isLoading && (
                 <>
-                    <Title name={"Detail Campaign"}>
-                        <div className="flex gap-3 pb-2">
-                            <div
-                                onClick={showMessage}
-                                className="flex justify-center items-center cursor-pointer shadow-sm bg-primary/20 aspect-square w-12 rounded-md"
-                            >
-                                <FaInfo className="text-xl text-emerald-600" />
+                    {currentCampaign ? (
+                        <>
+                            <Title name={"Detail Campaign"}>
+                                <div className="flex gap-3 pb-2">
+                                    <div
+                                        onClick={showMessage}
+                                        className="flex justify-center items-center cursor-pointer shadow-sm bg-primary/20 aspect-square w-12 rounded-md"
+                                    >
+                                        <FaInfo className="text-xl text-emerald-600" />
+                                    </div>
+                                    {currentCampaign.status === "COMPLETED" && (
+                                        <Button
+                                            type="submit"
+                                            name={"Request a withdrawal"}
+                                            onClick={requestWithdrawal}
+                                        />
+                                    )}
+                                    {currentCampaign.status === "ACTIVE" && (
+                                        <>
+                                            <Button
+                                                type="button"
+                                                name={"Edit campaign"}
+                                                onClick={handleModalOpen}
+                                            />
+                                            <Button
+                                                type="reset"
+                                                name={"Stop campaign"}
+                                                onClick={stopCampaign}
+                                            />
+                                        </>
+                                    )}
+                                </div>
+                            </Title>
+
+                            <FormEditCampaign
+                                isOpen={isModalOpen}
+                                closeModal={handleModalOpen}
+                            />
+
+                            <div className="flex flex-col gap-14 pb-10">
+                                <SectionDetailCampaign />
+
+                                <SectionCampaignReport />
+
+                                <SectionDonationCampaign />
                             </div>
-                            {currentCampaign.status === "COMPLETED" && (
-                                <Button
-                                    type="submit"
-                                    name={"Request a withdrawal"}
-                                    onClick={requestWithdrawal}
-                                />
-                            )}
-                            {currentCampaign.status === "ACTIVE" && (
-                                <>
-                                    <Button
-                                        type="button"
-                                        name={"Edit campaign"}
-                                        onClick={handleModalOpen}
-                                    />
-                                    <Button
-                                        type="reset"
-                                        name={"Stop campaign"}
-                                        onClick={stopCampaign}
-                                    />
-                                </>
-                            )}
+                        </>
+                    ) : (
+                        <div className="flex justify-center items-center h-[50vh]">
+                            <h1>Not Found</h1>
                         </div>
-                    </Title>
-
-                    <FormEditCampaign
-                        isOpen={isModalOpen}
-                        closeModal={handleModalOpen}
-                    />
-
-                    <div className="flex flex-col gap-14 pb-10">
-                        <SectionDetailCampaign />
-
-                        <SectionCampaignReport />
-
-                        <SectionDonationCampaign />
-                    </div>
+                    )}
                 </>
             )}
             {isLoading && <Loader />}

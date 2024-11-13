@@ -93,9 +93,9 @@ const Routers = () => {
                 {
                     path: "/dashboard/admin",
                     element: (
-                        // <AdminProtected>
-                        <Outlet />
-                        // </AdminProtected>
+                        <AdminProtected>
+                            <Outlet />
+                        </AdminProtected>
                     ),
                     children: [
                         {

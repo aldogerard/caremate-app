@@ -33,7 +33,7 @@ const HomeDonateCard = ({ item }) => {
         <>
             {!isLoading ? (
                 <Link
-                    to={`/campaign/details/${item.id}`}
+                    to={`/campaign/details/${item.slug}`}
                     className="flex flex-col w-full max-w-[440px] p-2 rounded-[36px] border gap-4 bg-light h-max"
                 >
                     <div className="w-full h-60 xl:h-72 rounded-t-[28px] rounded-b-[24px] overflow-hidden">

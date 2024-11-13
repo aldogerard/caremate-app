@@ -25,6 +25,18 @@ export const getCampaignDetailById = createAsyncThunk(
     }
 );
 
+export const getCampaignDetailBySlug = createAsyncThunk(
+    "campaign/getCampaignDetailBySlug",
+    async (slug, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get(`/campaign/slug/${slug}`);
+            return response.data;
+        } catch (e) {
+            return rejectWithValue(e.response?.data || "Failed to fetch");
+        }
+    }
+);
+
 export const getCampaignByPartnerId = createAsyncThunk(
     "campaign/getCampaignByPartnerId",
     async (data, { rejectWithValue }) => {
@@ -154,6 +166,14 @@ const campaignSlice = createSlice({
                 state.status = "success";
             })
             .addCase(getCampaignDetailById.rejected, (state) => {
+                state.status = "failed";
+            })
+
+            .addCase(getCampaignDetailBySlug.fulfilled, (state, action) => {
+                state.currentCampaign = action.payload.data;
+                state.status = "success";
+            })
+            .addCase(getCampaignDetailBySlug.rejected, (state) => {
                 state.status = "failed";
             })
 

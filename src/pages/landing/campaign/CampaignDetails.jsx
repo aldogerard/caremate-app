@@ -4,6 +4,7 @@ import Loader from "@/components/Loader";
 import { getCampaignReportByCampaignId } from "@/redux/feature/partner/campaignReportSlice";
 import {
     getCampaignDetailById,
+    getCampaignDetailBySlug,
     getCampaignImageByName,
 } from "@/redux/feature/partner/campaignSlice";
 import { getDonationByCampaignId } from "@/redux/feature/partner/donationSlice";
@@ -55,16 +56,16 @@ const CampaignDetails = () => {
             try {
                 setIsLoading(true);
                 const { data } = await dispatch(
-                    getCampaignDetailById(id)
+                    getCampaignDetailBySlug(id)
                 ).unwrap();
                 await dispatch(
                     getCampaignImageByName(data.campaignImageName)
                 ).unwrap();
                 await dispatch(
-                    getDonationByCampaignId({ id, size: 8 })
+                    getDonationByCampaignId({ id: data.id, size: 8 })
                 ).unwrap();
                 await dispatch(
-                    getCampaignReportByCampaignId({ id, size: 100000 })
+                    getCampaignReportByCampaignId({ id: data.id, size: 100000 })
                 ).unwrap();
             } catch (error) {
                 console.log("Erorr : ", error);
@@ -77,7 +78,7 @@ const CampaignDetails = () => {
 
     return (
         <>
-            {!isLoading ? (
+            {!isLoading && currentCampaign ? (
                 <div className="p-4 lg:m-6 h-auto">
                     <h1 className="text-2xl lg:text-4xl font-bold">
                         {currentCampaign.title}
