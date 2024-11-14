@@ -13,6 +13,8 @@ export default function FAQ() {
         dispatch(fetchFaqDonate());
     }, [dispatch]);
 
+    console.log(faqItems);
+
     return (
         <div className="bg-white p-5 md:p-12 lg:p-20">
             <h2 className="text-3xl font-bold text-black mb-4 lg:mr-52">

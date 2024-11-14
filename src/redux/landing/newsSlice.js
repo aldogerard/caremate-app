@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://10.10.102.91:1337/api";
+const BASE_URL = "https://lively-miracle-8d1d9a1f96.strapiapp.com/api";
 
 export const fetchNews = createAsyncThunk(
     "news/fetchNews",
@@ -18,13 +18,13 @@ export const fetchNews = createAsyncThunk(
             const newsWithImageUrls = response.data.data.map((item) => {
                 // Check for image formats and fallback to alternative sizes if necessary
                 const imageUrl = item.imagecontent[0]?.formats?.large?.url
-                    ? `http://10.10.102.91:1337${item.imagecontent[0].formats.large.url}` // large format
+                    ? `${item.imagecontent[0].formats?.large?.url}` // large format
                     : item.imagecontent[0]?.formats?.medium?.url
-                    ? `http://10.10.102.91:1337${item.imagecontent[0].formats.medium.url}` // medium format
+                    ? `${item.imagecontent[0].formats?.medium?.url}` // medium format
                     : item.imagecontent[0]?.formats?.small?.url
-                    ? `http://10.10.102.91:1337${item.imagecontent[0].formats.small.url}` // small format
+                    ? `${item.imagecontent[0].formats?.small?.url}` // small format
                     : item.imagecontent[0]?.formats?.thumbnail?.url // fallback to thumbnail format
-                    ? `http://10.10.102.91:1337${item.imagecontent[0].formats.thumbnail.url}`
+                    ? `${item.imagecontent[0].formats?.thumbnail?.url}`
                     : null; // no image available
 
                 return {
@@ -53,13 +53,13 @@ export const fetchNewsById = createAsyncThunk(
         const item = response.data.data;
 
         const imageUrl = item.imagecontent[0]?.formats?.large?.url
-            ? `http://10.10.102.91:1337${item.imagecontent[0].formats.large.url}` // large format
+            ? `${item.imagecontent[0].formats.large.url}` // large format
             : item.imagecontent[0]?.formats?.medium?.url
-            ? `http://10.10.102.91:1337${item.imagecontent[0].formats.medium.url}` // medium format
+            ? `${item.imagecontent[0].formats.medium.url}` // medium format
             : item.imagecontent[0]?.formats?.small?.url
-            ? `http://10.10.102.91:1337${item.imagecontent[0].formats.small.url}` // small format
+            ? `${item.imagecontent[0].formats.small.url}` // small format
             : item.imagecontent[0]?.formats?.thumbnail?.url // fallback to thumbnail format
-            ? `http://10.10.102.91:1337${item.imagecontent[0].formats.thumbnail.url}`
+            ? `${item.imagecontent[0].formats.thumbnail.url}`
             : null; // no image available
 
         return {

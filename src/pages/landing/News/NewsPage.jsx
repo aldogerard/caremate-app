@@ -39,25 +39,24 @@ const NewsPage = () => {
     }, [selectedItem?.contentnews]);
 
     const processImageUrls = (content) => {
+        // Step 1: Convert Markdown images (e.g., ![alt](url)) into HTML <img> tags
         const updatedContent = content.replace(
-            /!\[([^\]]*)\]\((http:\/\/localhost:1337[^)]+)\)/g,
+            /!\[([^\]]*)\]\((https?:\/\/[^\)]+)\)/g,
             (match, altText, url) => {
-                const updatedUrl = url.replace("localhost", "10.10.102.91");
-                return `<img src="${updatedUrl}" alt="${altText}" class="my-4 mx-auto w-3/4" />`;
+                // Return the <img> tag with the original URL
+                return `<img src="${url}" alt="${altText}" class="my-4 mx-auto w-3/4" />`;
             }
         );
 
-        const paragraphs = updatedContent.split("\n\n");
-
-        const formattedContent = paragraphs
-            .map((paragraph, index) => {
-                if (paragraph.startsWith("#")) {
-                    const headerText = paragraph.slice(1).trim();
-                    return `<p key=${index} class="paragraph text-3xl font-bold">${headerText}</p>`;
-                }
-                return `<p key=${index} class="paragraph">${paragraph}</p>`;
-            })
-            .join("");
+        // Step 2: Convert headers (lines starting with "#") to large and bold text
+        const formattedContent = updatedContent.replace(
+            /(^|\n)(#)(.*)/g, // Look for lines that start with a single "#"
+            (match, start, hash, headerText) => {
+                // Remove the "#" and add HTML for large, bold text
+                const cleanedText = headerText.trim();
+                return `<p class="paragraph text-3xl font-bold mt-4">${cleanedText}</p>`;
+            }
+        );
 
         return formattedContent;
     };
