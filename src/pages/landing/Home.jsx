@@ -75,7 +75,7 @@ const Home = () => {
                         <div className="flex gap-8 xl:gap-16 ml-2 xl:ml-12">
                             <div className="flex flex-col gap-2">
                                 <h2 className="text-2xl xl:text-4xl font-bold ">
-                                    145+
+                                    43+
                                 </h2>
                                 <p className="xl:text-base text-sm font-medium">
                                     Achieved Campaigns
@@ -84,7 +84,7 @@ const Home = () => {
 
                             <div className="flex flex-col gap-2">
                                 <h2 className="text-2xl xl:text-4xl font-bold ">
-                                    1200+
+                                    562+
                                 </h2>
                                 <p className="xl:text-base text-sm font-medium">
                                     Donations Received
@@ -93,10 +93,10 @@ const Home = () => {
 
                             <div className="flex flex-col gap-2">
                                 <h2 className="text-2xl xl:text-4xl font-bold ">
-                                    545+
+                                    251+
                                 </h2>
                                 <p className="xl:text-base text-sm font-medium">
-                                    Clarity in the Last Year
+                                    Tree Donated
                                 </p>
                             </div>
                         </div>
