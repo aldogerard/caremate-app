@@ -34,7 +34,11 @@ const CardCampaign = (props) => {
     return !isLoading ? (
         <Link
             to={`/dashboard/partner/campaign/${item.id}`}
-            className="flex flex-row border bg-light hover:border-primary transition-template shadow-sm cursor-pointer p-3 w-full max-w-[540px] rounded-xl gap-4"
+            className={`flex flex-row border bg-light hover:shadow-md transition-template shadow-sm cursor-pointer p-3 w-full max-w-[540px] rounded-xl gap-4 
+                ${item.isWithdrawal === "APPROVED" && "border-primary"}
+                ${item.isWithdrawal === "REJECTED" && "border-error"}
+                ${item.isWithdrawal === "PENDING" && "border-warning"}
+            `}
         >
             <img
                 src={imageUrl}

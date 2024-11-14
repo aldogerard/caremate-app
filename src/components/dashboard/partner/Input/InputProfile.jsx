@@ -9,6 +9,7 @@ const InputProfile = (props) => {
         handleChangeInput,
         isEdit,
         isEmailInvalid,
+        isPhoneNumberInvalid,
     } = props;
 
     const commonProps = {
@@ -42,12 +43,17 @@ const InputProfile = (props) => {
                         *Invalid format email
                     </p>
                 )}
+                {isPhoneNumberInvalid && name === "phoneNumber" && (
+                    <p className="text-xs font-medium text-error">
+                        *Phone number must be between 10 and 15 digits
+                    </p>
+                )}
             </div>
             {name === "description" && (
                 <textarea
                     {...commonProps}
                     placeholder="Enter description for your foundation"
-                    maxLength={500}
+                    maxLength={255}
                     className={`${commonProps.className} h-40 w-full lg:h-28 resize-none`}
                 />
             )}

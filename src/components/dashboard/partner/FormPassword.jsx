@@ -153,7 +153,13 @@ const FormPassword = () => {
                     />
                 </div>
                 <div className="flex justify-end">
-                    <Button type="submit" name={"Edit Password"} />
+                    <Button
+                        type="submit"
+                        name={"Edit Password"}
+                        disabled={
+                            isConfirmPasswordInvalid || isNewPasswordInvalid
+                        }
+                    />
                 </div>
             </form>
         </div>

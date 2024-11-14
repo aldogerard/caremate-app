@@ -44,6 +44,7 @@ const FormProfile = (props) => {
     const [isMount, setIsMount] = useState(false);
     const [updatedPartner, setUpdatedPartner] = useState(partner);
     const [isEmailInvalid, setIsEmailInvalid] = useState(false);
+    const [isPhoneNumberInvalid, setIsPhoneNumberInvalid] = useState(false);
 
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
@@ -51,12 +52,17 @@ const FormProfile = (props) => {
     useEffect(() => {
         if (isMount) {
             const email = updatedPartner?.email;
+            const phoneNumber = updatedPartner?.phoneNumber;
             setIsEmailInvalid(!validateEmail(email) && email?.length > 0);
+            setIsPhoneNumberInvalid(
+                phoneNumber.length > 0 &&
+                    (phoneNumber.length < 10 || phoneNumber.length > 15)
+            );
         } else {
             setUpdatedPartner(partner);
             setIsMount(true);
         }
-    }, [partner, updatedPartner, isMount]);
+    }, [partner, updatedPartner, isMount, updatedPartner]);
 
     const handleChangeInput = (e) => {
         const { name, value } = e.target;
@@ -70,6 +76,10 @@ const FormProfile = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (isPhoneNumberInvalid) {
+            return Failed("Please enter the input correctly");
+        }
+
         Update(() => {
             return handleSubmitFormProfile(updatedPartner);
         });
@@ -110,6 +120,7 @@ const FormProfile = (props) => {
                                 handleChangeInput={handleChangeInput}
                                 isEdit={isEdit}
                                 isEmailInvalid={isEmailInvalid}
+                                isPhoneNumberInvalid={isPhoneNumberInvalid}
                             />
                         )}
                     />
@@ -125,7 +136,16 @@ const FormProfile = (props) => {
                     )}
                     {isEdit && (
                         <>
-                            <Button type={"submit"} name={"Save"} />
+                            <Button
+                                type={"submit"}
+                                name={"Save"}
+                                disabled={
+                                    isPhoneNumberInvalid ||
+                                    updatedPartner?.name == "" ||
+                                    updatedPartner?.address == "" ||
+                                    updatedPartner?.phoneNumber == ""
+                                }
+                            />
                             <Button
                                 type={"reset"}
                                 name={"Cancel"}
