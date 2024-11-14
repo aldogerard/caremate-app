@@ -4,6 +4,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const AdminCardDonation = ({ item }) => {
+    console.log(item);
+
     return (
         <Link
             to={`/dashboard/admin/campaign/${item.campaignId}`}
@@ -14,13 +16,14 @@ const AdminCardDonation = ({ item }) => {
                     {limitText(item.campaignName, 24)}
                 </h1>
             </div>
-            {item.rewardPoints > 0 && (
-                <div className="flex justify-center items-center absolute -top-3 -right-2 bg-blue-500 aspect-square w-8  rounded-full">
-                    <h1 className="text-light text-xs font-semibold">
-                        +{item.rewardPoints}
-                    </h1>
-                </div>
-            )}
+            {item.rewardPoints > 0 &&
+                item.donorId !== "4b4d8bc4-e53d-4d85-8b76-037c2f97daa6" && (
+                    <div className="flex justify-center items-center absolute -top-3 -right-2 bg-blue-500 aspect-square w-8  rounded-full">
+                        <h1 className="text-light text-xs font-semibold">
+                            +{item.rewardPoints}
+                        </h1>
+                    </div>
+                )}
             <div className="w-full flex flex-row justify-between items-end">
                 <div className="flex flex-col text-xs w-full">
                     <div className="flex justify-between">
