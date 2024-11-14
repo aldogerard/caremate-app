@@ -71,7 +71,6 @@ const FormCampaign = (props) => {
             const { name, value } = e.target;
             setFormData({ ...formData, [name]: value });
         } else {
-            console.log(e);
             const { startDate, endDate } = e;
             if (startDate >= oneWeekFromNow) {
                 setFormData({ ...formData, startDate, endDate });

@@ -13,10 +13,6 @@ const SectionDonationCampaign = () => {
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
-        if (donations) {
-            console.log(donations);
-        }
-
         if (currentCampaign) {
             const fetchDonation = async () => {
                 try {

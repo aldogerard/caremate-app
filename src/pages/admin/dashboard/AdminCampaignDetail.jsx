@@ -42,7 +42,14 @@ const AdminCampaignDetail = () => {
     };
 
     const approve = () => {
-        const { status } = currentCampaign;
+        const { status, endDate } = currentCampaign;
+
+        const today = new Date().toISOString().split("T")[0];
+        const endDt = new Date(endDate).toISOString().split("T")[0];
+
+        if (today === endDt) {
+            return Failed("Campaign end date is already expired");
+        }
 
         if (status === "ACTIVE") {
             return Failed("Campaign is already approved");
