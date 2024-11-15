@@ -7,6 +7,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 
+import image from "@/assets/Campaign details.png";
+
 const CampaignCategorys = () => {
     const { category } = useParams();
     const categorys =
@@ -124,7 +126,7 @@ const CampaignCategorys = () => {
                     <div className="w-full xl:w-1/2 h-[500px]">
                         <img
                             className="w-full h-full object-contain"
-                            src="../src/assets/Campaign details.png"
+                            src={image}
                             alt="About Us Image 1"
                         />
                     </div>
