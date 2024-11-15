@@ -12,10 +12,8 @@ export default defineConfig({
     server: {
         proxy: {
             "/api": {
-                target: "https://lively-miracle-8d1d9a1f96.strapiapp.com", // This is the Strapi API
-                changeOrigin: true, // This handles CORS
-                secure: false, // Set to false if using HTTP or self-signed SSL certificates
-                rewrite: (path) => path.replace(/^\/api/, ""), // Remove the '/api' prefix when forwarding
+                target: "http://146.190.98.234:8080",
+                changeOrigin: true,
             },
         },
     },
